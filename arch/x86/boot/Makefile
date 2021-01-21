@@ -1,5 +1,4 @@
 #/arch/x86/boot
-
 BINS=boot.bin\
 	loader.bin
 

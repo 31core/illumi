@@ -1,5 +1,4 @@
 #/init
-
 OBJS=main.o
 
 default:$(OBJS)

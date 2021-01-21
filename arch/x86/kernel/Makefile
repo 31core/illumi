@@ -1,5 +1,4 @@
 #/arch/x86/kernel
-
 BINS=_start.bin
 
 default:$(BINS)
