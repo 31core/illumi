@@ -77,23 +77,22 @@ load_block:
 	add dx,1 ;0x1f7
 	out dx,al
 
-.check_status:
+.check_disk:
 	in al,dx
 	and al,0x88
 	cmp al,0x08
-	jnz .check_status
+	jnz .check_disk
 
 	mov ax,cx
 	mov dx,256
 	mul dx
 	mov cx,ax
-	mov bx,di
 	mov dx,0x1f0
 	pop edx
 .read_data: 				
 	in ax,dx
 	mov [edx],ax
-	add bx,2
+	add edx,2
 	loop .read_data
 	ret
 GDT_addr:
