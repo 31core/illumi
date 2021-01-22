@@ -1,7 +1,7 @@
 ;loader.asm
 org 0x70000
 
-KERNEL_ADDR equ 0x10000
+KERNEL_ADDR equ 0x100000
 
 [bits 16]
 	mov ax,0x07e0
@@ -45,10 +45,9 @@ start:
 	jmp dword 0x08:KERNEL_ADDR
 ;加载内核
 load_kernel:
-	mov cx,1
-	mov ebx,8
+	mov cx,0xff ;128KB
+	mov ebx,9
 	mov edx,KERNEL_ADDR
-
 	call load_block
 	ret
 
@@ -57,6 +56,7 @@ load_kernel:
 load_block:
 	push edx
 	mov dx,0x1f2
+	mov al,cl
 	out dx,al
 	mov al,bl
 	add dx,1 ;0x1f3
@@ -70,8 +70,8 @@ load_block:
 	add dx,1 ;0x1f5
 	out dx,al ;LBA16~23位
 	shr ebx,8
-	and bl,0x0f
-	or bl,0xe0
+	and bl,0x0f ;保留低4位
+	or bl,0xe0 ;LBA,主盘
 	mov al,bl
 	add dx,1 ;0x1f6
 	out dx,al ;LBA24~27位
@@ -89,12 +89,13 @@ load_block:
 	mov dx,256
 	mul dx
 	mov cx,ax
-	mov dx,0x1f0
 	pop edx
+	mov ebx,edx
+	mov dx,0x1f0
 .read_data:
 	in ax,dx
-	mov [edx],ax
-	add edx,2
+	mov [ebx],ax
+	add ebx,2
 	loop .read_data
 	ret
 GDT_addr:

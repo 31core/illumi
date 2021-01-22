@@ -3,13 +3,16 @@ NASN=nasm
 LD=ld
 QEMU=qemu-system-i386
 
-BINS=arch/x86/kernel/_start.bin
-OBJS=init/main.o
+ARCH=arch/x86
+
+BINS=$(ARCH)/kernel/_start.bin
+OBJS=init/main.o\
+$(ARCH)/kernel/graphics.o
 
 default:
-	$(MAKE) -C ./arch/x86/boot
-	$(MAKE) -C ./arch/x86/kernel
-	$(MAKE) -C ./init
+	$(MAKE) -C $(ARCH)/boot
+	$(MAKE) -C $(ARCH)/kernel
+	$(MAKE) -C init
 	$(MAKE) image
 #系统内核文件
 kernel.sys:
