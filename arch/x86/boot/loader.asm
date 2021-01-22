@@ -1,6 +1,8 @@
 ;loader.asm
 org 0x70000
 
+KERNEL_ADDR equ 0x10000
+
 [bits 16]
 	mov ax,0x07e0
 	mov ds,ax
@@ -40,12 +42,12 @@ start:
 	call load_kernel
 	mov byte[ds:0xb8000],'L'
 	mov byte[ds:0xb8001],0x07
-	jmp dword 0x08:0x10000
+	jmp dword 0x08:KERNEL_ADDR
 ;加载内核
 load_kernel:
 	mov cx,1
 	mov ebx,8
-	mov edx,0x10000
+	mov edx,KERNEL_ADDR
 
 	call load_block
 	ret
@@ -89,7 +91,7 @@ load_block:
 	mov cx,ax
 	mov dx,0x1f0
 	pop edx
-.read_data: 				
+.read_data:
 	in ax,dx
 	mov [edx],ax
 	add edx,2

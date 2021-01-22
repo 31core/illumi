@@ -2,8 +2,8 @@
 org 0x7c00
 
 SECTOR_OFFSET equ 1
-SECTOR_COUNT equ 8		;读入扇区数
-MEMORY_SEG equ 0x7000		;读入内存基地址
+SECTOR_COUNT equ 8 ;读入扇区数
+MEMORY_SEG equ 0x7000 ;读入内存基地址
 
 [bits 16]
 entry:
