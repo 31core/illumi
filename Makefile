@@ -19,8 +19,8 @@ kernel.sys:
 	$(LD) -m elf_i386 -e _start $(BINS) $(OBJS) -o kernel.sys
 #内核镜像
 image:kernel.sys
-	dd if=arch/x86/boot/boot.bin of=hda.img bs=512 count=1
-	dd if=arch/x86/boot/loader.bin of=hda.img bs=512 seek=1 count=8
+	dd if=$(ARCH)/boot/boot.bin of=hda.img bs=512 count=1
+	dd if=$(ARCH)/boot/loader.bin of=hda.img bs=512 seek=1 count=8
 	dd if=kernel.sys of=hda.img bs=512 seek=9 count=348
 
 run:
@@ -30,7 +30,7 @@ run:
 clean:
 	rm hda.img
 	rm kernel.sys
-	$(MAKE) -C ./arch/x86/boot clean
-	$(MAKE) -C ./arch/x86/kernel clean
+	$(MAKE) -C $(ARCH)/boot clean
+	$(MAKE) -C $(ARCH)/kernel clean
 	$(MAKE) -C ./init clean
 	
