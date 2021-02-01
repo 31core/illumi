@@ -6,17 +6,14 @@ KERNEL_ADDR equ 0x100000
 [bits 16]
 	mov ax,0x07e0
 	mov ds,ax
-	mov dword[bx],0x00
-	mov dword[bx+4],0x00
+	mov dword[0],0
+	mov dword[4],0
 
-	mov dword[bx+8],0x0000ffff ;4GB,可执行代码段
-	mov dword[bx+12],0x00cf9a00
+	mov dword[8],0x0000ffff ;4GB,可执行代码段
+	mov dword[12],0x00cf9a00
 
-	mov dword[bx+16],0x0000ffff ;4GB,可执行数据段
-	mov dword[bx+20],0x00cf9200
-
-	mov dword[bx+24],0x8000ffff ;显存
-	mov dword[bx+28],0x0040f20b
+	mov dword[16],0x0000ffff ;4GB,可执行数据段
+	mov dword[20],0x00cf9200
 
 	mov ah,0x00
 	mov al,0x03
@@ -24,7 +21,7 @@ KERNEL_ADDR equ 0x100000
 	cli ;关闭中断
 	mov ax,0x7000
 	mov ds,ax
-	lgdt [ds:GDT_addr] ;加载GDTR
+	lgdt [GDT_addr] ;加载GDTR
 	in al,0x92
 	or al,2
 	out 0x92,al	;enable A20 line
@@ -36,19 +33,20 @@ KERNEL_ADDR equ 0x100000
 [bits 32]
 start:
 	mov ax,2*8
-	mov ds,ax
-	mov byte[ds:0xb8000],'P'
-	mov byte[ds:0xb8001],0x07
+    mov ds,ax
+	mov ss,ax
 	call load_kernel
-	mov byte[ds:0xb8000],'L'
-	mov byte[ds:0xb8001],0x07
 	jmp dword 0x08:KERNEL_ADDR
 ;加载内核
 load_kernel:
-	mov cx,0xff ;128KB
+	mov cx,11 ;64KB
 	mov ebx,9
 	mov edx,KERNEL_ADDR
 	call load_block
+	mov cx,0x440
+	mov ebx,KERNEL_ADDR+0x1000
+	mov edx,KERNEL_ADDR
+	call memcpy
 	ret
 
 ;读取磁盘块
@@ -79,12 +77,6 @@ load_block:
 	add dx,1 ;0x1f7
 	out dx,al
 
-.check_disk:
-	in al,dx
-	and al,0x88
-	cmp al,0x08
-	jnz .check_disk
-
 	mov ax,cx
 	mov dx,256
 	mul dx
@@ -93,11 +85,28 @@ load_block:
 	mov ebx,edx
 	mov dx,0x1f0
 .read_data:
+	call .check_disk
+	mov dx,0x1f0
 	in ax,dx
 	mov [ebx],ax
 	add ebx,2
 	loop .read_data
 	ret
+.check_disk:
+	mov dx,0x1f7
+	in al,dx
+	and al,0x88
+	cmp al,0x08
+	jnz .check_disk
+	ret
+memcpy:
+	mov ah,[ebx]
+	mov [edx],ah
+	add ebx,1
+	add edx,1
+	loop memcpy
+	ret
+
 GDT_addr:
-	dw 4*8-1
+	dw 3*8-1
 	dd 0x00007e00

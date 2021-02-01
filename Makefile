@@ -16,7 +16,7 @@ default:
 	$(MAKE) image
 #系统内核文件
 kernel.sys:
-	$(LD) -m elf_i386 -e _start $(BINS) $(OBJS) -o kernel.sys
+	$(LD) -m elf_i386 -e _start -Ttext 0x100000 $(BINS) $(OBJS) -o kernel.sys
 #内核镜像
 image:kernel.sys
 	dd if=$(ARCH)/boot/boot.bin of=hda.img bs=512 count=1
@@ -32,5 +32,5 @@ clean:
 	rm kernel.sys
 	$(MAKE) -C $(ARCH)/boot clean
 	$(MAKE) -C $(ARCH)/kernel clean
-	$(MAKE) -C ./init clean
+	$(MAKE) -C init clean
 	

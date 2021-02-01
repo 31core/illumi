@@ -2,6 +2,6 @@
 
 void main()
 {
-	int vga_addr=0xb8000;//显存地址
+	print("[root /] ");
 	while(1);//操作系统主循环
 }
