@@ -33,7 +33,7 @@ KERNEL_ADDR equ 0x100000
 [bits 32]
 start:
 	mov ax,2*8
-    mov ds,ax
+	mov ds,ax
 	mov ss,ax
 	call load_kernel
 	jmp dword 0x08:KERNEL_ADDR

@@ -7,13 +7,8 @@ int screen_y_size=25;//屏幕高
 void print(char *str)
 {
 	int i=0;
-	while(1)
+	while(str[i]!='\0')
 	{
-		/* 字符串结尾 */
-		if(str[i]=='\0')
-		{
-			return;
-		}
 		putchar(str[i]);
 		i+=1;
 	}
@@ -21,7 +16,7 @@ void print(char *str)
 /* 打印单字符 */
 void putchar(char c)
 {
-	if(c=='\n')
+	if(c=='\n')//回车
 	{
 		int t=vga_addr-VGA_ADDR;
 		t-=t%(2*screen_x_size);

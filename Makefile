@@ -7,11 +7,13 @@ ARCH=arch/x86
 
 BINS=$(ARCH)/kernel/_start.bin
 OBJS=init/main.o\
-$(ARCH)/kernel/graphics.o
+$(ARCH)/kernel/graphics.o\
+kernel/string.o
 
 default:
 	$(MAKE) -C $(ARCH)/boot
 	$(MAKE) -C $(ARCH)/kernel
+	$(MAKE) -C kernel
 	$(MAKE) -C init
 	$(MAKE) image
 #系统内核文件
@@ -32,5 +34,6 @@ clean:
 	rm kernel.sys
 	$(MAKE) -C $(ARCH)/boot clean
 	$(MAKE) -C $(ARCH)/kernel clean
+	$(MAKE) -C kernel clean
 	$(MAKE) -C init clean
 	
