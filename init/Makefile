@@ -5,7 +5,7 @@ default:$(OBJS)
 	echo /init
 
 %.o:%.c
-	gcc -c -I../include $*.c -o $*.o
+	gcc -m32 -I../include -c $*.c -o $*.o
 
 clean:
 	rm *.o

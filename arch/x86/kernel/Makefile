@@ -9,7 +9,7 @@ default:$(BINS) $(OBJS)
 	nasm $*.asm -f elf -o $*.bin
 
 %.o:%.c
-	gcc -c $*.c -o $*.o
+	gcc -m32 -I../../../include -c $*.c -o $*.o
 
 clean:
 	rm *.bin
