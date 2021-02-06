@@ -35,18 +35,18 @@ void putchar(char c)
 		/* 填充最后一行 */
 		for(;i<=(char*)(VGA_ADDR+2*screen_x_size*screen_y_size);i++)
 		{
-			*i=(char)0;
+			*i=0;//填充0字节
 		}
 		vga_addr=VGA_ADDR+2*screen_x_size*(screen_y_size-1);//显存指针在最后一行第一字符
 	}
 	/* 不为回车则打印当前字符 */
 	if(c!='\n')
 	{
-		char *p;
+		char* p;
 		p=(char*)vga_addr;
 		*p=c;
 		p=(char*)vga_addr+1;
-		*p=(char)0x07;
+		*p=0x07;//字体颜色
 		vga_addr+=2;//一个字符占2-byte
 	}
 }
@@ -57,7 +57,7 @@ void CleanupScreen()
 	char* p=(char*)VGA_ADDR;
 	for(i=2*screen_x_size*screen_y_size;i>0;i--)
 	{
-		*p=(char)0;//填0字节
+		*p=0;//填0字节
 		p+=1;
 	}
 	vga_addr=VGA_ADDR;//重置显存地址
