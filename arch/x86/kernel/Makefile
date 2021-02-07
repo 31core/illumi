@@ -1,8 +1,6 @@
 #/arch/x86/kernel
-BINS=_start.bin\
-asmfunc.bin
-OBJS=graphics.o\
-dsctbl.o
+BINS=$(patsubst %.asm,%.bin,$(wildcard *.asm))
+OBJS=$(patsubst %.c,%.o,$(wildcard *.c))
 
 default:$(BINS) $(OBJS)
 	echo /arch/x86/kernel

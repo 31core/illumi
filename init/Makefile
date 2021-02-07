@@ -1,5 +1,5 @@
 #/init
-OBJS=main.o
+OBJS=$(patsubst %.c,%.o,$(wildcard *.c))
 
 default:$(OBJS)
 	echo /init

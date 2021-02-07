@@ -1,5 +1,5 @@
-#include<arch/kernel/graphics.h>
 #include<arch/x86/dsctbl.h>
+#include<device/video/graphics.h>
 
 void main()
 {

@@ -1,11 +1,11 @@
-#/kernel
+#/device/video
 OBJS=$(patsubst %.c,%.o,$(wildcard *.c))
 
 default:$(OBJS)
-	echo /kernel
+	echo /init
 
 %.o:%.c
-	gcc -m32 -I../include -c $*.c -o $*.o
+	gcc -m32 -I../../include -c $*.c -o $*.o
 
 clean:
 	rm *.o

@@ -5,17 +5,17 @@ QEMU=qemu-system-i386
 
 ARCH=arch/x86
 
-BINS=$(ARCH)/kernel/_start.bin\
-$(ARCH)/kernel/asmfunc.bin
-OBJS=init/main.o\
-$(ARCH)/kernel/graphics.o\
-$(ARCH)/kernel/dsctbl.o\
-kernel/string.o
+asm_src=$(ARCH)/kernel/*.asm
+BINS=$(patsubst %.asm,%.bin,$(wildcard $(asm_src)))
+c_src=init/*.c kernel/*.c\
+device/video/*.c\
+$(ARCH)/kernel/*.c
+OBJS=$(patsubst %.c,%.o,$(wildcard $(c_src)))
 
 default:
-	$(MAKE) -C $(ARCH)/boot
-	$(MAKE) -C $(ARCH)/kernel
+	$(MAKE) -C $(ARCH)
 	$(MAKE) -C kernel
+	$(MAKE) -C device
 	$(MAKE) -C init
 	$(MAKE) image
 #系统内核文件
@@ -34,8 +34,6 @@ run:
 clean:
 	rm hda.img
 	rm kernel.sys
+	rm $(BINS) $(OBJS)
 	$(MAKE) -C $(ARCH)/boot clean
-	$(MAKE) -C $(ARCH)/kernel clean
-	$(MAKE) -C kernel clean
-	$(MAKE) -C init clean
 	

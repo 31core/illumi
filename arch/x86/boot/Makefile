@@ -1,6 +1,5 @@
 #/arch/x86/boot
-BINS=boot.bin\
-	loader.bin
+BINS=$(patsubst %.asm,%.bin,$(wildcard *.asm))
 
 default:$(BINS)
 	echo /arch/x86/boot
