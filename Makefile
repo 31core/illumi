@@ -5,9 +5,11 @@ QEMU=qemu-system-i386
 
 ARCH=arch/x86
 
-BINS=$(ARCH)/kernel/_start.bin
+BINS=$(ARCH)/kernel/_start.bin\
+$(ARCH)/kernel/asmfunc.bin
 OBJS=init/main.o\
 $(ARCH)/kernel/graphics.o\
+$(ARCH)/kernel/dsctbl.o\
 kernel/string.o
 
 default:

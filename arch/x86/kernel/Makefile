@@ -1,6 +1,8 @@
 #/arch/x86/kernel
-BINS=_start.bin
-OBJS=graphics.o
+BINS=_start.bin\
+asmfunc.bin
+OBJS=graphics.o\
+dsctbl.o
 
 default:$(BINS) $(OBJS)
 	echo /arch/x86/kernel
