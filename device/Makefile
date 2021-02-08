@@ -1,5 +1,5 @@
 #/device
-dir=video.dir
+dir=video.dir interrupt.dir
 
 default:$(dir)
 	echo /device

@@ -9,6 +9,7 @@ asm_src=$(ARCH)/kernel/*.asm
 BINS=$(patsubst %.asm,%.bin,$(wildcard $(asm_src)))
 c_src=init/*.c kernel/*.c\
 device/video/*.c\
+device/interrupt/*.c\
 $(ARCH)/kernel/*.c
 OBJS=$(patsubst %.c,%.o,$(wildcard $(c_src)))
 
@@ -36,4 +37,3 @@ clean:
 	rm kernel.sys
 	rm $(BINS) $(OBJS)
 	$(MAKE) -C $(ARCH)/boot clean
-	
