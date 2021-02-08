@@ -10,13 +10,13 @@ LoadGDTR:
 	ret
 ;加载IDRT寄存器
 LoadIDTR:
-	mov	ax,[esp+4]
-	mov	[esp+6],ax
+	mov ax,[esp+4]
+	mov [esp+6],ax
 	lidt [esp+6]
 	ret
-
+;写8位端口
 io_out8:
-	mov edx,[esp+4];端口
+	mov dx,[esp+4];端口
 	mov al,[esp+8];8位数据
 	out dx,al
 	ret
