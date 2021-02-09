@@ -3,8 +3,8 @@
 
 void init_dsctbl()
 {
-	struct GDT_data* GDT=(struct GDT_data*)0x270000;
-	struct IDT_data* IDT=(struct IDT_data*)0x26f800;
+	struct GDT_data *GDT=(struct GDT_data*)0x270000;
+	struct IDT_data *IDT=(struct IDT_data*)0x26f800;
 	int i;
 	for(i=0;i<0x2000;i++)
 	{

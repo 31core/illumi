@@ -1,5 +1,5 @@
 /* 获取字符串大小 */
-int strlen(char* str)
+int strlen(char *str)
 {
 	int i=0;
 	while(str[i]!='\0')
@@ -9,7 +9,7 @@ int strlen(char* str)
 	return i;
 }
 /* 比较字符串 */
-int strcmp(char* a,char* b)
+int strcmp(char *a,char *b)
 {
 	if(strlen(a)!=strlen(b))
 	{
@@ -27,7 +27,7 @@ int strcmp(char* a,char* b)
 	return 1;
 }
 /* 复制字符串 */
-void strcpy(char* a,char* b)
+void strcpy(char *a,char *b)
 {
     int i=0;
     while(a[i]!='\0')

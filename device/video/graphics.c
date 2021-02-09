@@ -27,7 +27,7 @@ void putchar(char c)
 	/* 超出屏幕范围则下滚一行 */
 	if((vga_addr-VGA_ADDR+2)>2*screen_x_size*screen_y_size)
 	{
-		char* i;
+		char *i;
 		for(i=(char*)VGA_ADDR;i<(char*)(VGA_ADDR+2*screen_x_size*(screen_y_size-1));i++)
 		{
 			*i=*(i+2*screen_x_size);
@@ -42,7 +42,7 @@ void putchar(char c)
 	/* 不为回车则打印当前字符 */
 	if(c!='\n')
 	{
-		char* p;
+		char *p;
 		p=(char*)vga_addr;
 		*p=c;
 		p=(char*)vga_addr+1;
@@ -54,7 +54,7 @@ void putchar(char c)
 void CleanupScreen()
 {
 	int i;
-	char* p=(char*)VGA_ADDR;
+	char *p=(char*)VGA_ADDR;
 	for(i=2*screen_x_size*screen_y_size;i>0;i--)
 	{
 		*p=0;//填0字节
