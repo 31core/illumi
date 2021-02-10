@@ -5,4 +5,4 @@ default:$(OBJS)
 	echo /device/video
 
 %.o:%.c
-	gcc -m32 -I../../include -c $*.c -o $*.o
+	gcc -m32 -Wall -I../../include -c $*.c -o $*.o

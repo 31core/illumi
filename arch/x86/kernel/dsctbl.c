@@ -27,7 +27,7 @@ void SetGDT(struct GDT_data* GDT,int base,int limit,int access)
 	/* 大于1MB则置G为1 */
 	if(limit>0xfffff)
 	{
-		access!=0x8000;
+		access|=0x8000;
 		limit/=0x1000;
 	}
 	GDT->base_high=(base>>24)&0xff;//取base高8位

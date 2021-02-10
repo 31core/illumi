@@ -3,7 +3,7 @@
 #include<device/video/graphics.h>
 #include<device/interrupt/init.h>
 
-void main()
+int main()
 {
 	init_dsctbl();//初始化dsctbl
 	init_pic();//初始化PIC
