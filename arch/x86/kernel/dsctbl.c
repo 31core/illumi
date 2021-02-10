@@ -1,5 +1,6 @@
 #include<arch/x86/dsctbl.h>
 #include<arch/x86/asmfunc.h>
+#include<device/interrupt/interrupt.h>
 
 void init_dsctbl()
 {
@@ -17,9 +18,10 @@ void init_dsctbl()
 	{
 		SetIDT(IDT+i,0,0,0);
 	}
+	SetIDT(IDT+0x21,(int)asm_interrupt21h,2*8,0x008e);
 	LoadIDTR(0x7ff,0x26f800);//加载IDTR寄存器
 }
-
+/* 设置GDT数据 */
 void SetGDT(struct GDT_data* GDT,int base,int limit,int access)
 {
 	/* 大于1MB则置G为1 */
@@ -35,7 +37,7 @@ void SetGDT(struct GDT_data* GDT,int base,int limit,int access)
 	GDT->limit_low=limit&0xffff;//取limit低16位
 	GDT->access=access&0xff;//取access低8位
 }
-
+/* 设置IDT数据 */
 void SetIDT(struct IDT_data* IDT,int offset,int selector,int access)
 {
 	IDT->offset_high=(offset>>16)&0xffff;//取offset高16位

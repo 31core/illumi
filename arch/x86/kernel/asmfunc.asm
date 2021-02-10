@@ -1,5 +1,6 @@
 global LoadGDTR,LoadIDTR
 global io_out8
+global io_cli,io_sti
 
 [bits 32]
 ;加载GDRT寄存器
@@ -19,4 +20,12 @@ io_out8:
 	mov dx,[esp+4];端口
 	mov al,[esp+8];8位数据
 	out dx,al
+	ret
+;禁用中断
+io_cli:
+	cli
+	ret
+;启用中断
+io_sti:
+	sti
 	ret

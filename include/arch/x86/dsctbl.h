@@ -14,5 +14,5 @@ struct IDT_data
 };
 
 void init_dsctbl();
-void SetGDT(struct GDT_data*,int,int,int);
-void SetIDT(struct IDT_data*,int,int,int);
+void SetGDT(struct GDT_data*,int,int,int);//设置GDT数据
+void SetIDT(struct IDT_data*,int,int,int);//设置GDT数据
