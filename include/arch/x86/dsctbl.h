@@ -1,3 +1,6 @@
+#define GDT_ADDR 0x270000
+#define IDT_ADDR 0x26f800
+
 /* GDT数据结构体 */
 struct GDT_data
 {
@@ -14,5 +17,5 @@ struct IDT_data
 };
 
 void init_dsctbl();
-void SetGDT(struct GDT_data*,int,int,int);//设置GDT数据
-void SetIDT(struct IDT_data*,int,int,int);//设置GDT数据
+void SetGDT(short,int,int,short);//设置GDT数据
+void SetIDT(char,int,short,char);//设置GDT数据

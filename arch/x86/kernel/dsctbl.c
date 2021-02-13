@@ -5,25 +5,26 @@
 void init_dsctbl()
 {
 	struct GDT_data *GDT=(struct GDT_data*)0x270000;
-	struct IDT_data *IDT=(struct IDT_data*)0x26f800;
-	int i;
+	short i;
 	for(i=0;i<0x2000;i++)
 	{
-		SetGDT(GDT+i,0,0,0);
+		SetGDT(i,0,0,0);
 	}
-	SetGDT(GDT+1,0,0xffffffff,0x409a);
-	SetGDT(GDT+2,0,0xffffffff,0x4092);
+	SetGDT(1,0,0xffffffff,0x409a);
+	SetGDT(2,0,0xffffffff,0x4092);
 	LoadGDTR(0xffff,0x270000);//加载GDTR寄存器
 	for(i=0;i<256;i++)
 	{
-		SetIDT(IDT+i,0,0,0);
+		SetIDT((char)i,0,0,0);
 	}
-	SetIDT(IDT+0x21,(int)asm_interrupt21h,8,0x008e);
+	SetIDT(0x21,(int)asm_interrupt21h,8,0x8e);
 	LoadIDTR(0x7ff,0x26f800);//加载IDTR寄存器
 }
 /* 设置GDT数据 */
-void SetGDT(struct GDT_data *GDT,int base,int limit,int access)
+void SetGDT(short count,int base,int limit,short access)
 {
+	struct GDT_data *GDT=(struct GDT_data*)GDT_ADDR;
+	GDT+=count;//设置GDT地址到地count个GDT处
 	/* 大于1MB则置G为1 */
 	if(limit>0xfffff)
 	{
@@ -38,11 +39,13 @@ void SetGDT(struct GDT_data *GDT,int base,int limit,int access)
 	GDT->access=access&0xff;//取access低8位
 }
 /* 设置IDT数据 */
-void SetIDT(struct IDT_data *IDT,int offset,int selector,int access)
+void SetIDT(char count,int offset,short selector,char access)
 {
+	struct IDT_data *IDT=(struct IDT_data*)IDT_ADDR;
+	IDT+=count;//设置IDT地址到地count个IDT处
 	IDT->offset_high=(offset>>16)&0xffff;//取offset高16位
 	IDT->offset_low=offset&0xffff;//取offset低16位
 	IDT->selector=selector;
 	IDT->count=0;
-	IDT->access=access&0xff;//取access低8位
+	IDT->access=access;
 }
