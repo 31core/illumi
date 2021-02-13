@@ -28,7 +28,7 @@ KERNEL_ADDR equ 0x100000
 	mov eax,cr0
 	or eax,1
 	mov cr0,eax;cr0 PE位置1
-	jmp dword 0x08:start
+	jmp dword 8:start
 
 [bits 32]
 start:
@@ -36,7 +36,7 @@ start:
 	mov ds,ax
 	mov ss,ax
 	call load_kernel
-	jmp dword 0x08:KERNEL_ADDR
+	jmp dword 8:KERNEL_ADDR
 ;加载内核
 load_kernel:
 	mov cx,13

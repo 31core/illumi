@@ -14,7 +14,6 @@ void init_pic()
 	io_out8(PIC1_ICW2,0x28);//IRQ8-15由INT28-2f接收
 	io_out8(PIC1_ICW3,2);//PIC1由IRQ2连接
 	io_out8(PIC1_ICW4,0x01);//无缓冲区模式
-	io_out8(PIC0_IMR,0xfb);//11111011 PIC1以外全部禁止
-	io_out8(PIC1_IMR,0xff);//11111111 禁止所有中断
-	return; 
+	io_out8(PIC0_IMR,0xfd);
+	io_out8(PIC1_IMR,0xff);
 }
