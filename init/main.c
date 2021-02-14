@@ -14,6 +14,7 @@ int main()
 	init_dsctbl();//初始化dsctbl
 	init_pic();//初始化PIC
 	io_sti();//启用中断
+	init_MemFragCtl();//初始化内存碎片管理
 	CleanupScreen();
 
 	char *mem_size="          ";
