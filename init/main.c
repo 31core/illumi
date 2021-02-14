@@ -6,6 +6,7 @@
 #include<kernel/fifo.h>
 #include<kernel/types.h>
 #include<kernel/memory.h>
+#include<kernel/string.h>
 
 struct fifo8 key_fifo;
 int main()
@@ -22,15 +23,12 @@ int main()
 	print("Memory Total : ");
 	print(mem_size);
 	print(" Bytes\n");
-
-	print("[root /] ");
 	//操作系统主循环
 	while(1)
 	{
-		if(GetFifoInfo(key_fifo)!=0)
-		{
-			char data=ReadData(&key_fifo);
-			printchar(keyboard_set[data]);
-		}
+		print("[root /] ");
+		char *inp="          ";
+		input(inp);
+		print("command not found.\n");
 	}
 }

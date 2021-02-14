@@ -10,6 +10,7 @@ BINS=$(patsubst %.asm,%.bin,$(wildcard $(asm_src)))
 c_src=init/*.c kernel/*.c\
 device/video/*.c\
 device/interrupt/*.c\
+device/input/*.c\
 $(ARCH)/kernel/*.c
 OBJS=$(patsubst %.c,%.o,$(wildcard $(c_src)))
 

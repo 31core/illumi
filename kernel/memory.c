@@ -35,6 +35,7 @@ unsigned int AllocMemfrag(unsigned int size)
 		if(mem_frag_list[i].size>=size)
 		{
 			int addr=mem_frag_list[i].addr;
+			mem_frag_list[i].addr+=size;
 			mem_frag_list[i].size-=size;
 			/* 如果当前碎片大小为0则删除此碎片 */
 			if(mem_frag_list[i].size==0)
@@ -63,7 +64,7 @@ void FreeMemfrag(unsigned int addr,unsigned int size)
 		}
 	}
 	/* 和前面的内存碎片是连续的 */
-	if(i!=-1>0&&mem_frag_list[i].addr+mem_frag_list[i].size==addr)
+	if(i!=-1&&mem_frag_list[i].addr+mem_frag_list[i].size==addr)
 	{
 		mem_frag_list[i].size+=size;
 		/* 和后面的内存碎片是连续的 */
