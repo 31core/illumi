@@ -2,7 +2,6 @@
 #include<arch/x86/asmfunc.h>
 #include<device/video/graphics.h>
 #include<device/interrupt/init.h>
-#include<device/interrupt/interrupt.h>
 #include<kernel/fifo.h>
 
 struct fifo8 key_fifo;

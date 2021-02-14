@@ -30,10 +30,10 @@ int strcmp(char *a,char *b)
 void strcpy(char *a,char *b)
 {
     int i=0;
-    while(a[i]!='\0')
+    while(b[i]!='\0')
     {
-        b[i]=a[i];
+        a[i]=b[i];
         i+=1;
     }
-    b[i]='\0';
+    a[i]='\0';
 }
