@@ -1,7 +1,8 @@
 struct fifo8
 {
 	int addr;//缓冲区地址
-	int size;//缓冲区大小
+	unsigned int size;//缓冲区大小
+	int free;//缓冲区可用空间
 	int write,read;//数据读写位置
 };
 
