@@ -31,3 +31,24 @@ void int2str(char *str,int num)
 	str0+=i+1;
 	strcpy(str,str0);
 }
+/* 字符串转整形数字 */
+int str2int(char *str)
+{
+	int i,x,y,t;
+	i=0;//i用来累计str数值
+	x=0;//用来从高到低取str
+	int j=strlen(str)-1;
+	while(str[x]!='\0')
+	{
+		t=str[x]-48;//获取那一位的数字
+		/* t=t*10^j */
+		for(y=0;y<j;y++)
+		{
+			t*=10;
+		}
+		i+=t;
+		x+=1;//接下来取str的下一个数字
+		j-=1;
+	}
+	return i;
+}
