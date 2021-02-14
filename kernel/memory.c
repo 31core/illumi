@@ -1,12 +1,12 @@
 /* 获取内存大小 */
 int GetMemorySize()
 {
-	char *p,old;
-	for(p=(char*)0x10000;p<(char*)0xffffffff;p+=4096)
+	int *p,old;
+	for(p=(int*)0x100000;p<(int*)0xffffffff;p+=4096)
     {
         old=*p;
-		*p=0xff;
-		if(*p!=0xff)
+		*p=0xff00ff00;
+		if(*p!=0xff00ff00)
 		{
 			break;
 		}
