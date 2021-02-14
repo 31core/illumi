@@ -4,7 +4,6 @@
 
 void init_dsctbl()
 {
-	struct GDT_data *GDT=(struct GDT_data*)0x270000;
 	short i;
 	for(i=0;i<0x2000;i++)
 	{
