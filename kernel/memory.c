@@ -5,7 +5,7 @@ int GetMemorySize()
 {
 	int *p,old;
 	for(p=(int*)0x100000;p<(int*)0xffffffff;p+=4096)
-    {
+	{
         old=*p;
 		*p=0xff00ff00;
 		if(*p!=0xff00ff00)
@@ -55,7 +55,7 @@ void FreeMemfrag(unsigned int addr,unsigned int size)
 {
 	int i;
 	/* 查找插入位置 */
-	for(i=0;i+1<mem_frag_num;i++)
+	for(i=-1;i+1<mem_frag_num;i++)
 	{
 		if(mem_frag_list[i+1].addr>=addr)
 		{
@@ -63,13 +63,14 @@ void FreeMemfrag(unsigned int addr,unsigned int size)
 		}
 	}
 	/* 和前面的内存碎片是连续的 */
-	if(i>0&&mem_frag_list[i].addr+mem_frag_list[i].size==addr)
+	if(i!=-1>0&&mem_frag_list[i].addr+mem_frag_list[i].size==addr)
 	{
 		mem_frag_list[i].size+=size;
 		/* 和后面的内存碎片是连续的 */
 		if(addr+size==mem_frag_list[i+1].addr)
 		{
 			mem_frag_list[i].size+=mem_frag_list[i+1].size;
+			/* 列表中后面的内存碎片往前移 */
 			for(i+=1;i<mem_frag_num;i++)
 			{
 				mem_frag_list[i]=mem_frag_list[i+1];
@@ -86,13 +87,15 @@ void FreeMemfrag(unsigned int addr,unsigned int size)
 		return;
 	}
 	int j=mem_frag_num;
+	/* 列表中后面的内存碎片往后移 */
 	for(;j>i+1;j--)
 	{
 		mem_frag_list[j]=mem_frag_list[j-1];
 	}
+	/* 单独创建一个内存碎片信息 */
+	mem_frag_list[i+1].addr=addr;
+	mem_frag_list[i+1].size=size;
 	mem_frag_num+=1;
-	mem_frag_list[i].addr=addr;
-	mem_frag_list[i].size=size;
 }
 /* 获取内存剩余空间 */
 unsigned int GetMemoryFreeSize()
