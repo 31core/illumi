@@ -39,11 +39,11 @@ start:
 	jmp dword 8:KERNEL_ADDR
 ;加载内核
 load_kernel:
-	mov cx,13
+	mov cx,16
 	mov ebx,9
 	mov edx,KERNEL_ADDR
 	call load_block;加载内核到内存
-	mov cx,0xf50
+	mov cx,0x1984
 	mov ebx,KERNEL_ADDR+0x1000
 	mov edx,KERNEL_ADDR
 	call memcpy

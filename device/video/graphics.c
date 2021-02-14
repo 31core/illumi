@@ -9,12 +9,12 @@ void print(char *str)
 	int i=0;
 	while(str[i]!='\0')
 	{
-		putchar(str[i]);
+		printchar(str[i]);
 		i+=1;
 	}
 }
 /* 打印单字符 */
-void putchar(char c)
+void printchar(char c)
 {
 	/* 回车字符处理 */
 	if(c=='\n')
