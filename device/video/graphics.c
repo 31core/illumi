@@ -28,7 +28,7 @@ void printchar(char c)
 	if(c==0x0e)
 	{
 		vga_addr-=2;
-		int *bak_cln=(int*)vga_addr;
+		short *bak_cln=(short*)vga_addr;
 		*bak_cln=0;
 		return;
 	}
@@ -62,8 +62,8 @@ void printchar(char c)
 void CleanupScreen()
 {
 	int i;
-	char *p=(char*)VGA_ADDR;
-	for(i=2*screen_x_size*screen_y_size;i>0;i--)
+	short *p=(short*)VGA_ADDR;
+	for(i=screen_x_size*screen_y_size;i>0;i--)
 	{
 		*p=0;//填0字节
 		p+=1;
