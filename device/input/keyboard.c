@@ -28,13 +28,12 @@ void input(char *str)
 			continue;//仅打印不写入退格符
 		}
 		str[i]=data;
-		i+=1;
 		printchar(data);
 		if(data=='\n')
 		{
 			break;
 		}
-
+		i+=1;
 	}
 	str[i]='\0';
 }

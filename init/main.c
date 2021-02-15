@@ -29,7 +29,7 @@ int main()
 		print("[root /] ");
 		char *inp="          ";
 		input(inp);
-		if(strcmp(inp,"rever")==1)
+		if(str_cmp(inp,"rever")==1)
 		{
 			print("Rexistum Kernel 0.0.1\n");
 		}
