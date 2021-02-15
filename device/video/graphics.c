@@ -24,6 +24,14 @@ void printchar(char c)
 		t+=2*screen_x_size;
 		vga_addr=t+VGA_ADDR;
 	}
+	/* 退格键 */
+	if(c==0x0e)
+	{
+		vga_addr-=2;
+		int *bak_cln=(int*)vga_addr;
+		*bak_cln=0;
+		return;
+	}
 	/* 超出屏幕范围则下滚一行 */
 	if((vga_addr-VGA_ADDR+2)>2*screen_x_size*screen_y_size)
 	{
