@@ -29,6 +29,13 @@ int main()
 		print("[root /] ");
 		char *inp="          ";
 		input(inp);
-		print("command not found.\n");
+		if(strcmp(inp,"rever")==1)
+		{
+			print("Rexistum Kernel 0.0.1\n");
+		}
+		else
+		{
+			print("command not found.\n");
+		}
 	}
 }

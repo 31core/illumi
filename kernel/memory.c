@@ -1,7 +1,7 @@
 #include<kernel/memory.h>
 
 /* 获取内存大小 */
-int GetMemorySize()
+unsigned int GetMemorySize()
 {
 	int *p,old;
 	for(p=(int*)0x100000;p<(int*)0xffffffff;p+=4096)
@@ -14,7 +14,7 @@ int GetMemorySize()
 		}
 		*p=old;
 	}
-	return (int)p;
+	return (unsigned int)p;
 }
 
 struct mem_fragment mem_frag_list[1000];
@@ -23,7 +23,7 @@ int mem_frag_num=1;
 void init_MemFragCtl()
 {
 	mem_frag_list[0].addr=0x100000;
-	mem_frag_list[0].size=0xffffffff;
+	mem_frag_list[0].size=GetMemorySize();
 }
 /* 分配内存碎片 */
 unsigned int AllocMemfrag(unsigned int size)
@@ -95,7 +95,7 @@ void FreeMemfrag(unsigned int addr,unsigned int size)
 	{
 		mem_frag_list[i].size+=mem_frag_list[i+1].size-size;
 		/* 列表中后面的内存碎片往前移 */
-		for(i+=1;i<mem_frag_num;i++)
+		for(i+=1;i<mem_frag_num-1;i++)
 		{
 			mem_frag_list[i]=mem_frag_list[i+1];
 		}

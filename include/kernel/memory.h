@@ -4,7 +4,7 @@ struct mem_fragment
 	unsigned int addr,size;
 };
 
-int GetMemorySize();//获取内存大小
+unsigned int GetMemorySize();//获取内存大小
 void init_MemFragCtl();//初始化内存碎片管理
 unsigned int AllocMemfrag(unsigned int);//分配内存碎片
 void FreeMemfrag(unsigned int,unsigned int);//释放内存碎片
