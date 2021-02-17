@@ -18,16 +18,16 @@ int main()
 	init_MemFragCtl();//初始化内存碎片管理
 	CleanupScreen();
 
-	char *mem_size="          ";
+	char mem_size[11];
 	int2str(mem_size,GetMemorySize());
-	print("Memory Total : ");
+	print("Memory Total: ");
 	print(mem_size);
 	print(" Bytes\n");
 	//操作系统主循环
 	while(1)
 	{
 		print("[root /] ");
-		char *inp="          ";
+		char inp[21];
 		input(inp);
 		if(str_cmp(inp,"rever")==1)
 		{

@@ -3,7 +3,7 @@
 /* 整形数字转字符串 */
 void int2str(char *str,int num)
 {
-	char *str0="          ";
+	char str0[11];
 	int check=10;//用于检测最低位是否为0
 	int i,j;
 	i=9;//用于从后到前写入str0字符
@@ -28,8 +28,7 @@ void int2str(char *str,int num)
 			num-=check/10;
 		}
 	}
-	str0+=i+1;
-	str_cpy(str,str0);
+	str_cpy(str,str0+i+1);
 }
 /* 字符串转整形数字 */
 int str2int(char *str)
