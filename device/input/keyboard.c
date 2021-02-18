@@ -54,7 +54,7 @@ char inputchar()
 			{
 				char c=keyboard_set[(int)data];
 				/* caps lock且输入是字母 */
-				if(key_caps==2&&c>=0x61&&c<123)
+				if(key_caps==2&&c>=0x61&&c<=0x7a)
 				{
 					return c-32;
 				}
@@ -63,7 +63,8 @@ char inputchar()
 			else if(key_shift==2)
 			{
 				char c=keyboard_set_shift[(int)data];
-				if(key_caps==2&&c>=65&&c<=90)
+				/* caps lock且输入是字母 */
+				if(key_caps==2&&c>=0x41&&c<=0x5a)
 				{
 					return c+32;
 				}
@@ -73,13 +74,13 @@ char inputchar()
 	}
 }
 /* 获取一个输入按键的键码 */
-char inputcode()
+unsigned char inputcode()
 {
 	while(1)
 	{
 		if(GetFifoInfo(key_fifo)!=0)
 		{
-			char data=ReadData(&key_fifo);
+			unsigned char data=ReadData(&key_fifo);
 			return data;
 		}
 	}

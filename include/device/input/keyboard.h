@@ -13,4 +13,4 @@ static char keyboard_set_shift[]={' ',' ','!','@','#','$','%','^','&','*',
 
 void input(char*);//输入字符串
 char inputchar();//单字符输入
-char inputcode();//获取一个输入按键的键码
+unsigned char inputcode();//获取一个输入按键的键码
