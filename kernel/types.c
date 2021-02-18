@@ -1,7 +1,7 @@
 #include<kernel/string.h>
 
 /* 整形数字转字符串 */
-void int2str(char *str,int num)
+void int2str(char *str,unsigned int num)
 {
 	char str0[11];
 	int check=10;//用于检测最低位是否为0
@@ -33,8 +33,8 @@ void int2str(char *str,int num)
 /* 字符串转整形数字 */
 int str2int(char *str)
 {
-	int i,x,y,t;
-	i=0;//i用来累计str数值
+	unsigned int i=0;//i用来累计str数值
+	int x,y,t;
 	x=0;//用来从高到低取str
 	int j=str_len(str)-1;
 	while(str[x]!='\0')
