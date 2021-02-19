@@ -19,12 +19,13 @@ default:
 	$(MAKE) -C kernel
 	$(MAKE) -C device
 	$(MAKE) -C init
+	$(MAKE) kernel.sys
 	$(MAKE) image
 #系统内核文件
 kernel.sys:
 	$(LD) -m elf_i386 -e _start -Ttext 0x100000 $(BINS) $(OBJS) -o kernel.sys
 #内核镜像
-image:kernel.sys
+image:
 	dd if=$(ARCH)/boot/boot.bin of=hda.img bs=512 count=1
 	dd if=$(ARCH)/boot/loader.bin of=hda.img bs=512 seek=1 count=8
 	dd if=kernel.sys of=hda.img bs=512 seek=9 count=348

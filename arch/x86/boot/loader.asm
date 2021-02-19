@@ -43,8 +43,17 @@ load_kernel:
 	mov ebx,9
 	mov edx,KERNEL_ADDR
 	call load_block;加载内核到内存
-	mov cx,0x1984
-	mov ebx,KERNEL_ADDR+0x1000
+
+	mov eax,0
+	mov ebx,0
+	mov eax,KERNEL_ADDR
+	mov bl,[KERNEL_ADDR+28];bl=program header地址
+	add eax,ebx
+	add eax,4;eax=记录.text偏移数据地址
+	mov ebx,[eax]
+	add ebx,KERNEL_ADDR;ebx=.text偏移地址
+
+	mov cx,0xffff
 	mov edx,KERNEL_ADDR
 	call memcpy
 	ret
