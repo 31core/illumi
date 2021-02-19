@@ -1,7 +1,7 @@
 #/arch/x86
-dir=boot.dir kernel.dir
+dirs=boot.dir kernel.dir
 
-default:$(dir)
+default:$(dirs)
 	echo /arch/x86
 
 %.dir:

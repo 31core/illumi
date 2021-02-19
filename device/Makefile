@@ -1,7 +1,7 @@
 #/device
-dir=video.dir interrupt.dir input.dir
+dirs=video.dir interrupt.dir input.dir
 
-default:$(dir)
+default:$(dirs)
 	echo /device
 
 %.dir:
