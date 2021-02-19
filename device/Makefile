@@ -1,8 +1,7 @@
 #/device
 dirs=video.dir interrupt.dir input.dir
 
-default:$(dirs)
-	echo /device
+default:$(dirs);
 
 %.dir:
-	make -C $*
+	@make -C $*

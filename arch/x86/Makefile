@@ -1,8 +1,7 @@
 #/arch/x86
 dirs=boot.dir kernel.dir
 
-default:$(dirs)
-	echo /arch/x86
+default:$(dirs);
 
 %.dir:
-	make -C $*
+	@make -C $*
