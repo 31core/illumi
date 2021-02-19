@@ -6,9 +6,9 @@ C_FLAGS=-m32 -Wall -fno-stack-protector -I../../../include
 default:$(BINS) $(OBJS);
 
 %.bin:%.asm
-	@echo [NASM] $@
+	@echo [NASM] arch/x86/kernel/$@
 	@nasm $*.asm -f elf -o $*.bin
 
 %.o:%.c
-	@echo [CC] $@
+	@echo [CC] arch/x86/kernel/$@
 	@gcc $(C_FLAGS) -c $*.c -o $*.o

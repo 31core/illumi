@@ -1,15 +1,11 @@
+include sources.mk
+
 MAKE=make
 QEMU=qemu-system-i386
 
 ARCH=arch/x86
 
-asm_src=$(ARCH)/kernel/*.asm
 BINS=$(patsubst %.asm,%.bin,$(wildcard $(asm_src)))
-c_src=init/*.c kernel/*.c\
-device/video/*.c\
-device/interrupt/*.c\
-device/input/*.c\
-$(ARCH)/kernel/*.c
 OBJS=$(patsubst %.c,%.o,$(wildcard $(c_src)))
 
 default:
@@ -38,4 +34,4 @@ clean:
 	rm hda.img
 	rm kernel.sys
 	rm $(BINS) $(OBJS)
-	$(MAKE) -C $(ARCH)/boot clean
+	$(MAKE) -s -C $(ARCH)/boot clean

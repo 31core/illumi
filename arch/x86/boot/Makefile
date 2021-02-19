@@ -4,7 +4,7 @@ BINS=$(patsubst %.asm,%.bin,$(wildcard *.asm))
 default:$(BINS);
 
 %.bin:%.asm
-	@echo [NASM] $@
+	@echo [NASM] arch/x86/kernel/$@
 	@nasm $*.asm -o $*.bin
 
 clean:
