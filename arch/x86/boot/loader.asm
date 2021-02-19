@@ -24,7 +24,7 @@ KERNEL_ADDR equ 0x100000
 	lgdt [GDT_addr];加载GDTR
 	in al,0x92
 	or al,2
-	out 0x92,al	;启用 A20 line
+	out 0x92,al;启用 A20 line
 	mov eax,cr0
 	or eax,1
 	mov cr0,eax;cr0 PE位置1
@@ -49,8 +49,16 @@ load_kernel:
 	mov eax,KERNEL_ADDR
 	mov bl,[KERNEL_ADDR+28];bl=program header地址
 	add eax,ebx
-	add eax,4;eax=记录.text偏移数据地址
-	mov ebx,[eax]
+	sub eax,0x20
+.check_flag:
+	add eax,0x20;下一个program header地址
+	mov dh,[eax+24];dh=flag
+	cmp dh,0x05;flag是否为R E
+	je .next
+	jmp .check_flag
+
+.next:
+	mov ebx,[eax+4];eax=记录.text偏移数据地址
 	add ebx,KERNEL_ADDR;ebx=.text偏移地址
 
 	mov cx,0xffff

@@ -27,7 +27,7 @@ image:
 	@dd if=kernel.sys of=hda.img bs=512 seek=9 count=348
 
 run:
-	$(MAKE) default
+	@$(MAKE) -s default
 	$(QEMU) -hda hda.img
 
 clean:
