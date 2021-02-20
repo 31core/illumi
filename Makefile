@@ -1,4 +1,4 @@
-include sources.mk
+include config/sources.mk
 
 MAKE=make
 QEMU=qemu-system-i386

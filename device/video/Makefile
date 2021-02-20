@@ -5,5 +5,5 @@ C_FLAGS=-m32 -Wall -fno-stack-protector -I../../include
 default:$(OBJS);
 
 %.o:%.c
-	@echo [CC] device/video$@
+	@echo [CC] device/video/$@
 	@gcc $(C_FLAGS) -c $*.c -o $*.o
