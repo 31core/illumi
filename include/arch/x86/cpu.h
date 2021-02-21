@@ -16,6 +16,6 @@ struct IDT_data
 	short offset_high;
 };
 
-void init_dsctbl();
+void init_cpu();
 void SetGDT(short,int,int,short);//设置GDT数据
 void SetIDT(char,int,short,char);//设置GDT数据

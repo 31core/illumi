@@ -12,8 +12,8 @@ struct fifo8 key_fifo;
 int main()
 {
 	init_fifo(&key_fifo,0,10);
-	init_dsctbl();//初始化dsctbl
-	init_pic();//初始化PIC
+	init_cpu();//初始化cpu相关设定
+	init_PIC();//初始化PIC
 	io_sti();//启用中断
 	init_MemFragCtl();//初始化内存碎片管理
 	CleanupScreen();

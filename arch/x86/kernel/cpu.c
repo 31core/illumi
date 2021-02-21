@@ -2,7 +2,7 @@
 #include<arch/x86/asmfunc.h>
 #include<device/interrupt/interrupt.h>
 
-void init_dsctbl()
+void init_cpu()
 {
 	short i;
 	for(i=0;i<0x2000;i++)
@@ -16,6 +16,7 @@ void init_dsctbl()
 	{
 		SetIDT((char)i,0,0,0);
 	}
+	SetIDT(0x20,(int)asm_interrupt20h,8,0x8e);
 	SetIDT(0x21,(int)asm_interrupt21h,8,0x8e);
 	LoadIDTR(0x7ff,0x26f800);//加载IDTR寄存器
 }
