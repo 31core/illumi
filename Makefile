@@ -11,17 +11,14 @@ DD=dd
 ARCH=arch/x86
 C_FLAGS=-m32 -Wall -fno-stack-protector -Iinclude
 
-BINS=$(patsubst %.asm,%.bin,$(wildcard $(asm_src)))
-OBJS=$(patsubst %.c,%.o,$(wildcard $(c_src)))
-
 default:
 	@$(MAKE) -s -C $(ARCH)/boot
 	@$(MAKE) -s kernel.sys
 	@$(MAKE) -s image
 #系统内核文件
-kernel.sys:$(BINS) $(OBJS)
+kernel.sys:$(kernel_bins) $(kernel_objs)
 	@echo [LD] kernel.sys
-	@$(LD) -m elf_i386 -e _start -Ttext 0x100000 $(BINS) $(OBJS) -o kernel.sys
+	@$(LD) -m elf_i386 -e _start -Ttext 0x100000 $(kernel_bins) $(kernel_objs) -o kernel.sys
 
 %.bin:%.asm
 	@echo [NASM] $@
@@ -41,7 +38,7 @@ run:
 	$(QEMU) -hda hda.img
 
 clean:
-	rm $(BINS) $(OBJS)
+	rm $(kernel_bins) $(kernel_objs)
 	rm kernel.sys
 	$(MAKE) -s -C $(ARCH)/boot clean
 	rm hda.img

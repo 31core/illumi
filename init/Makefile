@@ -1,0 +1,1 @@
+kernel_objs+=init/main.o
