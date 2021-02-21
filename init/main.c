@@ -1,4 +1,4 @@
-#include<arch/x86/dsctbl.h>
+#include<arch/x86/cpu.h>
 #include<arch/x86/asmfunc.h>
 #include<device/video/graphics.h>
 #include<device/interrupt/init.h>
