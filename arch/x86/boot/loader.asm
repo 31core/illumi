@@ -35,6 +35,9 @@ KERNEL_SIZE equ 24
 start:
 	mov ax,2*8
 	mov ds,ax
+	mov es,ax
+	mov gs,ax
+	mov fs,ax
 	mov ss,ax
 	call load_kernel
 	jmp dword 8:KERNEL_ADDR

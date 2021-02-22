@@ -1,5 +1,6 @@
 #include<kernel/timer.h>
 
+/* 延时函数 */
 void sleep(unsigned int time)
 {
 	int i=AllocTimer();

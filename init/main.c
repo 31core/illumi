@@ -7,10 +7,11 @@
 #include<kernel/types.h>
 #include<kernel/memory.h>
 #include<kernel/string.h>
-
+int timer_num;
 struct fifo8 key_fifo;
 int main()
 {
+	timer_num=0;
 	init_fifo(&key_fifo,0,10);
 	init_cpu();//初始化cpu相关设定
 	init_PIC();//初始化PIC

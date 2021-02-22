@@ -1,1 +1,1 @@
-void sleep(unsigned int);
+void sleep(unsigned int);//延时函数
