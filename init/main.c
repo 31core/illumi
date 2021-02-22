@@ -37,6 +37,5 @@ int main()
 		{
 			print("command not found.\n");
 		}
-		sleep(1000);
 	}
 }

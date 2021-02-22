@@ -2,6 +2,7 @@
 org 0x70000
 
 KERNEL_ADDR equ 0x100000
+KERNEL_SIZE equ 24
 
 [bits 16]
 	mov ax,0x07e0
@@ -39,31 +40,28 @@ start:
 	jmp dword 8:KERNEL_ADDR
 ;加载内核
 load_kernel:
-	mov cx,24
+	mov cx,KERNEL_SIZE
 	mov ebx,9
 	mov edx,KERNEL_ADDR
 	call load_block;加载内核到内存
 
-	mov eax,0
 	mov ebx,0
+	mov si,[KERNEL_ADDR+0x2c];si=program header个数
 	mov eax,KERNEL_ADDR
-	mov bl,[KERNEL_ADDR+28];bl=program header地址
-	add eax,ebx
+	mov bl,[KERNEL_ADDR+0x1c];bl=program header文件偏移
+	add eax,ebx;eax=program header地址
 	sub eax,0x20
-.check_flag:
+.loop_load:
 	add eax,0x20;下一个program header地址
-	mov dh,[eax+24];dh=flag
-	cmp dh,0x05;flag是否为R E
-	je .next
-	jmp .check_flag
-
-.next:
 	mov ebx,[eax+4];eax=记录.text偏移数据地址
 	add ebx,KERNEL_ADDR;ebx=.text偏移地址
 
-	mov cx,0x2400
-	mov edx,KERNEL_ADDR
+	mov cx,[eax+16];cx=内存大小
+	mov edx,[eax+8];edx=目标内存地址
 	call memcpy
+	sub si,1
+	cmp si,0
+	jg .loop_load
 	ret
 
 ;读取磁盘块
