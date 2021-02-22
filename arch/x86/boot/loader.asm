@@ -39,7 +39,7 @@ start:
 	jmp dword 8:KERNEL_ADDR
 ;加载内核
 load_kernel:
-	mov cx,23
+	mov cx,24
 	mov ebx,9
 	mov edx,KERNEL_ADDR
 	call load_block;加载内核到内存
@@ -61,7 +61,7 @@ load_kernel:
 	mov ebx,[eax+4];eax=记录.text偏移数据地址
 	add ebx,KERNEL_ADDR;ebx=.text偏移地址
 
-	mov cx,0xffff
+	mov cx,0x2400
 	mov edx,KERNEL_ADDR
 	call memcpy
 	ret
