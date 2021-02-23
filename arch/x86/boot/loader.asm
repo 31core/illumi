@@ -35,10 +35,6 @@ KERNEL_SIZE equ 24
 start:
 	mov ax,2*8
 	mov ds,ax
-	mov es,ax
-	mov gs,ax
-	mov fs,ax
-	mov ss,ax
 	call load_kernel
 	jmp dword 8:KERNEL_ADDR
 ;加载内核
@@ -48,22 +44,27 @@ load_kernel:
 	mov edx,KERNEL_ADDR
 	call load_block;加载内核到内存
 
-	mov ebx,0
 	mov si,[KERNEL_ADDR+0x2c];si=program header个数
 	mov eax,KERNEL_ADDR
-	mov bl,[KERNEL_ADDR+0x1c];bl=program header文件偏移
+	mov ebx,[KERNEL_ADDR+0x1c];bl=program header文件偏移
 	add eax,ebx;eax=program header地址
 	sub eax,0x20
-.loop_load:
+	mov di,si
+.loop_read_header:
 	add eax,0x20;下一个program header地址
-	mov ebx,[eax+4];eax=记录.text偏移数据地址
+	mov ebx,[eax+4];eax=.text文件偏移数据地址
 	add ebx,KERNEL_ADDR;ebx=.text偏移地址
-
-	mov cx,[eax+16];cx=内存大小
 	mov edx,[eax+8];edx=目标内存地址
-	call memcpy
+	mov ecx,[eax+16];ecx=内存大小
+	pushad
 	sub si,1
 	cmp si,0
+	jg .loop_read_header
+.loop_load:
+	popad
+	call memcpy
+	sub di,1
+	cmp di,0
 	jg .loop_load
 	ret
 
