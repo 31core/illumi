@@ -1,8 +1,8 @@
 ;loader.asm
 org 0x70000
 
-KERNEL_ADDR equ 0x100000
-KERNEL_SIZE equ 24
+KERNEL_ADDR equ 0x100000;内核地址
+KERNEL_SIZE equ 24;内核大小(扇区)
 
 [bits 16]
 	mov ax,0x07e0
@@ -45,23 +45,27 @@ load_kernel:
 	call load_block;加载内核到内存
 
 	mov si,[KERNEL_ADDR+0x2c];si=program header个数
+	mov di,si
 	mov eax,KERNEL_ADDR
 	mov ebx,[KERNEL_ADDR+0x1c];bl=program header文件偏移
 	add eax,ebx;eax=program header地址
 	sub eax,0x20
-	mov di,si
 .loop_read_header:
 	add eax,0x20;下一个program header地址
 	mov ebx,[eax+4];eax=.text文件偏移数据地址
 	add ebx,KERNEL_ADDR;ebx=.text偏移地址
 	mov edx,[eax+8];edx=目标内存地址
 	mov ecx,[eax+16];ecx=内存大小
-	pushad
+	push ebx;记录值的寄存器压入栈
+	push ecx
+	push edx
 	sub si,1
 	cmp si,0
 	jg .loop_read_header
 .loop_load:
-	popad
+	pop edx
+	pop ecx
+	pop ebx
 	call memcpy
 	sub di,1
 	cmp di,0
