@@ -37,3 +37,32 @@ void str_cpy(char *a,char *b)
 	}
 	a[i]='\0';
 }
+/* 分割字符串 */
+void str_split(char *ret,char *str,char byte,int count)
+{
+	int i=0;
+	int j=0;
+	/* 查找第n个字符串开始位置 */
+	while(j<count)
+	{
+		if(str[i]==byte)
+		{
+			j+=1;
+		}
+		if(str[i]=='\0')
+		{
+			ret[0]='\0';
+			return;
+		}
+		i+=1;
+	}
+	j=0;
+	/* 复制字符串 */
+	while(str[i]!=byte&&str[i]!='\0')
+	{
+		ret[j]=str[i];
+		i+=1;
+		j+=1;
+	}
+	ret[j]='\0';//字符串结尾标志
+}

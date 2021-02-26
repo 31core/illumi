@@ -18,12 +18,6 @@ int main()
 	io_sti();//启用中断
 	init_MemFragCtl();//初始化内存碎片管理
 	CleanupScreen();
-
-	char mem_size[11];
-	int2str(mem_size,GetMemorySize());
-	print("Memory Total: ");
-	print(mem_size);
-	print(" Bytes\n");
 	//操作系统主循环
 	while(1)
 	{
@@ -34,9 +28,12 @@ int main()
 		{
 			print("Rexistum Kernel 0.0.1\n");
 		}
-		else
+		else if(str_cmp(inp,"")!=1)
 		{
-			print("command not found.\n");
+			char cmd[11];
+			str_split(cmd,inp,' ',0);
+			print(cmd);
+			print(": unkown command.\n");
 		}
 	}
 }
