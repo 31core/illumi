@@ -1,5 +1,6 @@
 global LoadGDTR,LoadIDTR
 global io_out8,io_in8
+global io_out16,io_in16
 global io_cli,io_sti
 
 [bits 32]
@@ -24,7 +25,18 @@ io_out8:
 ;读8位端口
 io_in8:
 	mov dx,[esp+4];端口
-	in eax,dx
+	in al,dx
+	ret
+;写8位端口
+io_out16:
+	mov dx,[esp+4];端口
+	mov ax,[esp+8];16位数据
+	out dx,ax
+	ret
+;读8位端口
+io_in16:
+	mov dx,[esp+4];端口
+	in ax,dx
 	ret
 ;禁用中断
 io_cli:

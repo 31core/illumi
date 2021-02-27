@@ -1,0 +1,1 @@
+kernel_objs+=device/disk/disk.o

@@ -120,7 +120,7 @@ load_block:
 	in al,dx
 	and al,0x88
 	cmp al,0x08
-	jnz .check_disk
+	jne .check_disk
 	ret
 ;复制内存数据
 ;ebx:原始数据地址 edx:目标内存地址
