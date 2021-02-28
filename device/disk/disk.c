@@ -1,7 +1,7 @@
 #include<arch/x86/asmfunc.h>
 
 /* LBA读取磁盘 */
-void LBA28ReadDisk(char *buf,int offset,char count)
+void LBA28ReadDisk(char *buf,int offset,unsigned char count)
 {
 	io_out8(0x1f2,count);
 	io_out8(0x1f3,offset&0xff);
@@ -24,7 +24,7 @@ void LBA28ReadDisk(char *buf,int offset,char count)
 	}
 }
 /* LBA写入磁盘 */
-void LBA28WriteDisk(char *data,int offset,char count)
+void LBA28WriteDisk(char *data,int offset,unsigned char count)
 {
 	io_out8(0x1f2,count);
 	io_out8(0x1f3,offset&0xff);
