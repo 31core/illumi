@@ -4,7 +4,6 @@
 #include<device/interrupt/init.h>
 #include<device/input/keyboard.h>
 #include<kernel/fifo.h>
-#include<kernel/types.h>
 #include<kernel/memory.h>
 #include<kernel/string.h>
 int timer_num;
