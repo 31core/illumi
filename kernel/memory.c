@@ -34,19 +34,19 @@ void init_MemFragCtl()
 unsigned int AllocMemfrag(unsigned int size)
 {
 	int i=1;
-	for(;i<mem_frag_num+1;i++)
+	for(;i<mem_frag_num+2;i++)
 	{
 		/* 找到了足够大的内存碎片 */
-		if(mem_frag_list[i].size-mem_frag_list[i-1].addr>=size)
+		if(mem_frag_list[i].addr-mem_frag_list[i-1].size>=size)
 		{
 			break;
 		}
 	}
-	int addr=mem_frag_list[i-1].addr+mem_frag_list[i-1].size;
-	int j=i;
-	for(;j<mem_frag_num+1;j++)
+	int addr=mem_frag_list[i].addr-mem_frag_list[i-1].size;
+	int j=mem_frag_num+1;
+	for(;j>i;j++)
 	{
-		mem_frag_list[i]=mem_frag_list[i+1];
+		mem_frag_list[j+1]=mem_frag_list[j];
 	}
 	mem_frag_list[i].addr=addr;
 	mem_frag_list[i].size=size;
@@ -61,10 +61,9 @@ void FreeMemfrag(unsigned int addr)
 	{
 		if(mem_frag_list[i].addr==addr)
 		{
-			int j=mem_frag_num+1;
-			for(;j>i;j++)
+			for(;i<mem_frag_num+1;i++)
 			{
-				mem_frag_list[j-1]=mem_frag_list[j];
+				mem_frag_list[i]=mem_frag_list[i+1];
 			}
 			mem_frag_num-=1;
 			return;
