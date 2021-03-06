@@ -1,6 +1,6 @@
 extern unsigned int time_count;
 extern unsigned int timer_list[1000];
-int timer_num=0;//计时器的数量
+extern int timer_num;//计时器的数量
 /* 分配一个计时器 */
 int AllocTimer()
 {

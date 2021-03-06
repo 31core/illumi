@@ -4,19 +4,25 @@
 #include<device/interrupt/init.h>
 #include<device/input/keyboard.h>
 #include<kernel/fifo.h>
+#include<kernel/task.h>
 #include<kernel/memory.h>
 #include<kernel/string.h>
-extern int timer_num;
+
+extern int timer_num,time_count;
 extern struct fifo8 key_fifo;
+
 int main()
 {
 	timer_num=0;
+	time_count=0;
 	init_fifo(&key_fifo,0,10);
+	init_task();//初始化多任务
 	init_cpu();//初始化cpu相关设定
 	init_PIC();//初始化PIC
 	io_sti();//启用中断
 	init_MemFragCtl();//初始化内存碎片管理
 	CleanupScreen();
+
 	//操作系统主循环
 	while(1)
 	{
