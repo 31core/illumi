@@ -6,8 +6,8 @@
 #include<kernel/fifo.h>
 #include<kernel/memory.h>
 #include<kernel/string.h>
-int timer_num;
-struct fifo8 key_fifo;
+extern int timer_num;
+extern struct fifo8 key_fifo;
 int main()
 {
 	timer_num=0;

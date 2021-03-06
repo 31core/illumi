@@ -2,7 +2,7 @@
 
 unsigned int time_count=0;/* 记录经过的时间 */
 unsigned int timer_list[1000];
-int timer_num;
+extern int timer_num;
 
 void interrupt20h()
 {
