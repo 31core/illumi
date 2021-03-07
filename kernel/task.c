@@ -22,7 +22,6 @@ int GetNextPid()
 	{
 		if(task_list[i].flags==1)
 		{
-			now_task_pid=i;
 			return i;
 		}
 	}
@@ -30,7 +29,6 @@ int GetNextPid()
 	{
 		if(task_list[i].flags==1)
 		{
-			now_task_pid=i;
 			return i;
 		}
 	}
@@ -43,22 +41,28 @@ void SwitchTask()
 	if(pid!=-1)
 	{
 		RecordTaskStatus(&task_list[now_task_pid].status);
+		now_task_pid=pid;
 		RestoreTaskStatus(&task_list[pid].status);
 	}
 }
 /* 创建任务 */
-int CreateTask()
+int CreateTask(unsigned int addr)
 {
 	int i=0;
 	for(;i<1024;i++)
 	{
 		if(task_list[i].flags==0)
 		{
-			unsigned int addr=AllocMemfrag(1024);
+			unsigned int esp_addr=AllocMemfrag(1024)+1024;//分配该任务的栈地址
 			task_list[i].flags=1;
-			RecordTaskStatus(&task_list[i].status);
-			task_list[i].status.esp=addr;
-			return i;
+			task_list[i].status.eax=0;
+			task_list[i].status.ebx=0;
+			task_list[i].status.ecx=0;
+			task_list[i].status.edx=0;
+			task_list[i].status.esp=esp_addr;
+			int *p=(int*)esp_addr;
+			*p=addr;
+			return i;//返回pid
 		}
 	}
 	return -1;

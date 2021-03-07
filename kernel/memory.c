@@ -37,12 +37,12 @@ unsigned int AllocMemfrag(unsigned int size)
 	for(;i<mem_frag_num+2;i++)
 	{
 		/* 找到了足够大的内存碎片 */
-		if(mem_frag_list[i].addr-mem_frag_list[i-1].size>=size)
+		if(mem_frag_list[i].addr-mem_frag_list[i-1].size-mem_frag_list[i-1].addr>=size)
 		{
 			break;
 		}
 	}
-	int addr=mem_frag_list[i].addr-mem_frag_list[i-1].size;
+	int addr=mem_frag_list[i-1].addr+mem_frag_list[i-1].size;
 	int j=mem_frag_num+1;
 	for(;j>i;j++)
 	{

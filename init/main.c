@@ -22,7 +22,6 @@ int main()
 	io_sti();//启用中断
 	init_MemFragCtl();//初始化内存碎片管理
 	CleanupScreen();
-
 	//操作系统主循环
 	while(1)
 	{
