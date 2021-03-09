@@ -4,5 +4,4 @@ struct task_status
 	int eax,ebx,ecx,edx;
 };
 
-void RecordTaskStatus();
-void RestoreTaskStatus();
+void asm_SwitchTask(struct task_status*,struct task_status*);

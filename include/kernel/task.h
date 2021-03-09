@@ -11,3 +11,5 @@ void init_task();//初始化多任务
 int GetNextPid();//获取下一个任务pid
 void SwitchTask();//切换任务
 int CreateTask(unsigned int);//创建任务
+
+int CreateNowTask();//为当前执行的位置创建任务

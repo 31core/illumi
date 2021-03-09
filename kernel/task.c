@@ -40,9 +40,9 @@ void SwitchTask()
 	int pid=GetNextPid();
 	if(pid!=-1)
 	{
-		RecordTaskStatus(&task_list[now_task_pid].status);
+		int old_pid=now_task_pid;
 		now_task_pid=pid;
-		RestoreTaskStatus(&task_list[pid].status);
+		asm_SwitchTask(&task_list[old_pid].status,&task_list[pid].status);
 	}
 }
 /* 创建任务 */
@@ -61,7 +61,7 @@ int CreateTask(unsigned int addr)
 			task_list[i].status.edx=0;
 			task_list[i].status.esp=esp_addr;
 			int *p=(int*)esp_addr;
-			*p=addr;
+			*p=addr;//[esp]为任务跳转地址
 			return i;//返回pid
 		}
 	}
