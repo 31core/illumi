@@ -7,6 +7,7 @@
 #include<kernel/task.h>
 #include<kernel/memory.h>
 #include<kernel/string.h>
+#include<kernel/types.h>
 
 extern int timer_num, time_count;
 extern struct fifo8 key_fifo;
@@ -46,7 +47,7 @@ int main()
 			print("PID Name\n");
 			for(; j < i - 1; j++)
 			{
-				char str[5];
+				char str[11];
 				int2str(str, pids[j]);
 				print(str);
 				print("  ");

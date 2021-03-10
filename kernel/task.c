@@ -57,10 +57,14 @@ int CreateTask(unsigned int addr)
 			unsigned int esp_addr = AllocMemfrag(1024) + 1024; //分配该任务的栈地址
 			task_list[i].flags = 1;
 			task_list[i].name[0] = '\0';
+			/* 初始化寄存器 */
 			task_list[i].status.eax = 0;
 			task_list[i].status.ebx = 0;
 			task_list[i].status.ecx = 0;
 			task_list[i].status.edx = 0;
+			task_list[i].status.esi = 0;
+			task_list[i].status.edi = 0;
+			task_list[i].status.ebp = 0;
 			task_list[i].status.esp = esp_addr;
 			int *p = (int*)esp_addr;
 			*p = addr; //[esp]为任务跳转地址

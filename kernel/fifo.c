@@ -37,7 +37,7 @@ char ReadData(struct fifo8 *fifo)
 	/* 缓冲区数据大小为0 */
 	if(GetFifoInfo(*fifo) == 0)
 	{
-		return - 1;
+		return -1;
 	}
 	/* 读到缓冲区最后一位 */
 	if(fifo->read >= fifo->size)
