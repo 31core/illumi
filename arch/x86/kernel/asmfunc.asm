@@ -6,15 +6,19 @@ global io_cli,io_sti
 [bits 32]
 ;加载GDRT寄存器
 LoadGDTR:
-	mov ax,[esp+4]
-	mov [esp+6],ax
-	lgdt [esp+6]
+	mov ax,[esp+8]
+	mov ebx,[esp+4]
+	mov [esp+6],ebx
+	mov [esp+4],ax
+	lgdt [esp+4]
 	ret
 ;加载IDRT寄存器
 LoadIDTR:
-	mov ax,[esp+4]
-	mov [esp+6],ax
-	lidt [esp+6]
+	mov ax,[esp+8]
+	mov ebx,[esp+4]
+	mov [esp+6],ebx
+	mov [esp+4],ax
+	lidt [esp+4]
 	ret
 ;写8位端口
 io_out8:
