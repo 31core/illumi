@@ -31,13 +31,13 @@ io_in8:
 	mov dx,[esp+4];端口
 	in al,dx
 	ret
-;写8位端口
+;写16位端口
 io_out16:
 	mov dx,[esp+4];端口
 	mov ax,[esp+8];16位数据
 	out dx,ax
 	ret
-;读8位端口
+;读16位端口
 io_in16:
 	mov dx,[esp+4];端口
 	in ax,dx
