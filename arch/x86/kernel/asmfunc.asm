@@ -1,5 +1,4 @@
 global LoadGDTR,LoadIDTR
-global LoadTR
 global io_out8,io_in8
 global io_out16,io_in16
 global io_cli,io_sti
@@ -16,9 +15,6 @@ LoadIDTR:
 	mov ax,[esp+4]
 	mov [esp+6],ax
 	lidt [esp+6]
-	ret
-LoadTR:
-	ltr [esp+4]
 	ret
 ;写8位端口
 io_out8:
