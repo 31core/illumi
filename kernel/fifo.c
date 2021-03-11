@@ -1,4 +1,4 @@
-#include<kernel/fifo.h>
+#include <kernel/fifo.h>
 /* 初始化缓冲区 */
 void init_fifo(struct fifo8 *fifo, unsigned int addr, int size)
 {

@@ -1,7 +1,7 @@
-#include<kernel/task.h>
-#include<kernel/memory.h>
-#include<kernel/string.h>
-#include<arch/x86/asmfunc.h>
+#include <kernel/task.h>
+#include <kernel/memory.h>
+#include <kernel/string.h>
+#include <arch/x86/asmfunc.h>
 
 struct task_info task_list[1024];
 int now_task_pid = 0; //当前运行的任务pid
@@ -68,6 +68,22 @@ int CreateTask(unsigned int addr)
 			task_list[i].status.esp = esp_addr;
 			int *p = (int*)esp_addr;
 			*p = addr; //[esp]为任务跳转地址
+			return i; //返回pid
+		}
+	}
+	return -1;
+}
+/* 为当前执行的代码创建任务 */
+int CreateCurrentTask()
+{
+	int i = 0;
+	for(; i < 1024; i++)
+	{
+		if(task_list[i].flags == 0)
+		{
+			/* 因为当前任务被挂起时状态会被保存,所以不用初始化寄存器 */
+			task_list[i].flags = 1;
+			task_list[i].name[0] = '\0';
 			return i; //返回pid
 		}
 	}

@@ -1,13 +1,13 @@
-#include<arch/x86/cpu.h>
-#include<arch/x86/asmfunc.h>
-#include<device/video/graphics.h>
-#include<device/interrupt/init.h>
-#include<device/input/keyboard.h>
-#include<kernel/fifo.h>
-#include<kernel/task.h>
-#include<kernel/memory.h>
-#include<kernel/string.h>
-#include<kernel/types.h>
+#include <arch/x86/cpu.h>
+#include <arch/x86/asmfunc.h>
+#include <device/video/graphics.h>
+#include <device/interrupt/init.h>
+#include <device/input/keyboard.h>
+#include <kernel/fifo.h>
+#include <kernel/task.h>
+#include <kernel/memory.h>
+#include <kernel/string.h>
+#include <kernel/types.h>
 
 extern int timer_num, time_count;
 extern struct fifo8 key_fifo;
@@ -23,7 +23,7 @@ int main()
 	io_sti(); //启用中断
 	init_MemFragCtl(); //初始化内存碎片管理
 
-	CreateNowTask();
+	CreateCurrentTask(); //创建当前任务
 	SetTaskName(0, "init");
 
 	CleanupScreen();

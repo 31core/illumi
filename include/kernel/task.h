@@ -1,4 +1,4 @@
-#include<arch/x86/task.h>
+#include <arch/x86/task.h>
 
 struct task_info
 {
@@ -11,9 +11,8 @@ void init_task(); //初始化多任务
 int GetNextPid(); //获取下一个任务pid
 void SwitchTask(); //切换任务
 int CreateTask(unsigned int); //创建任务
+int CreateCurrentTask(); //为当前执行的代码创建任务
 void KillTask(int); //杀死任务
 void SetTaskName(int, char*); //设置任务名字
 void GetTaskName(char*, int); //获取任务名字
 int ListTask(int*); //获取任务pid列表
-
-int CreateNowTask(); //为当前执行的位置创建任务

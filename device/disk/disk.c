@@ -1,4 +1,4 @@
-#include<arch/x86/asmfunc.h>
+#include <arch/x86/asmfunc.h>
 
 /* LBA读取磁盘 */
 void LBA28ReadDisk(char *buf, int offset, unsigned char count)

@@ -1,6 +1,6 @@
-global asm_SwitchTask,CreateNowTask
-extern CreateTask
+global asm_SwitchTask
 asm_SwitchTask:
+	;保存当前任务状态
 	mov eax,[esp+4]
 	mov [eax],esp
 	mov [eax+4],ebp
@@ -10,7 +10,7 @@ asm_SwitchTask:
 	mov [eax+20],edx
 	mov [eax+24],esi
 	mov [eax+28],edi
-
+	;恢复下一个任务状态
 	mov eax,[esp+8]
 	mov esp,[eax]
 	mov ebp,[eax+4]
@@ -21,6 +21,3 @@ asm_SwitchTask:
 	mov esi,[eax+24]
 	mov edi,[eax+28]
 	jmp [esp];返回时会返回到esp栈所指向的地址
-CreateNowTask:
-	call CreateTask
-	ret

@@ -1,5 +1,5 @@
-#include<arch/x86/asmfunc.h>
-#include<kernel/task.h>
+#include <arch/x86/asmfunc.h>
+#include <kernel/task.h>
 
 unsigned int time_count = 0;/* 记录经过的时间 */
 unsigned int timer_list[1000];

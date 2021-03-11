@@ -1,6 +1,6 @@
-#include<kernel/fifo.h>
-#include<device/video/graphics.h>
-#include<device/input/keyboard.h>
+#include <kernel/fifo.h>
+#include <device/video/graphics.h>
+#include <device/input/keyboard.h>
 
 extern struct fifo8 key_fifo;
 extern char key_caps;

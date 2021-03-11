@@ -1,4 +1,4 @@
-#include<kernel/memory.h>
+#include <kernel/memory.h>
 
 /* 获取内存大小 */
 unsigned int GetMemorySize()

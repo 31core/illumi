@@ -1,4 +1,4 @@
-#include<device/video/graphics.h>
+#include <device/video/graphics.h>
 
 int vga_addr = VGA_ADDR; //显存地址
 int screen_x_size = 80; //屏幕宽

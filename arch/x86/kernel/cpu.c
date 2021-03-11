@@ -1,6 +1,6 @@
-#include<arch/x86/cpu.h>
-#include<arch/x86/asmfunc.h>
-#include<device/interrupt/interrupt.h>
+#include <arch/x86/cpu.h>
+#include <arch/x86/asmfunc.h>
+#include <device/interrupt/interrupt.h>
 
 void init_cpu()
 {

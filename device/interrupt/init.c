@@ -1,5 +1,5 @@
-#include<arch/x86/asmfunc.h>
-#include<device/interrupt/init.h>
+#include <arch/x86/asmfunc.h>
+#include <device/interrupt/init.h>
 
 /* 初始化PIC */
 void init_PIC()

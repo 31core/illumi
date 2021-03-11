@@ -1,4 +1,4 @@
-#include<kernel/string.h>
+#include <kernel/string.h>
 
 /* 整形数字转字符串 */
 void int2str(char *str, unsigned int num)
