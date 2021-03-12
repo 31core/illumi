@@ -99,6 +99,11 @@ void GetTaskName(char *ret, int pid)
 {
 	str_cpy(ret, task_list[pid].name);
 }
+/* 获取当前任务的pid */
+int GetCurrentPid()
+{
+	return now_task_pid;
+}
 /* 杀死任务 */
 void KillTask(int pid)
 {

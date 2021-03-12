@@ -15,4 +15,5 @@ int CreateCurrentTask(); //为当前执行的代码创建任务
 void KillTask(int); //杀死任务
 void SetTaskName(int, char*); //设置任务名字
 void GetTaskName(char*, int); //获取任务名字
+int GetCurrentPid();//获取当前任务的pid
 int ListTask(int*); //获取任务pid列表

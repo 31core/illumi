@@ -31,15 +31,16 @@ int main()
 	while(1)
 	{
 		print("[root /] ");
-		char inp[21];
+		char inp[21],cmd[11];
 		input(inp);
+		str_split(cmd, inp, ' ',0);
 		/* 显示内核版本 */
-		if(str_cmp(inp, "rever") == 1)
+		if(str_cmp(cmd, "rever") == 1)
 		{
 			print("Rexistum Kernel 0.0.2\n");
 		}
 		/* 打印任务 */
-		else if(str_cmp(inp, "ps") == 1)
+		else if(str_cmp(cmd, "ps") == 1)
 		{
 			int pids[1024];
 			int i = ListTask(pids);
@@ -56,7 +57,14 @@ int main()
 				printchar('\n');
 			}
 		}
-		else if(str_cmp(inp, "") != 1)
+		else if(str_cmp(cmd, "kill") == 1)
+		{
+			char strpid[5];
+			str_split(strpid, inp, ' ',1);
+			int pid=str2int(strpid);
+			KillTask(pid);
+		}
+		else if(str_cmp(cmd, "") != 1)
 		{
 			char cmd[11];
 			str_split(cmd, inp, ' ', 0);
