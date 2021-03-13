@@ -31,7 +31,7 @@ void SetGDT(short count, int base, int limit, short access)
 		access |= 0x8000;
 		limit /= 0x1000;
 	}
-	GDT->base_high = base >> 24 & 0xff; //取base高8位
+	GDT->base_high = base >> 24; //取base高8位
 	GDT->base_mid = base >> 16 & 0xff; //取base中间8位
 	GDT->base_low = base & 0xffff; //取base低16位
 	GDT->limit_high = (limit >> 16 & 0x0f) | (access >> 8 & 0xf0);
@@ -43,8 +43,8 @@ void SetIDT(char count, int offset, short selector, char access)
 {
 	struct IDT_data *IDT = (struct IDT_data*)IDT_ADDR;
 	IDT += count; //设置IDT地址到地count个IDT处
-	IDT->offset_high = offset >> 16&0xffff; //取offset高16位
-	IDT->offset_low = offset&0xffff; //取offset低16位
+	IDT->offset_high = offset >> 16; //取offset高16位
+	IDT->offset_low = offset & 0xffff; //取offset低16位
 	IDT->selector = selector;
 	IDT->count = 0;
 	IDT->access = access;
