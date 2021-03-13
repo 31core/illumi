@@ -57,6 +57,7 @@ int main()
 				printchar('\n');
 			}
 		}
+		/* 杀死任务 */
 		else if(str_cmp(cmd, "kill") == 1)
 		{
 			char strpid[5];
