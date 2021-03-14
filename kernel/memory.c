@@ -45,7 +45,7 @@ unsigned int AllocMemfrag(unsigned int size)
 	}
 	int addr = mem_frag_list[i - 1].addr + mem_frag_list[i - 1].size;
 	int j = mem_frag_num + 1;
-	for(; j > i; j++)
+	for(; j > i; j--)
 	{
 		mem_frag_list[j + 1] = mem_frag_list[j];
 	}

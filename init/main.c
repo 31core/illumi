@@ -46,7 +46,7 @@ int main()
 			int i = ListTask(pids);
 			int j = 0;
 			print("PID Name\n");
-			for(; j < i - 1; j++)
+			for(; j < i; j++)
 			{
 				char str[11];
 				int2str(str, pids[j]);

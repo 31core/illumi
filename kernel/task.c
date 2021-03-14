@@ -97,12 +97,22 @@ void SetTaskName(int pid, char *str)
 /* 获取任务名字 */
 void GetTaskName(char *ret, int pid)
 {
+	/* 任务没有运行 */
+	if(task_list[pid].flags == 0)
+	{
+		return;
+	}
 	str_cpy(ret, task_list[pid].name);
 }
 /* 获取当前任务的pid */
 int GetCurrentPid()
 {
 	return now_task_pid;
+}
+/* 等待任务结束 */
+void WaitTask(int pid)
+{
+	while(task_list[pid].flags != 0);
 }
 /* 杀死任务 */
 void KillTask(int pid)
@@ -112,8 +122,7 @@ void KillTask(int pid)
 /* 获取任务pid列表 */
 int ListTask(int *ret)
 {
-	int i, j;
-	j = 0;
+	int i, j = 0;
 	for(i = 0; i < 1024; i++)
 	{
 		if(task_list[i].flags == 1)
@@ -122,5 +131,5 @@ int ListTask(int *ret)
 			j += 1;
 		}
 	}
-	return j + 1;
+	return j; //返回pid个数
 }
