@@ -13,6 +13,7 @@ void SwitchTask(); //切换任务
 int CreateTask(unsigned int); //创建任务
 int CreateCurrentTask(); //为当前执行的代码创建任务
 void KillTask(int); //杀死任务
+void WaitTask(int); //等待任务结束
 void SetTaskName(int, char*); //设置任务名字
 void GetTaskName(char*, int); //获取任务名字
 int GetCurrentPid();//获取当前任务的pid

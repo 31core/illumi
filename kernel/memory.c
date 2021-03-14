@@ -6,7 +6,7 @@ unsigned int GetMemorySize()
 	int *p, old;
 	for(p = (int*)0x100000; p < (int*)0xffffffff; p += 4096)
 	{
-		old = *p;
+		old = *p; //保存初始内存内容
 		*p = 0xff00ff00;
 		if(*p != 0xff00ff00)
 		{
@@ -20,6 +20,7 @@ unsigned int GetMemorySize()
 struct mem_fragment mem_frag_list[4096];
 int mem_frag_num = 0; //内存碎片总数
 unsigned int memory_size; //内存大小
+
 /* 初始化内存碎片管理 */
 void init_MemFragCtl()
 {
@@ -27,7 +28,7 @@ void init_MemFragCtl()
 	mem_frag_num = 0;
 	mem_frag_list[0].addr = 0;
 	mem_frag_list[0].size = 0;
-	mem_frag_list[1].addr = memory_size;
+	mem_frag_list[1].addr = memory_size;  //结尾的地址为内存大小
 	mem_frag_list[1].size = 0;
 }
 /* 分配内存碎片 */
@@ -62,6 +63,7 @@ void FreeMemfrag(unsigned int addr)
 	{
 		if(mem_frag_list[i].addr == addr)
 		{
+			/* 向前移动成员 */
 			for(; i < mem_frag_num + 1; i++)
 			{
 				mem_frag_list[i] = mem_frag_list[i + 1];
