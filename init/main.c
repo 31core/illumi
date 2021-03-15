@@ -21,7 +21,11 @@ int main()
 	init_cpu(); //初始化cpu相关设定
 	init_PIC(); //初始化PIC
 	io_sti(); //启用中断
-	init_MemFragCtl(); //初始化内存碎片管理
+	/* 初始化内存碎片管理 */
+	init_MemFragCtl();
+	AllocMemfragWithAddr(0x8b000, 2 * 80 * 25);
+	AllocMemfragWithAddr(GDT_ADDR, 8 * 0x2000);
+	AllocMemfragWithAddr(GDT_ADDR, 8 * 0x100);
 
 	CreateCurrentTask(); //创建当前任务
 	SetTaskName(0, "init");

@@ -1,5 +1,5 @@
-#define GDT_ADDR 0x270000
-#define IDT_ADDR 0x26f800
+#define GDT_ADDR 0x210000 //GDT地址
+#define IDT_ADDR 0x20f800 //IDT地址
 
 /* GDT数据结构体 */
 struct GDT_data

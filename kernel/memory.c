@@ -55,6 +55,33 @@ unsigned int AllocMemfrag(unsigned int size)
 	mem_frag_num += 1;
 	return addr;
 }
+/* 分配内存时指定地址 */
+void AllocMemfragWithAddr(unsigned int addr, unsigned int size)
+{
+	int i = 1;
+	for(; i < mem_frag_num + 2; i++)
+	{
+		if(addr < mem_frag_list[i].addr)
+		{
+			break;
+		}
+	}
+	/* 需要分配的内存已被使用 */
+	if(mem_frag_list[i].addr + mem_frag_list[i].size > addr || \
+	addr + size > mem_frag_list[i + 1].addr)
+	{
+		return;
+	}
+	int j = mem_frag_num + 1; //j为最后一个成员位置
+	/* 向后移动成员 */
+	for(; j > i; j--)
+	{
+		mem_frag_list[j + 1] = mem_frag_list[j];
+	}
+	mem_frag_list[i].addr = addr;
+	mem_frag_list[i].size = size;
+	mem_frag_num += 1;
+}
 /* 释放内存碎片 */
 void FreeMemfrag(unsigned int addr)
 {

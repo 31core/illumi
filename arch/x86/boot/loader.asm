@@ -50,22 +50,26 @@ load_kernel:
 	mov ebx,[KERNEL_ADDR+0x1c];bl=program header文件偏移
 	add eax,ebx;eax=program header地址
 	sub eax,0x20
+	push ebp
 .loop_read_header:
 	add eax,0x20;下一个program header地址
 	mov ebx,[eax+4];eax=.text文件偏移数据地址
 	add ebx,KERNEL_ADDR;ebx=.text偏移地址
 	mov edx,[eax+8];edx=目标内存地址
 	mov ecx,[eax+16];ecx=内存大小
-	push ebx;记录值的寄存器压入栈
-	push ecx
-	push edx
+	mov [ebp],ebx;记录值的寄存器的值
+	mov [ebp+4],ecx
+	mov [ebp+8],edx
+	add ebp,12
 	sub si,1
 	cmp si,0
 	jg .loop_read_header
+	pop ebp
 .loop_load:
-	pop edx
-	pop ecx
-	pop ebx
+	mov ebx,[ebp];记录值的寄存器压入栈
+	mov ecx,[ebp+4]
+	mov edx,[ebp+8]
+	add ebp,12
 	call memcpy
 	sub di,1
 	cmp di,0
