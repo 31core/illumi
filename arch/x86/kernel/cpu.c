@@ -2,6 +2,7 @@
 #include <arch/x86/asmfunc.h>
 #include <device/interrupt/interrupt.h>
 
+/* 初始化cpu */
 void init_cpu()
 {
 	short i;
@@ -11,14 +12,14 @@ void init_cpu()
 	}
 	SetGDT(1, 0, 0xffffffff, 0x409a);
 	SetGDT(2, 0, 0xffffffff, 0x4092);
-	LoadGDTR(0x270000, 0xffff); //加载GDTR寄存器
+	LoadGDTR(GDT_ADDR, 0xffff); //加载GDTR寄存器
 	for(i = 0; i < 256; i++)
 	{
 		SetIDT((char)i, 0, 0, 0);
 	}
 	SetIDT(0x20, (int)asm_interrupt20h, 8, 0x8e);
 	SetIDT(0x21, (int)asm_interrupt21h, 8, 0x8e);
-	LoadIDTR(0x26f800, 0x7ff); //加载IDTR寄存器
+	LoadIDTR(IDT_ADDR, 0x7ff); //加载IDTR寄存器
 }
 /* 设置GDT数据 */
 void SetGDT(short count, int base, int limit, short access)

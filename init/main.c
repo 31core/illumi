@@ -23,7 +23,7 @@ int main()
 	io_sti(); //启用中断
 	/* 初始化内存碎片管理 */
 	init_MemFragCtl();
-	AllocMemfragWithAddr(0x8b000, 2 * 80 * 25);
+	AllocMemfragWithAddr(VGA_ADDR, 2 * 80 * 25); //显存
 	AllocMemfragWithAddr(GDT_ADDR, 8 * 0x2000);
 	AllocMemfragWithAddr(GDT_ADDR, 8 * 0x100);
 
