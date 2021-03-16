@@ -27,9 +27,6 @@ int main()
 	AllocMemfragWithAddr(GDT_ADDR, 8 * 0x2000);
 	AllocMemfragWithAddr(GDT_ADDR, 8 * 0x100);
 
-	CreateCurrentTask(); //创建当前任务
-	SetTaskName(0, "init");
-
 	CleanupScreen();
 	/* 操作系统主循环 */
 	while(1)
@@ -68,6 +65,21 @@ int main()
 			str_split(strpid, inp, ' ',1);
 			int pid=str2int(strpid);
 			KillTask(pid);
+		}
+		/* 打印内存使用情况 */
+		else if(str_cmp(cmd, "mem") == 1)
+		{
+			unsigned int size = GetMemorySize() / 1024;
+			char str_size[11];
+			print("Total: ");
+			int2str(str_size, size);
+			print(str_size);
+			print(" KB\n");
+			size = GetMemoryFreeSize() / 1024;
+			int2str(str_size, size);
+			print("Free: ");
+			print(str_size);
+			print(" KB\n");
 		}
 		else if(str_cmp(cmd, "") != 1)
 		{

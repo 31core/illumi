@@ -14,6 +14,10 @@ void init_task()
 	{
 		task_list[i].flags = 0;
 	}
+	/* 创建初始化任务 */
+	task_list[0].flags = 1;
+	task_list[0].name[0] = '\0';
+	str_cpy(task_list[0].name, "init");
 }
 /* 获取下一个任务pid */
 int GetNextPid()
@@ -66,6 +70,7 @@ int CreateTask(unsigned int addr)
 			task_list[i].status.edi = 0;
 			task_list[i].status.ebp = 0;
 			task_list[i].status.esp = esp_addr;
+			task_list[i].init_info.stack_addr = esp_addr;
 			int *p = (int*)esp_addr;
 			*p = addr; //[esp]为任务跳转地址
 			return i; //返回pid
@@ -73,22 +78,7 @@ int CreateTask(unsigned int addr)
 	}
 	return -1;
 }
-/* 为当前执行的代码创建任务 */
-int CreateCurrentTask()
-{
-	int i = 0;
-	for(; i < 1024; i++)
-	{
-		if(task_list[i].flags == 0)
-		{
-			/* 因为当前任务被挂起时状态会被保存,所以不用初始化寄存器 */
-			task_list[i].flags = 1;
-			task_list[i].name[0] = '\0';
-			return i; //返回pid
-		}
-	}
-	return -1;
-}
+
 /* 设置任务名字 */
 void SetTaskName(int pid, char *str)
 {
@@ -117,7 +107,11 @@ void WaitTask(int pid)
 /* 杀死任务 */
 void KillTask(int pid)
 {
-	task_list[pid].flags = 0;
+	if(pid != 0)
+	{
+		task_list[pid].flags = 0;
+		FreeMemfrag(task_list[pid].init_info.stack_addr);
+	}
 }
 /* 获取任务pid列表 */
 int ListTask(int *ret)

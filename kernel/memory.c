@@ -86,12 +86,12 @@ void AllocMemfragWithAddr(unsigned int addr, unsigned int size)
 void FreeMemfrag(unsigned int addr)
 {
 	int i = 1;
-	for(; i < mem_frag_num + 1; i++)
+	for(; i <= mem_frag_num; i++)
 	{
 		if(mem_frag_list[i].addr == addr)
 		{
 			/* 向前移动成员 */
-			for(; i < mem_frag_num + 1; i++)
+			for(; i <= mem_frag_num; i++)
 			{
 				mem_frag_list[i] = mem_frag_list[i + 1];
 			}
