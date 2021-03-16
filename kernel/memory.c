@@ -46,7 +46,7 @@ unsigned int AllocMemfrag(unsigned int size)
 	}
 	int addr = mem_frag_list[i - 1].addr + mem_frag_list[i - 1].size;
 	int j = mem_frag_num + 1;
-	for(; j > i; j--)
+	for(; j >= i; j--)
 	{
 		mem_frag_list[j + 1] = mem_frag_list[j];
 	}
@@ -61,20 +61,20 @@ void AllocMemfragWithAddr(unsigned int addr, unsigned int size)
 	int i = 1;
 	for(; i < mem_frag_num + 2; i++)
 	{
-		if(addr < mem_frag_list[i].addr)
+		if(addr < mem_frag_list[i - 1].addr)
 		{
 			break;
 		}
 	}
 	/* 需要分配的内存已被使用 */
-	if(mem_frag_list[i].addr + mem_frag_list[i].size > addr || \
-	addr + size > mem_frag_list[i + 1].addr)
+	if(mem_frag_list[i - 1].addr + mem_frag_list[i - 1].size > addr || \
+	addr + size > mem_frag_list[i].addr)
 	{
 		return;
 	}
 	int j = mem_frag_num + 1; //j为最后一个成员位置
 	/* 向后移动成员 */
-	for(; j > i; j--)
+	for(; j >= i; j--)
 	{
 		mem_frag_list[j + 1] = mem_frag_list[j];
 	}
