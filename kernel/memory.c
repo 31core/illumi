@@ -1,8 +1,17 @@
 #include <kernel/memory.h>
 
+struct mem_fragment mem_frag_list[4096];
+int mem_frag_num = 0; //内存碎片总数
+unsigned int memory_size = 0; //内存大小
+
 /* 获取内存大小 */
 unsigned int GetMemorySize()
 {
+	/* 已经检测过内存则返回该值 */
+	if(memory_size != 0)
+	{
+		return memory_size;
+	}
 	int *p, old;
 	for(p = (int*)0x100000; p < (int*)0xffffffff; p += 4096)
 	{
@@ -17,15 +26,12 @@ unsigned int GetMemorySize()
 	return (unsigned int)p;
 }
 
-struct mem_fragment mem_frag_list[4096];
-int mem_frag_num = 0; //内存碎片总数
-unsigned int memory_size; //内存大小
-
 /* 初始化内存碎片管理 */
 void init_MemFragCtl()
 {
-	memory_size = GetMemorySize();
+	memory_size = 0;
 	mem_frag_num = 0;
+	memory_size = GetMemorySize();
 	mem_frag_list[0].addr = 0;
 	mem_frag_list[0].size = 0;
 	mem_frag_list[1].addr = memory_size;  //结尾的地址为内存大小

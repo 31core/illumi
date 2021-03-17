@@ -60,6 +60,7 @@ int CreateTask(unsigned int addr)
 		{
 			unsigned int esp_addr = AllocMemfrag(1024) + 1024; //分配该任务的栈地址
 			task_list[i].flags = 1;
+			task_list[i].parent_pid = 0;
 			task_list[i].name[0] = '\0';
 			/* 初始化寄存器 */
 			task_list[i].status.eax = 0;
@@ -77,6 +78,13 @@ int CreateTask(unsigned int addr)
 		}
 	}
 	return -1;
+}
+/* 创建子进程 */
+int CreateSubTask(unsigned int addr)
+{
+	int pid = CreateTask(addr);
+	task_list[pid].parent_pid = now_task_pid;
+	return pid;
 }
 
 /* 设置任务名字 */
@@ -111,6 +119,15 @@ void KillTask(int pid)
 	{
 		task_list[pid].flags = 0;
 		FreeMemfrag(task_list[pid].init_info.stack_addr);
+		int i = 0;
+		/* 递归杀死其子进程 */
+		for(; i < 1024; i++)
+		{
+			if(task_list[i].flags != 0 && task_list[i].parent_pid == pid)
+			{
+				KillTask(i);
+			}
+		}
 	}
 }
 /* 获取任务pid列表 */

@@ -11,6 +11,7 @@ struct task_info
 	struct task_init_info init_info;
 	char name[11]; //任务名称
 	struct task_status status; //任务状态
+	int parent_pid;
 	int flags;
 };
 
@@ -18,6 +19,7 @@ void init_task(); //初始化多任务
 int GetNextPid(); //获取下一个任务pid
 void SwitchTask(); //切换任务
 int CreateTask(unsigned int); //创建任务
+int CreateSubTask(unsigned int addr); //创建子进程
 void KillTask(int); //杀死任务
 void WaitTask(int); //等待任务结束
 void SetTaskName(int, char*); //设置任务名字
