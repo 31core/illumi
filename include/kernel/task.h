@@ -11,7 +11,7 @@ struct task_info
 	struct task_init_info init_info;
 	char name[11]; //任务名称
 	struct task_status status; //任务状态
-	int parent_pid;
+	int parent_pid; //父进程pid
 	int flags;
 };
 
@@ -25,4 +25,4 @@ void WaitTask(int); //等待任务结束
 void SetTaskName(int, char*); //设置任务名字
 void GetTaskName(char*, int); //获取任务名字
 int GetCurrentPid();//获取当前任务的pid
-int ListTask(int*); //获取任务pid列表
+int GetTaskList(int*); //获取任务pid列表

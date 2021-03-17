@@ -25,7 +25,8 @@ int main()
 	init_MemFragCtl();
 	AllocMemfragWithAddr(VGA_ADDR, 2 * 80 * 25); //显存
 	AllocMemfragWithAddr(GDT_ADDR, 8 * 0x2000);
-	AllocMemfragWithAddr(GDT_ADDR, 8 * 0x100);
+	AllocMemfragWithAddr(IDT_ADDR, 8 * 0x100);
+	AllocMemfragWithAddr(0x100000, 64 * 1024); //为内核分配64 kb空间
 
 	CleanupScreen();
 	/* 操作系统主循环 */
@@ -44,7 +45,7 @@ int main()
 		else if(str_cmp(cmd, "ps") == 1)
 		{
 			int pids[1024];
-			int i = ListTask(pids);
+			int i = GetTaskList(pids);
 			int j = 0;
 			print("PID Name\n");
 			for(; j < i; j++)

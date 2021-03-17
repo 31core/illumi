@@ -65,9 +65,9 @@ unsigned int AllocMemfrag(unsigned int size)
 void AllocMemfragWithAddr(unsigned int addr, unsigned int size)
 {
 	int i = 1;
-	for(; i < mem_frag_num + 2; i++)
+	for(; i <= mem_frag_num; i++)
 	{
-		if(addr < mem_frag_list[i - 1].addr)
+		if(mem_frag_list[i].addr > addr)
 		{
 			break;
 		}
@@ -111,7 +111,7 @@ unsigned int GetMemoryFreeSize()
 {
 	int i = 1;
 	unsigned int size = memory_size;
-	for(; i < mem_frag_num + 1; i++)
+	for(; i <= mem_frag_num; i++)
 	{
 		size -= mem_frag_list[i].size;
 	}

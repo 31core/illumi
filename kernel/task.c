@@ -90,7 +90,10 @@ int CreateSubTask(unsigned int addr)
 /* 设置任务名字 */
 void SetTaskName(int pid, char *str)
 {
-	str_cpy(task_list[pid].name, str);
+	if(pid != 0)
+	{
+		str_cpy(task_list[pid].name, str);
+	}
 }
 /* 获取任务名字 */
 void GetTaskName(char *ret, int pid)
@@ -110,11 +113,17 @@ int GetCurrentPid()
 /* 等待任务结束 */
 void WaitTask(int pid)
 {
+	/* 不是当前任务的子进程 */
+	if(task_list[pid].parent_pid != now_task_pid)
+	{
+		return;
+	}
 	while(task_list[pid].flags != 0);
 }
 /* 杀死任务 */
 void KillTask(int pid)
 {
+	/* 不能杀死init进程 */
 	if(pid != 0)
 	{
 		task_list[pid].flags = 0;
@@ -131,7 +140,7 @@ void KillTask(int pid)
 	}
 }
 /* 获取任务pid列表 */
-int ListTask(int *ret)
+int GetTaskList(int *ret)
 {
 	int i, j = 0;
 	for(i = 0; i < 1024; i++)
