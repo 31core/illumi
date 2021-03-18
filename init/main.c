@@ -47,13 +47,16 @@ int main()
 			int pids[1024];
 			int i = GetTaskList(pids);
 			int j = 0;
-			print("PID Name\n");
+			print("PID  PPID  Name\n");
 			for(; j < i; j++)
 			{
 				char str[11];
 				int2str(str, pids[j]);
 				print(str);
-				print("  ");
+				print("   ");
+				int2str(str, GetParentPid(pids[j]));
+				print(str);
+				print("    ");
 				GetTaskName(str, j);
 				print(str);
 				printchar('\n');

@@ -17,6 +17,7 @@ void init_task()
 	/* 创建初始化任务 */
 	task_list[0].flags = 1;
 	task_list[0].name[0] = '\0';
+	task_list[0].parent_pid = 0;
 	str_cpy(task_list[0].name, "init");
 }
 /* 获取下一个任务pid */
@@ -60,7 +61,7 @@ int CreateTask(unsigned int addr)
 		{
 			unsigned int esp_addr = AllocMemfrag(1024) + 1024; //分配该任务的栈地址
 			task_list[i].flags = 1;
-			task_list[i].parent_pid = 0;
+			task_list[i].parent_pid = now_task_pid;
 			task_list[i].name[0] = '\0';
 			/* 初始化寄存器 */
 			task_list[i].status.eax = 0;
@@ -78,13 +79,6 @@ int CreateTask(unsigned int addr)
 		}
 	}
 	return -1;
-}
-/* 创建子进程 */
-int CreateSubTask(unsigned int addr)
-{
-	int pid = CreateTask(addr);
-	task_list[pid].parent_pid = now_task_pid;
-	return pid;
 }
 
 /* 设置任务名字 */
@@ -110,6 +104,19 @@ int GetCurrentPid()
 {
 	return now_task_pid;
 }
+/* 获取父进程pid */
+int GetParentPid(int pid)
+{
+	if(pid == 0)
+	{
+		return 0; //init进程的父进程为0
+	}
+	if(task_list[pid].flags != 0)
+	{
+		return task_list[pid].parent_pid;
+	}
+	return -1;
+}
 /* 等待任务结束 */
 void WaitTask(int pid)
 {
@@ -129,12 +136,12 @@ void KillTask(int pid)
 		task_list[pid].flags = 0;
 		FreeMemfrag(task_list[pid].init_info.stack_addr);
 		int i = 0;
-		/* 递归杀死其子进程 */
+		/* 为子进程重新分配父进程 */
 		for(; i < 1024; i++)
 		{
 			if(task_list[i].flags != 0 && task_list[i].parent_pid == pid)
 			{
-				KillTask(i);
+				task_list[i].parent_pid = 0;
 			}
 		}
 	}

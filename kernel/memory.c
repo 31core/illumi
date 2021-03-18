@@ -41,7 +41,7 @@ void init_MemFragCtl()
 unsigned int AllocMemfrag(unsigned int size)
 {
 	int i = 1;
-	for(; i < mem_frag_num + 2; i++)
+	for(; i <= mem_frag_num + 1; i++)
 	{
 		/* 找到了足够大的内存碎片 */
 		if(mem_frag_list[i].addr - mem_frag_list[i - 1].size -\
@@ -65,7 +65,8 @@ unsigned int AllocMemfrag(unsigned int size)
 void AllocMemfragWithAddr(unsigned int addr, unsigned int size)
 {
 	int i = 1;
-	for(; i <= mem_frag_num; i++)
+	/* 查找插入内存片段位置 */
+	for(; i <= mem_frag_num + 1; i++)
 	{
 		if(mem_frag_list[i].addr > addr)
 		{
