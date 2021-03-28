@@ -5,6 +5,7 @@
 #include <device/input/keyboard.h>
 #include <kernel/fifo.h>
 #include <kernel/task.h>
+#include <kernel/ipc.h>
 #include <kernel/memory.h>
 #include <kernel/string.h>
 #include <kernel/types.h>
@@ -18,6 +19,7 @@ int main()
 	time_count = 0;
 	init_fifo(&key_fifo, 0, 10);
 	init_task(); //初始化多任务
+	init_pipe(); //初始化管道(pipe)
 	init_cpu(); //初始化cpu相关设定
 	init_PIC(); //初始化PIC
 	io_sti(); //启用中断
