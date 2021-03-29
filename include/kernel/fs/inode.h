@@ -5,7 +5,7 @@ struct inode
 {
 	char name[16];
 	int parent_block;
-	int block_index;
+	int index_block;
 	int type;
 };
 

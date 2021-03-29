@@ -2,7 +2,7 @@
 org 0x70000
 
 KERNEL_ADDR equ 0x100000;内核地址
-KERNEL_SIZE equ 30;内核大小(扇区)
+KERNEL_SIZE equ 38;内核大小(扇区)
 
 [bits 16]
 	mov ax,0x07e0
