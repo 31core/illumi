@@ -9,6 +9,8 @@
 #include <kernel/memory.h>
 #include <kernel/string.h>
 #include <kernel/types.h>
+#include <kernel/fs/index.h>
+#include <kernel/fs/inode.h>
 
 extern int timer_num, time_count;
 extern struct fifo8 key_fifo;
@@ -29,7 +31,6 @@ int main()
 	AllocMemfragWithAddr(GDT_ADDR, 8 * 0x2000);
 	AllocMemfragWithAddr(IDT_ADDR, 8 * 0x100);
 	AllocMemfragWithAddr(0x100000, 64 * 1024); //为内核分配64 kb空间
-
 	CleanupScreen();
 	/* 操作系统主循环 */
 	while(1)
@@ -71,6 +72,16 @@ int main()
 			str_split(strpid, inp, ' ',1);
 			int pid=str2int(strpid);
 			KillTask(pid);
+		}
+		else if(str_cmp(cmd, "fs") == 1)
+		{
+			char mode[10];
+			str_split(mode, inp, ' ',1);
+			if(str_cmp(mode, "create") == 1)
+			{
+				init_IndexArea();
+				init_inode();
+			}
 		}
 		/* 打印内存使用情况 */
 		else if(str_cmp(cmd, "mem") == 1)

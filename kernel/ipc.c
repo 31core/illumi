@@ -22,14 +22,15 @@ void CreatePipe(struct pipe *pipe, int target_pid)
 	pipe_count += 1;
 }
 /* 获取pipe */
-int GetPipe()
+int GetPipe(struct pipe **pipe)
 {
 	int i = 0;
 	for(; i < pipe_count; i++)
 	{
 		if(GetCurrentPid() == pipe_list[i]->target_pid)
 		{
-			return (int)pipe_list[i];
+			*pipe = pipe_list[i];
+			return 0;
 		}
 	}
 	return -1;
@@ -74,7 +75,7 @@ void ClosePipe(struct pipe *pipe)
 	{
 		if(pipe_list[i] == pipe)
 		{
-			for(; i < pipe_count; i++)
+			for(; i < pipe_count - 1; i++)
 			{
 				pipe_list[i] = pipe_list[i + 1];
 			}
