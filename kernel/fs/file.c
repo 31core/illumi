@@ -5,7 +5,9 @@
 #include <kernel/string.h>
 #include <kernel/memory.h>
 
-extern struct inode inode_list[1024];
+#define DATA_BLOCK_BEGIN 3
+
+extern struct inode inode_list[INDOE_NUM];
 
 /* 创建文件 */
 void CreateFile(struct file *file, char *name)
@@ -16,14 +18,14 @@ void CreateFile(struct file *file, char *name)
 		inode_list[inode].type = 1;
 		str_cpy(inode_list[inode].name, name);
 	}
-	int i = 3;
+	int i = DATA_BLOCK_BEGIN;
 	/* 为文件分配块索引 */
 	for(; i < 1024; i++)
 	{
 		/* 找到未使用的块 */
 		if(IndexAreaGetUsed(i) == 0)
 		{
-			IndexAreaSetUsed(i);
+			IndexAreaSetUsed(i); //标记块为已用
 			SaveIndexArea();
 			inode_list[inode].index_block = i;
 			CleanupBlock(i);
@@ -31,14 +33,14 @@ void CreateFile(struct file *file, char *name)
 		}
 	}
 	WriteBlock(2, (char*)inode_list); //保存inode索引
-	file->index = inode;
+	file->inode = inode;
 	file->seek = 0;
 }
 /* 获取文件大小 */
 int GetFileSize(struct file file)
 {
 	struct block_index *index_data = (struct block_index*)AllocMemfrag(4096);
-	GetBlock(inode_list[file.index].index_block, (char*)index_data); //加载索引块
+	GetBlock(inode_list[file.inode].index_block, (char*)index_data); //加载索引块
 	int i = 0;
 	int size = 0;
 	for(; i < 4096 / sizeof(struct block_index); i++)
@@ -50,72 +52,107 @@ int GetFileSize(struct file file)
 	}
 	return size;
 }
-
+/* 打开文件 */
+int OpenFile(struct file *file, char *filename)
+{
+	int i = 1;
+	for(; i < INDOE_NUM; i++)
+	{
+		if(str_cmp(inode_list[i].name, filename) == 1)
+		{
+			file->inode = i;
+			file->seek = 0;
+			return 0;
+		}
+	}
+	return -1;
+}
+/* 写入文件 */
 void WriteFile(struct file *file, char *data, int size)
 {
 	struct block_index *index_data = (struct block_index*)AllocMemfrag(4096);
-	GetBlock(inode_list[file->index].index_block, (char*)index_data); //加载索引块
-	int i = 0;
-	int data_w = 0;
-start_write:
-	/* 文件没有多余的空间 */
-	if(GetFileSize(*file) >= size)
+	CleanupBlock(inode_list[file->inode].index_block);
+	/* end = 写入数据块数 */
+	int end = size / 4096;
+	if(size % 4096 != 0)
 	{
-		i = 4096 / sizeof(struct block_index) - 1;
-		for(; i >= 0; i--)
-		{
-			if(index_data[i].block == 0)
-			{
-				int j = 3;
-				/* 分配一个用于存数据的块 */
-				for(; j < 1024; j++)
-				{
-					/* 找到未使用的块 */
-					if(IndexAreaGetUsed(j) == 0)
-					{
-						IndexAreaSetUsed(j);
-						SaveIndexArea();
-						CleanupBlock(j);
-						break;
-					}
-				}
-				index_data[i].block = j;
-				index_data[i].size = 0;
-				break;
-			}
-		}
-	}
-	else
-	{
-		for(i = 0; i < 4096 / sizeof(struct block_index); i++)
-		{
-			/* 获取有剩余空间的数据块 */
-			if(index_data[i].block != 0 && index_data[i].size < 4096)
-			{
-				break;
-			}
-		}
+		end += 1;
 	}
 	char *data_block = (char*)AllocMemfrag(4096);
-	GetBlock(index_data[i].block, data_block);
-	int w = index_data[i].size;
-	while(index_data[i].size <= 4096)
+	int data_w = 0; //用于访问data位置
+	int w = 0;
+	int i = 0;
+	for(; i < end; i++)
 	{
-		data_block[w] = data[data_w];
-		w += 1;
-		data_w += 1;
-		if(data_w == size)
+		int j = DATA_BLOCK_BEGIN;
+		/* 分配一个用于存数据的块 */
+		for(; j < 1024; j++)
 		{
-			WriteBlock(index_data[i].block, data_block);
-			break;
+			/* 找到未使用的块 */
+			if(IndexAreaGetUsed(j) == 0)
+			{
+				IndexAreaSetUsed(j);
+				SaveIndexArea();
+				CleanupBlock(j); //清除此数据块数据
+				break;
+			}
 		}
+		index_data[i].block = j;
+		w = 0;
+		for(j = 0; j < 4096; j++)
+		{
+			data_block[w] = data[data_w];
+			w += 1;
+			data_w += 1;
+			/* 已写入所有数据 */
+			if(data_w == size)
+			{
+				index_data[i].size = w;
+				WriteBlock(index_data[i].block, data_block);
+				FreeMemfrag((unsigned int)data_block);
+				WriteBlock(inode_list[file->inode].index_block, (char*)index_data); //保存索引块
+				FreeMemfrag((unsigned int)index_data);
+				return;
+			}
+		}
+		index_data[i].size = 4096;
+		WriteBlock(index_data[i].block, data_block); //保存当前块数据
 	}
-	if(data_w < size - 1)
+}
+/* 读取文件 */
+int ReadFile(struct file *file, char *data, int size)
+{
+	if(size == 0)
 	{
-		WriteBlock(index_data[i].block, data_block);
-		FreeMemfrag((unsigned int)data_block);
-		goto start_write;
+		size = GetFileSize(*file);
 	}
-	FreeMemfrag((unsigned int)data_block);
-	WriteBlock(inode_list[file->index].index_block, (char*)index_data); //保存索引块
+	struct block_index *index_data = (struct block_index*)AllocMemfrag(4096);
+	char *data_block = (char*)AllocMemfrag(4096);
+	GetBlock(inode_list[file->inode].index_block, (char*)index_data);
+	int i = 0;
+	int data_r = 0;
+	int r;
+	for(; i < 4096 / sizeof(struct block_index); i++)
+	{
+		if(index_data[i].block == 0)
+		{
+			continue;
+		}
+		GetBlock(index_data[i].block, data_block);
+		int j = 0;
+		r = 0;
+		for(; j < index_data[i].size; j++)
+		{
+			data[data_r] = data_block[r];
+			data_r += 1;
+			r += 1;
+			if(data_r == size)
+			{
+				FreeMemfrag((unsigned int)data_block);
+				FreeMemfrag((unsigned int)index_data);
+				return size;
+			}
+		} 
+	}
+	return 0;
 }

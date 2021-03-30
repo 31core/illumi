@@ -11,6 +11,7 @@
 #include <kernel/types.h>
 #include <kernel/fs/index.h>
 #include <kernel/fs/inode.h>
+#include <kernel/fs/file.h>
 
 extern int timer_num, time_count;
 extern struct fifo8 key_fifo;
@@ -73,15 +74,22 @@ int main()
 			int pid=str2int(strpid);
 			KillTask(pid);
 		}
-		else if(str_cmp(cmd, "fs") == 1)
+		/* 显示文件内容 */
+		else if(str_cmp(cmd, "cat") == 1)
 		{
-			char mode[10];
-			str_split(mode, inp, ' ',1);
-			if(str_cmp(mode, "create") == 1)
+			struct file fp;
+			char filename[10];
+			char data[1024];
+			str_cpy(data, "");
+			str_split(filename, inp, ' ',1);
+			if(OpenFile(&fp, filename) == -1)
 			{
-				init_IndexArea();
-				init_inode();
+				print(filename);
+				print(": no such file.\n");
+				continue;
 			}
+			ReadFile(&fp, data, 0);
+			print(data);
 		}
 		/* 打印内存使用情况 */
 		else if(str_cmp(cmd, "mem") == 1)

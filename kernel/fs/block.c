@@ -11,6 +11,7 @@ void WriteBlock(unsigned int block, char *data)
 {
 	LBA28WriteDisk((short*)data, block * 8, 8);
 }
+/* 清除一个块的数据 */
 void CleanupBlock(unsigned int block)
 {
 	char *data = (char*)AllocMemfrag(4096);
