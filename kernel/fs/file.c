@@ -5,9 +5,9 @@
 #include <kernel/string.h>
 #include <kernel/memory.h>
 
-#define DATA_BLOCK_BEGIN 3
+#define DATA_BLOCK_BEGIN 2
 
-extern struct inode inode_list[INDOE_NUM];
+extern struct inode inode_list[INODE_NUM];
 
 /* 创建文件 */
 void CreateFile(struct file *file, char *name)
@@ -17,6 +17,10 @@ void CreateFile(struct file *file, char *name)
 	{
 		inode_list[inode].type = 1;
 		str_cpy(inode_list[inode].name, name);
+	}
+	else
+	{
+		return;
 	}
 	int i = DATA_BLOCK_BEGIN;
 	/* 为文件分配块索引 */
@@ -32,7 +36,7 @@ void CreateFile(struct file *file, char *name)
 			break;
 		}
 	}
-	WriteBlock(2, (char*)inode_list); //保存inode索引
+	SaveINode(); //保存inode索引
 	file->inode = inode;
 	file->seek = 0;
 }
@@ -56,7 +60,7 @@ int GetFileSize(struct file file)
 int OpenFile(struct file *file, char *filename)
 {
 	int i = 1;
-	for(; i < INDOE_NUM; i++)
+	for(; i < INODE_NUM; i++)
 	{
 		if(str_cmp(inode_list[i].name, filename) == 1)
 		{
@@ -71,7 +75,18 @@ int OpenFile(struct file *file, char *filename)
 void WriteFile(struct file *file, char *data, int size)
 {
 	struct block_index *index_data = (struct block_index*)AllocMemfrag(4096);
-	CleanupBlock(inode_list[file->inode].index_block);
+	GetBlock(inode_list[file->inode].index_block, (char*)index_data);
+	int i = 0;
+	/* 释放此inode占用的数据块 */
+	for(; i < 1024; i++)
+	{
+		if(index_data[i].block != 0)
+		{
+			IndexAreaSetUnused(i); //标记块为未用
+		}
+	}
+	SaveIndexArea();
+	CleanupBlock(inode_list[file->inode].index_block); //清除引导块
 	/* end = 写入数据块数 */
 	int end = size / 4096;
 	if(size % 4096 != 0)
@@ -81,8 +96,7 @@ void WriteFile(struct file *file, char *data, int size)
 	char *data_block = (char*)AllocMemfrag(4096);
 	int data_w = 0; //用于访问data位置
 	int w = 0;
-	int i = 0;
-	for(; i < end; i++)
+	for(i = 0; i < end; i++)
 	{
 		int j = DATA_BLOCK_BEGIN;
 		/* 分配一个用于存数据的块 */
@@ -99,6 +113,7 @@ void WriteFile(struct file *file, char *data, int size)
 		}
 		index_data[i].block = j;
 		w = 0;
+		/* 将4 kb数据写入当前块 */
 		for(j = 0; j < 4096; j++)
 		{
 			data_block[w] = data[data_w];

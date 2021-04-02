@@ -1,5 +1,6 @@
 #include <device/disk/disk.h>
 #include <kernel/memory.h>
+#include <kernel/fs/index.h>
 
 /* 读取一个块的数据 */
 void GetBlock(unsigned int block, char *data)
@@ -22,4 +23,38 @@ void CleanupBlock(unsigned int block)
 	}
 	WriteBlock(block, data);
 	FreeMemfrag((unsigned int)data);
+}
+
+int super_block[1024];
+/* 加载超级块的数据 */
+void LoadSuperBlock()
+{
+	GetBlock(1, (char*)super_block); //加载超级块
+}
+/* 保存超级块的数据 */
+void SaveSuperBlock()
+{
+	WriteBlock(1, (char*)super_block); //加载超级块
+}
+/* 获取引导块的位置 */
+int SuperBlockGetIndex()
+{
+	return *super_block;
+}
+/* 创建一个块 */
+int CreateBlock()
+{
+	int i;
+	for(i = 2; i < 1024; i++)
+	{
+		/* 找到未使用的块 */
+		if(IndexAreaGetUsed(i) == 0)
+		{
+			IndexAreaSetUsed(i); //设置为已用
+			SaveIndexArea();
+			CleanupBlock(i); //清除此数据块数据
+			return i;
+		}
+	}
+	return -1;
 }

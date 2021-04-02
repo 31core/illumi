@@ -1,29 +1,25 @@
-#include <device/disk/disk.h>
-#include <kernel/time.h>
+#include <kernel/fs/block.h>
+#include <kernel/fs/index.h>
 
-void init_IndexArea()
+/* 创建引导块 */
+void CreateIndexArea()
 {
-	char data[512];
-	int i = 0;
-	for(; i < 512; i++)
-	{
-		data[i] = 0;
-	}
-	for(i = 8; i < 16; i++)
-	{
-		LBA28WriteDisk((short*)data, i, 1);
-		sleep(1);
-	}
+	CleanupBlock(2);
+	LoadIndexArea();
 }
+
 char index_area_data[8 * 4096];
+/* 加载引导块 */
 void LoadIndexArea()
 {
-	LBA28ReadDisk((short*)index_area_data, 8, 8);
+	GetBlock(2, index_area_data);
 }
+/* 保存引导块 */
 void SaveIndexArea()
 {
-	LBA28WriteDisk((short*)index_area_data, 8, 8);
+	WriteBlock(2, index_area_data);
 }
+/* 获取块是否使用 */
 int IndexAreaGetUsed(unsigned int block)
 {
 	int offset = block / 8;

@@ -1,5 +1,5 @@
-#define INODE_TABLE_SIZE 1 * 8
-#define INDOE_NUM 512 * INODE_TABLE_SIZE / sizeof(struct inode)
+#define INODE_TABLE_SIZE sizeof(struct inode)
+#define INODE_NUM 4096 / INODE_TABLE_SIZE
 
 struct inode
 {
@@ -9,7 +9,6 @@ struct inode
 	int type;
 };
 
-void init_inode();
 int GetAvailableINode(); //获取可用inode编号
 void LoadINode(); //加载inode
 void SaveINode(); //保存inode

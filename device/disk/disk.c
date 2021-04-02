@@ -1,4 +1,5 @@
 #include <arch/x86/asmfunc.h>
+#include <kernel/time.h>
 
 /* LBA读取磁盘 */
 void LBA28ReadDisk(short *buf, unsigned int offset, unsigned char count)
@@ -38,11 +39,12 @@ void LBA28WriteDisk(short *data, unsigned int offset, unsigned char count)
 		/* 等待磁盘驱动器 */
 		while(1)
 		{
-			if((io_in8(0x1f7) & 0x88) == 0x08)
+			if((io_in8(0x1f7) & 0x08) == 0x08)
 			{
 				break;
 			}
 		}
 		io_out16(0x1f0, data[i]);
 	}
+	sleep(1);
 }

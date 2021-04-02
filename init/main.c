@@ -9,8 +9,7 @@
 #include <kernel/memory.h>
 #include <kernel/string.h>
 #include <kernel/types.h>
-#include <kernel/fs/index.h>
-#include <kernel/fs/inode.h>
+#include <kernel/fs/init.h>
 #include <kernel/fs/file.h>
 
 extern int timer_num, time_count;
@@ -32,6 +31,8 @@ int main()
 	AllocMemfragWithAddr(GDT_ADDR, 8 * 0x2000);
 	AllocMemfragWithAddr(IDT_ADDR, 8 * 0x100);
 	AllocMemfragWithAddr(0x100000, 64 * 1024); //为内核分配64 kb空间
+	CreateFileSystem();
+	init_fs();
 	CleanupScreen();
 	/* 操作系统主循环 */
 	while(1)
