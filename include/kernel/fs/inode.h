@@ -3,10 +3,10 @@
 
 struct inode
 {
-	char name[16];
+	char name[16]; //inode(文件)名
 	int parent_block;
-	int index_block;
-	int type;
+	int index_block; //索引块编号
+	int type; //inode类型
 };
 
 int GetAvailableINode(); //获取可用inode编号

@@ -13,6 +13,7 @@ extern struct inode inode_list[INODE_NUM];
 void CreateFile(struct file *file, char *name)
 {
 	int inode = GetAvailableINode();
+	/* 找到了未使用的块 */
 	if(inode != -1)
 	{
 		inode_list[inode].type = 1;
@@ -31,8 +32,8 @@ void CreateFile(struct file *file, char *name)
 		{
 			IndexAreaSetUsed(i); //标记块为已用
 			SaveIndexArea();
-			inode_list[inode].index_block = i;
-			CleanupBlock(i);
+			inode_list[inode].index_block = i; //当前索引块编号保存到inode
+			CleanupBlock(i); //清除索引块数据
 			break;
 		}
 	}
@@ -54,6 +55,7 @@ int GetFileSize(struct file file)
 			size += index_data[i].size;
 		}
 	}
+	FreeMemfrag((unsigned int)index_data);
 	return size;
 }
 /* 打开文件 */
@@ -75,7 +77,7 @@ int OpenFile(struct file *file, char *filename)
 void WriteFile(struct file *file, char *data, int size)
 {
 	struct block_index *index_data = (struct block_index*)AllocMemfrag(4096);
-	GetBlock(inode_list[file->inode].index_block, (char*)index_data);
+	GetBlock(inode_list[file->inode].index_block, (char*)index_data); //获取此inode中的索引块数据
 	int i = 0;
 	/* 释放此inode占用的数据块 */
 	for(; i < 1024; i++)
@@ -83,6 +85,7 @@ void WriteFile(struct file *file, char *data, int size)
 		if(index_data[i].block != 0)
 		{
 			IndexAreaSetUnused(i); //标记块为未用
+			index_data[i].block = 0;
 		}
 	}
 	SaveIndexArea();

@@ -22,7 +22,7 @@ void SaveIndexArea()
 /* 获取块是否使用 */
 int IndexAreaGetUsed(unsigned int block)
 {
-	int offset = block / 8;
+	int offset = block / 8; //计算用于存放信息的位置,char为8 bits
 	char p = block % 8;
 	if((index_area_data[offset] & (0x100 >> p)) != 0)
 	{

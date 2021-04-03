@@ -1,6 +1,7 @@
 #include <device/disk/disk.h>
 #include <kernel/memory.h>
 #include <kernel/fs/index.h>
+#include <kernel/fs/block.h>
 
 /* 读取一个块的数据 */
 void GetBlock(unsigned int block, char *data)
@@ -25,21 +26,21 @@ void CleanupBlock(unsigned int block)
 	FreeMemfrag((unsigned int)data);
 }
 
-int super_block[1024];
+struct super_block sblock;
 /* 加载超级块的数据 */
 void LoadSuperBlock()
 {
-	GetBlock(1, (char*)super_block); //加载超级块
+	GetBlock(1, (char*)&sblock); //加载超级块
 }
 /* 保存超级块的数据 */
 void SaveSuperBlock()
 {
-	WriteBlock(1, (char*)super_block); //加载超级块
+	WriteBlock(1, (char*)&sblock.index_block); //加载超级块
 }
 /* 获取引导块的位置 */
 int SuperBlockGetIndex()
 {
-	return *super_block;
+	return sblock.index_block;
 }
 /* 创建一个块 */
 int CreateBlock()
