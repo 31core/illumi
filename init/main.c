@@ -37,6 +37,7 @@ int main()
 	/* 操作系统主循环 */
 	while(1)
 	{
+		int i = 0;
 		print("[root /] ");
 		char inp[21],cmd[11];
 		input(inp);
@@ -82,15 +83,18 @@ int main()
 			char filename[10];
 			char data[1024];
 			str_cpy(data, "");
-			str_split(filename, inp, ' ',1);
+			str_split(filename, inp, ' ', 1);
 			if(OpenFile(&fp, filename) == -1)
 			{
 				print(filename);
 				print(": no such file.\n");
 				continue;
 			}
-			ReadFile(&fp, data, 0);
-			print(data);
+			int size = ReadFile(&fp, data, 0);
+			for(i = 0; i < size; i++)
+			{
+				printchar(data[i]);
+			}
 		}
 		/* 打印内存使用情况 */
 		else if(str_cmp(cmd, "mem") == 1)

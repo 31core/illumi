@@ -61,10 +61,19 @@ int GetFileSize(struct file file)
 /* 打开文件 */
 int OpenFile(struct file *file, char *filename)
 {
+	if(str_len(filename) == 0)
+	{
+		return -1;
+	}
 	int i = 1;
 	for(; i < INODE_NUM; i++)
 	{
-		if(str_cmp(inode_list[i].name, filename) == 1)
+		/* 此inode未被分配 */
+		if(inode_list[i].type == 0)
+		{
+			continue;
+		}
+		else if(str_cmp(inode_list[i].name, filename) == 1)
 		{
 			file->inode = i;
 			file->seek = 0;

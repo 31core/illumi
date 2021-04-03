@@ -1,14 +1,17 @@
 #include <kernel/fs/block.h>
 #include <kernel/fs/index.h>
 
+extern struct super_block sblock;
+
 /* 创建引导块 */
 void CreateIndexArea()
 {
 	CleanupBlock(2);
 	LoadIndexArea();
+	sblock.index_block = 2; //设置super block中的引导块编号
 }
 
-char index_area_data[8 * 4096];
+char index_area_data[4096];
 /* 加载引导块 */
 void LoadIndexArea()
 {
