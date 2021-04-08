@@ -33,5 +33,5 @@ void interrupt21h()
 			key_caps = 1;
 		}
 	}
-	WriteData(&key_fifo, data); //将数据写入缓冲区
+	fifo_write_data(&key_fifo, data); //将数据写入缓冲区
 }

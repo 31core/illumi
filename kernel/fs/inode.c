@@ -8,7 +8,7 @@ int inode_count = 0; //node的数量
 extern struct super_block sblock;
 
 /* 获取可用inode编号 */
-int GetAvailableINode()
+int inode_get_availave()
 {
 	int i = 1;
 	/* 循环查找未使用的inode */
@@ -21,7 +21,7 @@ int GetAvailableINode()
 		}
 	}
 	/* 所有的inode已经使用 */
-	int new = CreateBlock(); //分配一个新的块作为inode表
+	int new = block_create(); //分配一个新的块作为inode表
 	if(new != -1)
 	{
 		for(i = 0; i < 1024 - 1; i++)
@@ -30,11 +30,11 @@ int GetAvailableINode()
 			if(sblock.inode_table[i] == 0)
 			{
 				sblock.inode_table[i] = new;
-				SaveSuperBlock(); //写入数据
+				super_block_save(); //写入数据
 				break;
 			}
 		}
-		LoadINode(); //重新加载inode
+		inode_load(); //重新加载inode
 		for(i = 1; i < inode_count; i++)
 		{
 			if(inode_list[i].type == 0)
@@ -46,7 +46,7 @@ int GetAvailableINode()
 	return -1;
 }
 /* 从超级块加载inode */
-void LoadINode()
+void inode_load()
 {
 	int i = 0;
 	int j = 0;
@@ -55,18 +55,18 @@ void LoadINode()
 		/* 指向了一个存在的块 */
 		if(sblock.inode_table[i] != 0)
 		{
-			GetBlock(sblock.inode_table[i], (char*)&inode_list[INODE_NUM * j]); //加载该块的数据
+			block_load(sblock.inode_table[i], (char*)&inode_list[INODE_NUM * j]); //加载该块的数据
 			j += 1;
 		}
 	}
 	inode_count = j * INODE_NUM; //更新inode数量
 }
 /* 保存inode */
-void SaveINode()
+void inode_save()
 {
 	int i = 0;
 	for(; i < inode_count; i++)
 	{
-		WriteBlock(sblock.inode_table[i], (char*)&inode_list[INODE_TABLE_SIZE * i]);
+		block_save(sblock.inode_table[i], (char*)&inode_list[INODE_TABLE_SIZE * i]);
 	}
 }

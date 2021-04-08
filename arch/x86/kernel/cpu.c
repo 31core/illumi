@@ -3,26 +3,26 @@
 #include <device/interrupt/interrupt.h>
 
 /* 初始化cpu */
-void init_cpu()
+void cpu_init()
 {
 	short i;
 	for(i = 0; i < 0x2000; i++)
 	{
-		SetGDT(i, 0, 0, 0);
+		GDT_set(i, 0, 0, 0);
 	}
-	SetGDT(1, 0, 0xffffffff, 0x409a);
-	SetGDT(2, 0, 0xffffffff, 0x4092);
-	LoadGDTR(GDT_ADDR, 0xffff); //加载GDTR寄存器
+	GDT_set(1, 0, 0xffffffff, 0x409a);
+	GDT_set(2, 0, 0xffffffff, 0x4092);
+	GDTR_load(GDT_ADDR, 0xffff); //加载GDTR寄存器
 	for(i = 0; i < 256; i++)
 	{
-		SetIDT((char)i, 0, 0, 0);
+		IDT_set((char)i, 0, 0, 0);
 	}
-	SetIDT(0x20, (int)asm_interrupt20h, 8, 0x8e);
-	SetIDT(0x21, (int)asm_interrupt21h, 8, 0x8e);
-	LoadIDTR(IDT_ADDR, 0x7ff); //加载IDTR寄存器
+	IDT_set(0x20, (int)asm_interrupt20h, 8, 0x8e);
+	IDT_set(0x21, (int)asm_interrupt21h, 8, 0x8e);
+	IDTR_load(IDT_ADDR, 0x7ff); //加载IDTR寄存器
 }
 /* 设置GDT数据 */
-void SetGDT(short count, int base, int limit, short access)
+void GDT_set(short count, int base, int limit, short access)
 {
 	struct GDT_data *GDT = (struct GDT_data*)GDT_ADDR;
 	GDT += count; //设置GDT地址到地count个GDT处
@@ -40,7 +40,7 @@ void SetGDT(short count, int base, int limit, short access)
 	GDT->access = access & 0xff; //取access低8位
 }
 /* 设置IDT数据 */
-void SetIDT(char count, int offset, short selector, char access)
+void IDT_set(char count, int offset, short selector, char access)
 {
 	struct IDT_data *IDT = (struct IDT_data*)IDT_ADDR;
 	IDT += count; //设置IDT地址到地count个IDT处

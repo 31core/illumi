@@ -5,9 +5,9 @@ struct pipe
 	int size, w, r;
 };
 
-void init_pipe(); //初始化管道(pipe)
-void CreatePipe(struct pipe*, int); //分配一个pipe
-int GetPipe(struct pipe**); //获取pipe
-int WritePipe(struct pipe*, char*, int); //写入管道数据
-int ReadPipe(struct pipe*, char*, int); //读取管道数据
-void ClosePipe(struct pipe*); //关闭管道
+void pipe_init(); //初始化管道(pipe)
+void pipe_create(struct pipe*, int); //分配一个pipe
+int pipe_get(struct pipe**); //获取pipe
+int pipe_write(struct pipe*, char*, int); //写入管道数据
+int pipe_read(struct pipe*, char*, int); //读取管道数据
+void pipe_close(struct pipe*); //关闭管道

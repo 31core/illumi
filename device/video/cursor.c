@@ -1,7 +1,7 @@
 #include <arch/x86/asmfunc.h>
 
 /* 移动光标 */
-void MoveCursor(short p)
+void video_move_cursor(short p)
 {
 	io_out8(0x3d4, 0xe);
 	io_out8(0x3d5, p >> 8);

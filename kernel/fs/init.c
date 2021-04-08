@@ -1,19 +1,24 @@
 #include <kernel/fs/block.h>
 #include <kernel/fs/index.h>
 #include <kernel/fs/inode.h>
+
+extern int inode_count;
+
 /* 初始化文件系统 */
-void init_fs()
+void fs_init()
 {
-	LoadSuperBlock();
-	LoadIndexArea();
-	LoadINode();
+	inode_count = 0;
+	super_block_load();
+	index_area_load();
+	inode_load();
 }
 /* 创建文件系统 */
-void CreateFileSystem()
+void fs_create()
 {
-	CleanupBlock(1); //清除超级块
-	CreateIndexArea();
-	LoadIndexArea();
-	IndexAreaSetUsed(2);
-	SaveIndexArea();
+	block_cleanup(1); //清除超级块
+	index_area_create();
+	index_area_load();
+	index_area_set_used(2);
+	index_area_save();
+	fs_init();
 }

@@ -6,28 +6,28 @@ int pipe_count = 0; //pipe数量
 struct pipe *pipe_list[1024];
 
 /* 初始化管道(pipe) */
-void init_pipe()
+void pipe_init()
 {
 	pipe_count = 0;
 }
 /* 分配一个pipe */
-void CreatePipe(struct pipe *pipe, int target_pid)
+void pipe_create(struct pipe *pipe, int target_pid)
 {
 	pipe->size = 1024;
 	pipe->w = 0;
 	pipe->r = 0;
 	pipe->target_pid = target_pid;
-	pipe->data_addr = AllocMemfrag(1024);
+	pipe->data_addr = memfrag_alloc(1024);
 	pipe_list[pipe_count] = pipe;
 	pipe_count += 1;
 }
 /* 获取pipe */
-int GetPipe(struct pipe **pipe)
+int pipe_get(struct pipe **pipe)
 {
 	int i = 0;
 	for(; i < pipe_count; i++)
 	{
-		if(GetCurrentPid() == pipe_list[i]->target_pid)
+		if(task_get_current_pid() == pipe_list[i]->target_pid)
 		{
 			*pipe = pipe_list[i];
 			return 0;
@@ -36,7 +36,7 @@ int GetPipe(struct pipe **pipe)
 	return -1;
 }
 /* 写入管道数据 */
-int WritePipe(struct pipe *pipe, char *data, int size)
+int pipe_write(struct pipe *pipe, char *data, int size)
 {
 	char *p = (char*)pipe->data_addr;
 	int i = 0;
@@ -52,7 +52,7 @@ int WritePipe(struct pipe *pipe, char *data, int size)
 	return size;
 }
 /* 读取管道数据 */
-int ReadPipe(struct pipe *pipe, char* data, int size)
+int pipe_read(struct pipe *pipe, char* data, int size)
 {
 	char *p = (char*)pipe->data_addr;
 	int i = 0;
@@ -68,7 +68,7 @@ int ReadPipe(struct pipe *pipe, char* data, int size)
 	return size;
 }
 /* 关闭管道 */
-void ClosePipe(struct pipe *pipe)
+void pipe_close(struct pipe *pipe)
 {
 	int i = 0;
 	for(; i < pipe_count; i++)

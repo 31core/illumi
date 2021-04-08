@@ -24,7 +24,7 @@ void printchar(char c)
 		t -= t % (2 * screen_x_size);
 		t += 2 * screen_x_size;
 		vga_addr = t + VGA_ADDR;
-		MoveCursor((vga_addr - VGA_ADDR) / 2);
+		video_move_cursor((vga_addr - VGA_ADDR) / 2);
 	}
 	/* 退格键 */
 	if(c == 0x0e)
@@ -32,7 +32,7 @@ void printchar(char c)
 		vga_addr -= 2;
 		short *bak_cln = (short*)vga_addr;
 		*bak_cln = 0x0700;
-		MoveCursor((vga_addr - VGA_ADDR) / 2);
+		video_move_cursor((vga_addr - VGA_ADDR) / 2);
 		return;
 	}
 	/* 超出屏幕范围则下滚一行 */
@@ -62,10 +62,10 @@ void printchar(char c)
 		*p = 0x07; //字体颜色
 		vga_addr += 2; //一个字符占2-byte
 	}
-	MoveCursor((vga_addr - VGA_ADDR) / 2);
+	video_move_cursor((vga_addr - VGA_ADDR) / 2);
 }
 /* 清屏 */
-void CleanupScreen()
+void video_cleanup()
 {
 	int i;
 	short *p = (short*)VGA_ADDR;

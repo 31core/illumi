@@ -1,11 +1,11 @@
-global LoadGDTR,LoadIDTR
+global GDTR_load,IDTR_load
 global io_out8,io_in8
 global io_out16,io_in16
 global io_cli,io_sti
 
 [bits 32]
 ;加载GDRT寄存器
-LoadGDTR:
+GDTR_load:
 	mov ax,[esp+8]
 	mov ebx,[esp+4]
 	mov [esp+6],ebx
@@ -13,7 +13,7 @@ LoadGDTR:
 	lgdt [esp+4]
 	ret
 ;加载IDRT寄存器
-LoadIDTR:
+IDTR_load:
 	mov ax,[esp+8]
 	mov ebx,[esp+4]
 	mov [esp+6],ebx

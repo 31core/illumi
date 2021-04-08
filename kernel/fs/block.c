@@ -4,56 +4,56 @@
 #include <kernel/fs/block.h>
 
 /* 读取一个块的数据 */
-void GetBlock(unsigned int block, char *data)
+void block_load(unsigned int block, char *data)
 {
 	LBA28ReadDisk((short*)data, block * 8, 8);
 }
 /* 写入一个块的数据 */
-void WriteBlock(unsigned int block, char *data)
+void block_save(unsigned int block, char *data)
 {
 	LBA28WriteDisk((short*)data, block * 8, 8);
 }
 /* 清除一个块的数据 */
-void CleanupBlock(unsigned int block)
+void block_cleanup(unsigned int block)
 {
-	char *data = (char*)AllocMemfrag(4096);
+	char *data = (char*)memfrag_alloc(4096);
 	int i = 0;
 	for(; i < 4096; i++)
 	{
 		data[i] = 0;
 	}
-	WriteBlock(block, data);
-	FreeMemfrag((unsigned int)data);
+	block_save(block, data);
+	memfrag_free((unsigned int)data);
 }
 
 struct super_block sblock;
 /* 加载超级块的数据 */
-void LoadSuperBlock()
+void super_block_load()
 {
-	GetBlock(1, (char*)&sblock); //加载超级块
+	block_load(1, (char*)&sblock); //加载超级块
 }
 /* 保存超级块的数据 */
-void SaveSuperBlock()
+void super_block_save()
 {
-	WriteBlock(1, (char*)&sblock.index_block); //加载超级块
+	block_save(1, (char*)&sblock.index_block); //加载超级块
 }
 /* 获取引导块的位置 */
-int SuperBlockGetIndex()
+int super_block_get_index()
 {
 	return sblock.index_block;
 }
 /* 创建一个块 */
-int CreateBlock()
+int block_create()
 {
 	int i;
 	for(i = 2; i < 1024; i++)
 	{
 		/* 找到未使用的块 */
-		if(IndexAreaGetUsed(i) == 0)
+		if(index_area_get_used(i) == 0)
 		{
-			IndexAreaSetUsed(i); //设置为已用
-			SaveIndexArea();
-			CleanupBlock(i); //清除此数据块数据
+			index_area_set_used(i); //设置为已用
+			index_area_save();
+			block_cleanup(i); //清除此数据块数据
 			return i;
 		}
 	}

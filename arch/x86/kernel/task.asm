@@ -1,5 +1,5 @@
-global asm_SwitchTask
-asm_SwitchTask:
+global asm_task_switch
+asm_task_switch:
 	;保存当前任务状态
 	mov eax,[esp+4]
 	mov [eax],esp

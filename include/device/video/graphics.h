@@ -2,5 +2,5 @@
 
 void print(char*); //打印字符串
 void printchar(char); //打印单字符
-void CleanupScreen(); //清屏
-void MoveCursor(short); //移动光标
+void video_cleanup(); //清屏
+void video_move_cursor(short); //移动光标

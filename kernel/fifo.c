@@ -9,12 +9,12 @@ void init_fifo(struct fifo8 *fifo, unsigned int addr, int size)
 	fifo->read = 0;
 }
 /* 获取缓冲区未读取的数据大小 */
-int GetFifoInfo(struct fifo8 fifo)
+int fifo_get_info(struct fifo8 fifo)
 {
 	return fifo.size - fifo.free;
 }
 /* 写入缓冲区数据 */
-void WriteData(struct fifo8 *fifo, char data)
+void fifo_write_data(struct fifo8 *fifo, char data)
 {
 	/* 缓冲区空间已满 */
 	if(fifo->free == 0)
@@ -32,10 +32,10 @@ void WriteData(struct fifo8 *fifo, char data)
 	fifo->free -= 1;
 }
 /* 读取缓冲区数据 */
-char ReadData(struct fifo8 *fifo)
+char fifo_read_data(struct fifo8 *fifo)
 {
 	/* 缓冲区数据大小为0 */
-	if(GetFifoInfo(*fifo) == 0)
+	if(fifo_get_info(*fifo) == 0)
 	{
 		return -1;
 	}

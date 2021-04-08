@@ -5,7 +5,7 @@ int mem_frag_num = 0; //内存碎片总数
 unsigned int memory_size = 0; //内存大小
 
 /* 获取内存大小 */
-unsigned int GetMemorySize()
+unsigned int mem_get_size()
 {
 	/* 已经检测过内存则返回该值 */
 	if(memory_size != 0)
@@ -27,18 +27,18 @@ unsigned int GetMemorySize()
 }
 
 /* 初始化内存碎片管理 */
-void init_MemFragCtl()
+void memfrag_init()
 {
 	memory_size = 0;
 	mem_frag_num = 0;
-	memory_size = GetMemorySize();
+	memory_size = mem_get_size();
 	mem_frag_list[0].addr = 0;
 	mem_frag_list[0].size = 0;
 	mem_frag_list[1].addr = memory_size;  //结尾的地址为内存大小
 	mem_frag_list[1].size = 0;
 }
 /* 分配内存碎片 */
-unsigned int AllocMemfrag(unsigned int size)
+unsigned int memfrag_alloc(unsigned int size)
 {
 	int i = 1;
 	for(; i <= mem_frag_num + 1; i++)
@@ -62,7 +62,7 @@ unsigned int AllocMemfrag(unsigned int size)
 	return addr;
 }
 /* 分配内存时指定地址 */
-void AllocMemfragWithAddr(unsigned int addr, unsigned int size)
+void memfrag_alloc_with_addr(unsigned int addr, unsigned int size)
 {
 	int i = 1;
 	/* 查找插入内存片段位置 */
@@ -90,7 +90,7 @@ void AllocMemfragWithAddr(unsigned int addr, unsigned int size)
 	mem_frag_num += 1;
 }
 /* 释放内存碎片 */
-void FreeMemfrag(unsigned int addr)
+void memfrag_free(unsigned int addr)
 {
 	int i = 1;
 	for(; i <= mem_frag_num; i++)
@@ -108,7 +108,7 @@ void FreeMemfrag(unsigned int addr)
 	}
 }
 /* 获取内存剩余空间 */
-unsigned int GetMemoryFreeSize()
+unsigned int mem_get_free_size()
 {
 	int i = 1;
 	unsigned int size = memory_size;

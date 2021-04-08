@@ -6,7 +6,7 @@
 struct task_info task_list[1024];
 int now_task_pid = 0; //当前运行的任务pid
 /* 初始化多任务 */
-void init_task()
+void task_init()
 {
 	now_task_pid = 0;
 	int i = 0;
@@ -21,7 +21,7 @@ void init_task()
 	str_cpy(task_list[0].name, "init");
 }
 /* 获取下一个任务pid */
-int GetNextPid()
+int task_get_next_pid()
 {
 	int i = now_task_pid + 1;
 	for(; i < 1024; i++)
@@ -41,25 +41,25 @@ int GetNextPid()
 	return -1; //没有正在运行的任务
 }
 /* 切换任务 */
-void SwitchTask()
+void task_switch()
 {
-	int pid = GetNextPid();
+	int pid = task_get_next_pid();
 	if(pid != -1)
 	{
 		int old_pid = now_task_pid;
 		now_task_pid = pid;
-		asm_SwitchTask(&task_list[old_pid].status, &task_list[pid].status);
+		asm_task_switch(&task_list[old_pid].status, &task_list[pid].status);
 	}
 }
 /* 创建任务 */
-int CreateTask(unsigned int addr)
+int task_create(unsigned int addr)
 {
 	int i = 0;
 	for(; i < 1024; i++)
 	{
 		if(task_list[i].flags == 0)
 		{
-			unsigned int esp_addr = AllocMemfrag(1024) + 1024; //分配该任务的栈地址
+			unsigned int esp_addr = memfrag_alloc(1024) + 1024; //分配该任务的栈地址
 			task_list[i].flags = 1;
 			task_list[i].parent_pid = now_task_pid;
 			task_list[i].name[0] = '\0';
@@ -82,7 +82,7 @@ int CreateTask(unsigned int addr)
 }
 
 /* 设置任务名字 */
-void SetTaskName(int pid, char *str)
+void task_set_name(int pid, char *str)
 {
 	if(pid != 0)
 	{
@@ -90,7 +90,7 @@ void SetTaskName(int pid, char *str)
 	}
 }
 /* 获取任务名字 */
-void GetTaskName(char *ret, int pid)
+void task_get_name(char *ret, int pid)
 {
 	/* 任务没有运行 */
 	if(task_list[pid].flags == 0)
@@ -100,12 +100,12 @@ void GetTaskName(char *ret, int pid)
 	str_cpy(ret, task_list[pid].name);
 }
 /* 获取当前任务的pid */
-int GetCurrentPid()
+int task_get_current_pid()
 {
 	return now_task_pid;
 }
 /* 获取父进程pid */
-int GetParentPid(int pid)
+int task_get_parent_pid(int pid)
 {
 	if(pid == 0)
 	{
@@ -118,7 +118,7 @@ int GetParentPid(int pid)
 	return -1;
 }
 /* 等待任务结束 */
-void WaitTask(int pid)
+void task_wait(int pid)
 {
 	/* 不是当前任务的子进程 */
 	if(task_list[pid].parent_pid != now_task_pid)
@@ -128,13 +128,13 @@ void WaitTask(int pid)
 	while(task_list[pid].flags != 0);
 }
 /* 杀死任务 */
-void KillTask(int pid)
+void task_kill(int pid)
 {
 	/* 不能杀死init进程 */
 	if(pid != 0)
 	{
 		task_list[pid].flags = 0;
-		FreeMemfrag(task_list[pid].init_info.stack_addr);
+		memfrag_free(task_list[pid].init_info.stack_addr);
 		int i = 0;
 		/* 为子进程重新分配父进程 */
 		for(; i < 1024; i++)
@@ -147,7 +147,7 @@ void KillTask(int pid)
 	}
 }
 /* 获取任务pid列表 */
-int GetTaskList(int *ret)
+int task_get_list(int *ret)
 {
 	int i, j = 0;
 	for(i = 0; i < 1024; i++)

@@ -56,9 +56,9 @@ char inputchar()
 {
 	while(1)
 	{
-		if(GetFifoInfo(key_fifo) != 0)
+		if(fifo_get_info(key_fifo) != 0)
 		{
-			char data = ReadData(&key_fifo);
+			char data = fifo_read_data(&key_fifo);
 			/* 按键抬起 */
 			if(data < 0)
 			{
@@ -92,9 +92,9 @@ unsigned char inputcode()
 {
 	while(1)
 	{
-		if(GetFifoInfo(key_fifo) != 0)
+		if(fifo_get_info(key_fifo) != 0)
 		{
-			unsigned char data = ReadData(&key_fifo);
+			unsigned char data = fifo_read_data(&key_fifo);
 			return data;
 		}
 	}

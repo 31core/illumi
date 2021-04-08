@@ -5,4 +5,4 @@ struct task_status
 	int esi, edi; //目标寄存器
 };
 
-void asm_SwitchTask(struct task_status*, struct task_status*);
+void asm_task_switch(struct task_status*, struct task_status*);

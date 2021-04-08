@@ -2,7 +2,7 @@
 #include <device/interrupt/init.h>
 
 /* 初始化PIC */
-void init_PIC()
+void PIC_init()
 {
 	io_out8(0x21, 0xff); //禁止所有中断
 	io_out8(0xa1, 0xff); //禁止所有中断
@@ -20,10 +20,10 @@ void init_PIC()
 	io_out8(0x21, 0xfc); //重新启用中断
 	io_out8(0xa1, 0xff);
 
-	init_PIT();
+	PIT_init();
 }
 
-void init_PIT()
+void PIT_init()
 {
 	io_out8(0x43, 0x34);
 	io_out8(0x40, 0x9c); //每10ms产生一次中断
