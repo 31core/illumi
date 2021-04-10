@@ -35,7 +35,7 @@ image:
 
 run:
 	@$(MAKE) -s default
-	$(QEMU) -hda hda.img
+	@$(QEMU) -hda hda.img
 
 clean:
 	rm $(kernel_bins) $(kernel_objs)
