@@ -1,5 +1,5 @@
 #include <kernel/fs/block.h>
-#include <kernel/fs/index.h>
+#include <kernel/fs/bitmap.h>
 
 extern struct super_block sblock;
 
@@ -8,7 +8,7 @@ void index_area_create()
 {
 	block_cleanup(2);
 	index_area_load();
-	sblock.index_block = 2; //设置super block中的引导块编号
+	sblock.bitmap_block = 2; //设置super block中的引导块编号
 }
 
 char index_area_data[4096];

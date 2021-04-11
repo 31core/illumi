@@ -5,7 +5,8 @@ struct inode
 {
 	char name[16]; //inode(文件)名
 	int parent_block;
-	int index_block; //索引块编号
+	int bitmap_block; //索引块编号
+	int size;
 	int type; //inode类型
 };
 

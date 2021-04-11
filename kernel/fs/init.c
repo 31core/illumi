@@ -1,5 +1,5 @@
 #include <kernel/fs/block.h>
-#include <kernel/fs/index.h>
+#include <kernel/fs/bitmap.h>
 #include <kernel/fs/inode.h>
 
 extern int inode_count;

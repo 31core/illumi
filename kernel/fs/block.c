@@ -1,6 +1,6 @@
 #include <device/disk/disk.h>
 #include <kernel/memory.h>
-#include <kernel/fs/index.h>
+#include <kernel/fs/bitmap.h>
 #include <kernel/fs/block.h>
 
 /* 读取一个块的数据 */
@@ -35,12 +35,12 @@ void super_block_load()
 /* 保存超级块的数据 */
 void super_block_save()
 {
-	block_save(1, (char*)&sblock.index_block); //加载超级块
+	block_save(1, (char*)&sblock.bitmap_block); //加载超级块
 }
 /* 获取引导块的位置 */
 int super_block_get_index()
 {
-	return sblock.index_block;
+	return sblock.bitmap_block;
 }
 /* 创建一个块 */
 int block_create()

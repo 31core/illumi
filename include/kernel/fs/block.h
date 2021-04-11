@@ -1,12 +1,7 @@
-struct block_index
-{
-	unsigned int block;
-	int size;
-};
 /* 超级块数据 */
 struct super_block
 {
-	unsigned index_block; //引导块编号
+	unsigned bitmap_block; //引导块编号
 	unsigned inode_table[1024 - 1]; //inode块编号
 };
 

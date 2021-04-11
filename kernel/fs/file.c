@@ -1,4 +1,4 @@
-#include <kernel/fs/index.h>
+#include <kernel/fs/bitmap.h>
 #include <kernel/fs/inode.h>
 #include <kernel/fs/file.h>
 #include <kernel/fs/block.h>
@@ -33,7 +33,7 @@ void file_create(struct file *file, char *name)
 		{
 			index_area_set_used(i); //标记块为已用
 			index_area_save();
-			inode_list[inode].index_block = i; //当前索引块编号保存到inode
+			inode_list[inode].bitmap_block = i; //当前索引块编号保存到inode
 			block_cleanup(i); //清除索引块数据
 			break;
 		}
@@ -43,21 +43,9 @@ void file_create(struct file *file, char *name)
 	file->seek = 0;
 }
 /* 获取文件大小 */
-int GetFileSize(struct file file)
+int file_get_size(struct file file)
 {
-	struct block_index *index_data = (struct block_index*)memfrag_alloc(4096);
-	block_load(inode_list[file.inode].index_block, (char*)index_data); //加载索引块
-	int i = 0;
-	int size = 0;
-	for(; i < 4096 / sizeof(struct block_index); i++)
-	{
-		if(index_data[i].block != 0)
-		{
-			size += index_data[i].size;
-		}
-	}
-	memfrag_free((unsigned int)index_data);
-	return size;
+	return inode_list[file.inode].size;
 }
 /* 打开文件 */
 int file_open(struct file *file, char *filename)
@@ -86,20 +74,20 @@ int file_open(struct file *file, char *filename)
 /* 写入文件 */
 void file_write(struct file *file, char *data, int size)
 {
-	struct block_index *index_data = (struct block_index*)memfrag_alloc(4096);
-	block_load(inode_list[file->inode].index_block, (char*)index_data); //获取此inode中的索引块数据
+	int *index_data = (int*)memfrag_alloc(4096);
+	block_load(inode_list[file->inode].bitmap_block, (char*)index_data); //获取此inode中的索引块数据
 	int i = 0;
 	/* 释放此inode占用的数据块 */
 	for(; i < 1024; i++)
 	{
-		if(index_data[i].block != 0)
+		if(index_data[i] != 0)
 		{
 			index_area_set_unused(i); //标记块为未用
-			index_data[i].block = 0;
+			index_data[i] = 0;
 		}
 	}
 	index_area_save();
-	block_cleanup(inode_list[file->inode].index_block); //清除引导块
+	block_cleanup(inode_list[file->inode].bitmap_block); //清除引导块
 	/* end = 写入数据块数 */
 	int end = size / 4096;
 	if(size % 4096 != 0)
@@ -109,6 +97,7 @@ void file_write(struct file *file, char *data, int size)
 	char *data_block = (char*)memfrag_alloc(4096);
 	int data_w = 0; //用于访问data位置
 	int w = 0;
+	/* 循环写入使用数据 */
 	for(i = 0; i < end; i++)
 	{
 		int j = DATA_BLOCK_BEGIN;
@@ -124,7 +113,7 @@ void file_write(struct file *file, char *data, int size)
 				break;
 			}
 		}
-		index_data[i].block = j;
+		index_data[i] = j;
 		w = 0;
 		/* 将4 kb数据写入当前块 */
 		for(j = 0; j < 4096; j++)
@@ -135,16 +124,16 @@ void file_write(struct file *file, char *data, int size)
 			/* 已写入所有数据 */
 			if(data_w == size)
 			{
-				index_data[i].size = w;
-				block_save(index_data[i].block, data_block);
+				inode_list[file->inode].size = size;
+				block_save(index_data[i], data_block); //保存当前块数据
+				block_save(inode_list[file->inode].bitmap_block, (char*)index_data); //保存索引块
+				inode_save(); //保存inode
 				memfrag_free((unsigned int)data_block);
-				block_save(inode_list[file->inode].index_block, (char*)index_data); //保存索引块
 				memfrag_free((unsigned int)index_data);
 				return;
 			}
 		}
-		index_data[i].size = 4096;
-		block_save(index_data[i].block, data_block); //保存当前块数据
+		block_save(index_data[i], data_block); //保存当前块数据
 	}
 }
 /* 读取文件 */
@@ -152,28 +141,31 @@ int file_read(struct file *file, char *data, int size)
 {
 	if(size == 0)
 	{
-		size = GetFileSize(*file);
+		size = file_get_size(*file);
 	}
-	struct block_index *index_data = (struct block_index*)memfrag_alloc(4096);
+	int *index_data = (int*)memfrag_alloc(4096);
 	char *data_block = (char*)memfrag_alloc(4096);
-	block_load(inode_list[file->inode].index_block, (char*)index_data);
+	block_load(inode_list[file->inode].bitmap_block, (char*)index_data); //加载块索引
 	int i = 0;
 	int data_r = 0;
 	int r;
-	for(; i < 4096 / sizeof(struct block_index); i++)
+	for(; i < 1024; i++)
 	{
-		if(index_data[i].block == 0)
+		/* 数据块未使用 */
+		if(index_data[i] == 0)
 		{
 			continue;
 		}
-		block_load(index_data[i].block, data_block);
+		block_load(index_data[i], data_block); //加载数据块
 		int j = 0;
 		r = 0;
-		for(; j < index_data[i].size; j++)
+		/* 读取4 kb数据 */
+		for(; j < 4096; j++)
 		{
 			data[data_r] = data_block[r];
 			data_r += 1;
 			r += 1;
+			/* 已读取所有数据 */
 			if(data_r == size)
 			{
 				memfrag_free((unsigned int)data_block);
