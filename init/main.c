@@ -41,7 +41,7 @@ int main()
 		print("[root /] ");
 		char inp[21],cmd[11];
 		input(inp);
-		str_split(cmd, inp, ' ',0);
+		str_split(cmd, inp, " ", 0);
 		/* 显示内核版本 */
 		if(str_cmp(cmd, "rever") == 1)
 		{
@@ -72,7 +72,7 @@ int main()
 		else if(str_cmp(cmd, "kill") == 1)
 		{
 			char strpid[5];
-			str_split(strpid, inp, ' ',1);
+			str_split(strpid, inp, " ",1);
 			int pid=str2int(strpid);
 			task_kill(pid);
 		}
@@ -83,7 +83,7 @@ int main()
 			char filename[10];
 			char data[1024];
 			str_cpy(data, "");
-			str_split(filename, inp, ' ', 1);
+			str_split(filename, inp, " ", 1);
 			if(file_open(&fp, filename) == -1)
 			{
 				print(filename);
@@ -113,8 +113,8 @@ int main()
 		}
 		else if(str_cmp(cmd, "") != 1)
 		{
-			char cmd[11];
-			str_split(cmd, inp, ' ', 0);
+			//char cmd[11];
+			//str_split(cmd, inp, " ", 0);
 			print(cmd);
 			print(": unkown command.\n");
 		}

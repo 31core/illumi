@@ -37,32 +37,80 @@ void str_cpy(char *a, char *b)
 	}
 	a[i] = '\0';
 }
-/* 分割字符串 */
-void str_split(char *ret, char *str, char byte, int count)
+/* 拼接字符串 */
+void str_cat(char *a, char *b)
+{
+	int i = str_len(a);
+	int j = 0;
+	while(b[j] != '\0')
+	{
+		a[i] = b[j];
+		i +=1;
+		j +=1;
+	}
+	a[i] = '\0';
+}
+/* 查找字符串 */
+int str_find(char *origin, char *str, int index)
 {
 	int i = 0;
-	int j = 0;
-	/* 查找第n个字符串开始位置 */
-	while(j < count)
+	int j;
+	int size = str_len(origin) - str_len(str);
+	for(; i <= size; i++)
 	{
-		if(str[i] == byte)
+		/* 测试origin[i]处是否匹配str */
+		j = 0;
+		while(str[j] != '\0')
 		{
+			if(origin[i + j] != str[j])
+			{
+				break;
+			}
 			j += 1;
 		}
-		if(str[i] == '\0')
+		/* origin[i]处匹配str */
+		if(j == str_len(str))
 		{
-			ret[0] = '\0';
-			return;
+			index -= 1;
 		}
-		i += 1;
+		if(index == -1)
+		{
+			return i; //返回字符串位置
+		}
 	}
-	j = 0;
-	/* 复制字符串 */
-	while(str[i] != byte && str[i] != '\0')
+	return -1;
+}
+/* 统计字符串中出现字符串次数 */
+int str_count(char *origin, char *str)
+{
+	int count = 0;
+	while(str_find(origin, str, count) != -1)
 	{
-		ret[j] = str[i];
-		i += 1;
-		j += 1;
+		count += 1;
 	}
-	ret[j] = '\0'; //字符串结尾标志
+	return count;
+}
+/* 分割字符串 */
+void str_split(char *ret, char *str, char *symbol, int index)
+{
+	int start = 0;
+	/* 获取原字符串结束位置 */
+	if(index != 0)
+	{
+		start = str_find(str, symbol, index - 1);
+	}
+	int end = str_find(str, symbol, index); //获取原字符串结束位置
+	if(end == -1)
+	{
+		end = str_len(str);
+	}
+	int i = 0;
+	/* 复制字符串 */
+	while(start < end)
+	{
+		ret[i] = str[start];
+		start += 1;
+		i += 1;
+	}
+	ret[i] = '\0'; //字符串结尾标志
 }
