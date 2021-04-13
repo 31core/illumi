@@ -96,6 +96,13 @@ int main()
 				printchar(data[i]);
 			}
 		}
+		/* 删除文件 */
+		else if(str_cmp(cmd, "rm") == 1)
+		{
+			char filename[10];
+			str_split(filename, inp, " ", 1);
+			file_remove(filename);
+		}
 		/* 打印内存使用情况 */
 		else if(str_cmp(cmd, "mem") == 1)
 		{

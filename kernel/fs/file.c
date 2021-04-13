@@ -33,7 +33,7 @@ void file_create(struct file *file, char *name)
 		{
 			index_area_set_used(i); //标记块为已用
 			index_area_save();
-			inode_list[inode].bitmap_block = i; //当前索引块编号保存到inode
+			inode_list[inode].index_block = i; //当前索引块编号保存到inode
 			block_cleanup(i); //清除索引块数据
 			break;
 		}
@@ -75,7 +75,7 @@ int file_open(struct file *file, char *filename)
 void file_write(struct file *file, char *data, int size)
 {
 	int *index_data = (int*)memfrag_alloc(4096);
-	block_load(inode_list[file->inode].bitmap_block, (char*)index_data); //获取此inode中的索引块数据
+	block_load(inode_list[file->inode].index_block, (char*)index_data); //获取此inode中的索引块数据
 	int i = 0;
 	/* 释放此inode占用的数据块 */
 	for(; i < 1024; i++)
@@ -87,7 +87,7 @@ void file_write(struct file *file, char *data, int size)
 		}
 	}
 	index_area_save();
-	block_cleanup(inode_list[file->inode].bitmap_block); //清除引导块
+	block_cleanup(inode_list[file->inode].index_block); //清除引导块
 	/* end = 写入数据块数 */
 	int end = size / 4096;
 	if(size % 4096 != 0)
@@ -126,7 +126,7 @@ void file_write(struct file *file, char *data, int size)
 			{
 				inode_list[file->inode].size = size;
 				block_save(index_data[i], data_block); //保存当前块数据
-				block_save(inode_list[file->inode].bitmap_block, (char*)index_data); //保存索引块
+				block_save(inode_list[file->inode].index_block, (char*)index_data); //保存索引块
 				inode_save(); //保存inode
 				memfrag_free((unsigned int)data_block);
 				memfrag_free((unsigned int)index_data);
@@ -145,7 +145,7 @@ int file_read(struct file *file, char *data, int size)
 	}
 	int *index_data = (int*)memfrag_alloc(4096);
 	char *data_block = (char*)memfrag_alloc(4096);
-	block_load(inode_list[file->inode].bitmap_block, (char*)index_data); //加载块索引
+	block_load(inode_list[file->inode].index_block, (char*)index_data); //加载块索引
 	int i = 0;
 	int data_r = 0;
 	int r;
@@ -175,4 +175,30 @@ int file_read(struct file *file, char *data, int size)
 		} 
 	}
 	return 0;
+}
+/* 删除文件 */
+void file_remove(char *filename)
+{
+	struct file file;
+	/* 文件不存在 */
+	if(file_open(&file, filename) == -1)
+	{
+		return;
+	}
+	int *index_data = (int*)memfrag_alloc(4096);
+	block_load(inode_list[file.inode].index_block, (char*)index_data); //获取此inode中的索引块数据
+	int i = 0;
+	/* 释放此inode占用的数据块 */
+	for(; i < 1024; i++)
+	{
+		if(index_data[i] != 0)
+		{
+			index_area_set_unused(i); //标记块为未用
+			index_data[i] = 0;
+		}
+	}
+	index_area_save();
+	inode_list[file.inode].type = 0; //此unode标记为未用
+	inode_save(); //保存inode
+	memfrag_free((unsigned int)index_data);
 }

@@ -94,10 +94,10 @@ int str_count(char *origin, char *str)
 void str_split(char *ret, char *str, char *symbol, int index)
 {
 	int start = 0;
-	/* 获取原字符串结束位置 */
+	/* 获取原字符串开始位置 */
 	if(index != 0)
 	{
-		start = str_find(str, symbol, index - 1) + 1;
+		start = str_find(str, symbol, index - 1) + str_len(symbol);
 	}
 	int end = str_find(str, symbol, index); //获取原字符串结束位置
 	if(end == -1)
