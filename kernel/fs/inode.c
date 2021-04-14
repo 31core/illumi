@@ -12,7 +12,7 @@ int inode_get_availave()
 {
 	int i = 1;
 	/* 循环查找未使用的inode */
-	for(i = 1; i < inode_count; i++)
+	for(; i < inode_count; i++)
 	{
 		/* inode未使用 */
 		if(inode_list[i].type == 0)
@@ -50,7 +50,7 @@ void inode_load()
 {
 	int i = 0;
 	int j = 0;
-	for(; i < 1024 - 1; i++)
+	for(; i < sizeof(sblock.inode_table) / sizeof(sblock.inode_table[0]); i++)
 	{
 		/* 指向了一个存在的块 */
 		if(sblock.inode_table[i] != 0)
@@ -65,7 +65,7 @@ void inode_load()
 void inode_save()
 {
 	int i = 0;
-	for(; i < inode_count; i++)
+	for(; i < inode_count / INODE_NUM; i++)
 	{
 		block_save(sblock.inode_table[i], (char*)&inode_list[INODE_TABLE_SIZE * i]);
 	}
