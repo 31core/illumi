@@ -8,7 +8,7 @@ int inode_count = 0; //node的数量
 extern struct super_block sblock;
 
 /* 获取可用inode编号 */
-int inode_get_availave()
+int inode_get_available()
 {
 	int i = 1;
 	/* 循环查找未使用的inode */

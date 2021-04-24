@@ -1,5 +1,9 @@
 #include <arch/x86/task.h>
 
+#define TASK_AVAILABLE 0
+#define TASK_RUNNING 1
+#define TASK_PAUSED 2
+
 /* 任务初始化信息,释放任务时需要 */
 struct task_init_info
 {

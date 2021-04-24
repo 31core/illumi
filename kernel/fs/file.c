@@ -13,7 +13,7 @@ extern int inode_count;
 /* 创建文件 */
 void file_create(struct file *file, char *name)
 {
-	int inode = inode_get_availave();
+	int inode = inode_get_available();
 	/* 找到了未使用的块 */
 	if(inode != -1)
 	{

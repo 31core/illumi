@@ -10,6 +10,6 @@ struct inode
 	int type; //inode类型
 };
 
-int inode_get_availave(); //获取可用inode编号
+int inode_get_available(); //获取可用inode编号
 void inode_load(); //加载inode
 void inode_save(); //保存inode

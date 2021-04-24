@@ -12,10 +12,10 @@ void task_init()
 	int i = 0;
 	for(; i < 1024; i++)
 	{
-		task_list[i].flags = 0;
+		task_list[i].flags = TASK_AVAILABLE;
 	}
 	/* 创建初始化任务 */
-	task_list[0].flags = 1;
+	task_list[0].flags = TASK_RUNNING;
 	task_list[0].name[0] = '\0';
 	task_list[0].parent_pid = 0;
 	str_cpy(task_list[0].name, "init");
@@ -26,14 +26,14 @@ int task_get_next_pid()
 	int i = now_task_pid + 1;
 	for(; i < 1024; i++)
 	{
-		if(task_list[i].flags == 1)
+		if(task_list[i].flags == TASK_RUNNING)
 		{
 			return i;
 		}
 	}
 	for(i = 0; i < now_task_pid; i++)
 	{
-		if(task_list[i].flags == 1)
+		if(task_list[i].flags == TASK_RUNNING)
 		{
 			return i;
 		}
@@ -57,10 +57,10 @@ int task_create(unsigned int addr)
 	int i = 0;
 	for(; i < 1024; i++)
 	{
-		if(task_list[i].flags == 0)
+		if(task_list[i].flags == TASK_AVAILABLE)
 		{
 			unsigned int esp_addr = memfrag_alloc(1024) + 1024; //分配该任务的栈地址
-			task_list[i].flags = 1;
+			task_list[i].flags = TASK_RUNNING;
 			task_list[i].parent_pid = now_task_pid;
 			task_list[i].name[0] = '\0';
 			/* 初始化寄存器 */
@@ -93,7 +93,7 @@ void task_set_name(int pid, char *str)
 void task_get_name(char *ret, int pid)
 {
 	/* 任务没有运行 */
-	if(task_list[pid].flags == 0)
+	if(task_list[pid].flags == TASK_AVAILABLE)
 	{
 		return;
 	}
@@ -111,7 +111,7 @@ int task_get_parent_pid(int pid)
 	{
 		return 0; //init进程的父进程为0
 	}
-	if(task_list[pid].flags != 0)
+	if(task_list[pid].flags != TASK_AVAILABLE)
 	{
 		return task_list[pid].parent_pid;
 	}
@@ -125,7 +125,7 @@ void task_wait(int pid)
 	{
 		return;
 	}
-	while(task_list[pid].flags != 0);
+	while(task_list[pid].flags != TASK_RUNNING);
 }
 /* 杀死任务 */
 void task_kill(int pid)
@@ -133,17 +133,22 @@ void task_kill(int pid)
 	/* 不能杀死init进程 */
 	if(pid != 0)
 	{
-		task_list[pid].flags = 0;
+		task_list[pid].flags = TASK_AVAILABLE;
 		memfrag_free(task_list[pid].init_info.stack_addr);
 		int i = 0;
 		/* 为子进程重新分配父进程 */
 		for(; i < 1024; i++)
 		{
-			if(task_list[i].flags != 0 && task_list[i].parent_pid == pid)
+			if(task_list[i].flags != TASK_AVAILABLE && task_list[i].parent_pid == pid)
 			{
 				task_list[i].parent_pid = 0;
 			}
 		}
+	}
+	/* 杀死当前任务 */
+	if(pid == now_task_pid)
+	{
+		task_switch();
 	}
 }
 /* 获取任务pid列表 */
@@ -152,7 +157,7 @@ int task_get_list(int *ret)
 	int i, j = 0;
 	for(i = 0; i < 1024; i++)
 	{
-		if(task_list[i].flags == 1)
+		if(task_list[i].flags != TASK_AVAILABLE)
 		{
 			ret[j] = i;
 			j += 1;
