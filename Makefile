@@ -11,7 +11,7 @@ DD=dd
 ARCH=arch/x86
 C_FLAGS=-m32 -Wall -fno-stack-protector -Iinclude
 
-default:
+all:
 	@$(MAKE) -s -C $(ARCH)/boot
 	@$(MAKE) -s kernel.sys
 	@$(MAKE) -s image
@@ -34,7 +34,7 @@ image:
 	@$(DD) if=kernel.sys of=hda.img bs=512 seek=9 count=348
 
 run:
-	@$(MAKE) -s default
+	@$(MAKE) -s all
 	@$(QEMU) -hda hda.img
 
 clean:

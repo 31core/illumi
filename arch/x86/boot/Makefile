@@ -1,7 +1,7 @@
 #/arch/x86/boot
 BINS=$(patsubst %.asm,%.bin,$(wildcard *.asm))
 
-default:$(BINS);
+all:$(BINS);
 
 %.bin:%.asm
 	@echo [NASM] arch/x86/kernel/$@

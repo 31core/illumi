@@ -1,6 +1,7 @@
 #include <kernel/fs/bitmap.h>
 #include <kernel/fs/inode.h>
 #include <kernel/fs/file.h>
+#include <kernel/fs/dir.h>
 #include <kernel/fs/block.h>
 #include <kernel/string.h>
 #include <kernel/memory.h>
@@ -14,13 +15,8 @@ extern int inode_count;
 void file_create(struct file *file, char *name)
 {
 	int inode = inode_get_available();
-	/* 找到了未使用的块 */
-	if(inode != -1)
-	{
-		inode_list[inode].type = 1;
-		str_cpy(inode_list[inode].name, name);
-	}
-	else
+	/* 未找到未使用的块 */
+	if(inode == -1)
 	{
 		return;
 	}
@@ -38,6 +34,9 @@ void file_create(struct file *file, char *name)
 			break;
 		}
 	}
+	inode_list[inode].parent_inode = dir_get_parent(name);
+	inode_list[inode].type = TYPE_FILE;
+	str_split(inode_list[inode].name, name, "/", str_count(name, "/")); //获取文件名
 	inode_save(); //保存inode索引
 	file->inode = inode;
 	file->seek = 0;
@@ -55,15 +54,22 @@ int file_open(struct file *file, char *filename)
 		return -1;
 	}
 	int i = 1;
+	int parent_inode = dir_get_parent(filename);
+	char basename[20];
+	str_split(basename, filename, "/", str_count(filename, "/")); //获取文件名
 	for(; i < inode_count; i++)
 	{
 		/* 此inode未被分配 */
-		if(inode_list[i].type == 0)
+		if(inode_list[i].type == TYPE_AVAILABLE)
 		{
 			continue;
 		}
-		else if(str_cmp(inode_list[i].name, filename) == 1)
+		else if(str_cmp(inode_list[i].name, basename) == 1)
 		{
+			if(inode_list[i].parent_inode != parent_inode)
+			{
+				continue;
+			}
 			file->inode = i;
 			file->seek = 0;
 			return 0;
@@ -198,7 +204,12 @@ void file_remove(char *filename)
 		}
 	}
 	index_area_save();
-	inode_list[file.inode].type = 0; //此unode标记为未用
+	inode_list[file.inode].type = TYPE_AVAILABLE; //此unode标记为未用
 	inode_save(); //保存inode
 	memfrag_free((unsigned int)index_data);
+}
+/* 通过inode获取文件名 */
+void file_get_name_by_inode(char *ret, int inode)
+{
+	str_cpy(ret, inode_list[inode].name);
 }

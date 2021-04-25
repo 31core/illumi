@@ -11,6 +11,7 @@
 #include <kernel/types.h>
 #include <kernel/fs/init.h>
 #include <kernel/fs/file.h>
+#include <kernel/fs/dir.h>
 
 extern int timer_num, time_count;
 extern struct fifo8 key_fifo;
@@ -40,6 +41,7 @@ int main()
 		int i = 0;
 		print("[root /] ");
 		char inp[21],cmd[11];
+		char dirname[20];
 		input(inp);
 		str_split(cmd, inp, " ", 0);
 		/* 显示内核版本 */
@@ -75,6 +77,25 @@ int main()
 			str_split(strpid, inp, " ",1);
 			int pid=str2int(strpid);
 			task_kill(pid);
+		}
+		/* 打印子目录及文件 */
+		else if(str_cmp(cmd, "ls") == 1)
+		{
+			int inode_list[20];
+			str_split(dirname, inp, " ", 1);
+			int count = dir_list_inode(inode_list, dirname);
+			for(i = 0; i < count; i++)
+			{
+				file_get_name_by_inode(dirname, inode_list[i]);
+				print(dirname);
+				printchar('\n');
+			}
+		}
+		/* 创建文件夹 */
+		else if(str_cmp(cmd, "mkdir") == 1)
+		{
+			str_split(dirname, inp, " ", 1);
+			dir_create(dirname);
 		}
 		/* 显示文件内容 */
 		else if(str_cmp(cmd, "cat") == 1)
