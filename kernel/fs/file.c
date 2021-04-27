@@ -13,17 +13,25 @@ extern struct inode inode_list[INODE_NUM];
 extern int inode_count;
 
 /* 创建文件 */
-void file_create(struct file *file, char *name)
+int file_create(struct file *file, char *name)
 {
-	if(path_exist(name) == 0)
+	char dirname[50];
+	path_get_dirname(dirname, name);
+	/* 文件已存在 */
+	if(path_exist(name) == 1)
 	{
-		return;
+		return -1;
+	}
+	/* 父级目录不存在 */
+	else if(path_exist(dirname) == 0)
+	{
+		return -1;
 	}
 	int inode = inode_get_available();
 	/* 未找到未使用的块 */
 	if(inode == -1)
 	{
-		return;
+		return -1;
 	}
 	int i = DATA_BLOCK_BEGIN;
 	/* 为文件分配块索引 */
@@ -39,12 +47,13 @@ void file_create(struct file *file, char *name)
 			break;
 		}
 	}
-	inode_list[inode].parent_inode = dir_get_inode(name);
+	inode_list[inode].parent_inode = dir_get_inode(dirname);
 	inode_list[inode].type = TYPE_FILE;
 	path_get_basename(inode_list[inode].name, name);
 	inode_save(); //保存inode索引
 	file->inode = inode;
 	file->seek = 0;
+	return 0;
 }
 /* 获取文件大小 */
 int file_get_size(struct file file)
@@ -52,16 +61,18 @@ int file_get_size(struct file file)
 	return inode_list[file.inode].size;
 }
 /* 打开文件 */
-int file_open(struct file *file, char *filename)
+int file_open(struct file *file, char *path)
 {
-	if(str_len(filename) == 0)
+	/* 文件不存在 */
+	if(path_exist(path) == 0)
 	{
 		return -1;
 	}
 	int i = 1;
-	int parent_inode = dir_get_inode(filename);
-	char basename[20];
-	str_split(basename, filename, "/", str_count(filename, "/")); //获取文件名
+	char dirname[50], basename[50];
+	path_get_basename(basename, path);
+	path_get_dirname(dirname, path);
+	int parent_inode = dir_get_inode(dirname);
 	for(; i < inode_count; i++)
 	{
 		/* 此inode未被分配 */

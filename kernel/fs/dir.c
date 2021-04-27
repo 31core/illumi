@@ -1,5 +1,6 @@
 #include <kernel/fs/file.h>
 #include <kernel/fs/inode.h>
+#include <kernel/fs/path.h>
 #include <kernel/string.h>
 
 extern struct inode inode_list[INODE_NUM];
@@ -8,13 +9,23 @@ extern int inode_count;
 void dir_create(char *path)
 {
 	struct file dir;
-	file_create(&dir, path);
-	inode_list[dir.inode].type = TYPE_DIRECTOR; //类型更改为文件夹
-	inode_save();
+	if(file_create(&dir, path) != -1)
+	{
+		inode_list[dir.inode].type = TYPE_DIRECTOR; //类型更改为文件夹
+		inode_save();
+	}
 }
 /* 获取文件inode编号 */
 int dir_get_inode(char *path)
 {
+	if(str_cmp(path, "/") == 1)
+	{
+		return 0;
+	}
+	if(path_exist(path) == 0)
+	{
+		return -1;
+	}
 	char now_name[20];
 	int times = 0;
 	int i = 0;
@@ -38,10 +49,6 @@ int dir_get_inode(char *path)
 /* 列出子目录及文件inode */
 int dir_list_inode(int *ret, char *path)
 {
-	if(path[str_len(path) - 1] == '/')
-	{
-		path[str_len(path) - 1] = '\0';
-	}
 	int inode = dir_get_inode(path);
 	int count = 0;
 	int i = 0;
