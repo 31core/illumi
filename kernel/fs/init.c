@@ -9,16 +9,16 @@ void fs_init()
 {
 	inode_count = 0;
 	super_block_load();
-	index_area_load();
+	bitmap_load();
 	inode_load();
 }
 /* 创建文件系统 */
 void fs_create()
 {
 	block_cleanup(1); //清除超级块
-	index_area_create();
-	index_area_load();
-	index_area_set_used(2);
-	index_area_save();
+	bitmap_create();
+	bitmap_load();
+	bitmap_set_used(2);
+	bitmap_save();
 	fs_init();
 }

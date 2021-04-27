@@ -49,10 +49,10 @@ int block_create()
 	for(i = 2; i < 1024; i++)
 	{
 		/* 找到未使用的块 */
-		if(index_area_get_used(i) == 0)
+		if(bitmap_get_used(i) == 0)
 		{
-			index_area_set_used(i); //设置为已用
-			index_area_save();
+			bitmap_set_used(i); //设置为已用
+			bitmap_save();
 			block_cleanup(i); //清除此数据块数据
 			return i;
 		}

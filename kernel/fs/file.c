@@ -3,6 +3,7 @@
 #include <kernel/fs/file.h>
 #include <kernel/fs/dir.h>
 #include <kernel/fs/block.h>
+#include <kernel/fs/path.h>
 #include <kernel/string.h>
 #include <kernel/memory.h>
 
@@ -14,6 +15,10 @@ extern int inode_count;
 /* 创建文件 */
 void file_create(struct file *file, char *name)
 {
+	if(path_exist(name) == 0)
+	{
+		return;
+	}
 	int inode = inode_get_available();
 	/* 未找到未使用的块 */
 	if(inode == -1)
@@ -25,18 +30,18 @@ void file_create(struct file *file, char *name)
 	for(; i < 1024; i++)
 	{
 		/* 找到未使用的块 */
-		if(index_area_get_used(i) == 0)
+		if(bitmap_get_used(i) == 0)
 		{
-			index_area_set_used(i); //标记块为已用
-			index_area_save();
+			bitmap_set_used(i); //标记块为已用
+			bitmap_save();
 			inode_list[inode].index_block = i; //当前索引块编号保存到inode
 			block_cleanup(i); //清除索引块数据
 			break;
 		}
 	}
-	inode_list[inode].parent_inode = dir_get_parent(name);
+	inode_list[inode].parent_inode = dir_get_inode(name);
 	inode_list[inode].type = TYPE_FILE;
-	str_split(inode_list[inode].name, name, "/", str_count(name, "/")); //获取文件名
+	path_get_basename(inode_list[inode].name, name);
 	inode_save(); //保存inode索引
 	file->inode = inode;
 	file->seek = 0;
@@ -54,7 +59,7 @@ int file_open(struct file *file, char *filename)
 		return -1;
 	}
 	int i = 1;
-	int parent_inode = dir_get_parent(filename);
+	int parent_inode = dir_get_inode(filename);
 	char basename[20];
 	str_split(basename, filename, "/", str_count(filename, "/")); //获取文件名
 	for(; i < inode_count; i++)
@@ -88,11 +93,11 @@ void file_write(struct file *file, char *data, int size)
 	{
 		if(index_data[i] != 0)
 		{
-			index_area_set_unused(i); //标记块为未用
+			bitmap_set_unused(i); //标记块为未用
 			index_data[i] = 0;
 		}
 	}
-	index_area_save();
+	bitmap_save();
 	block_cleanup(inode_list[file->inode].index_block); //清除引导块
 	/* end = 写入数据块数 */
 	int end = size / 4096;
@@ -111,10 +116,10 @@ void file_write(struct file *file, char *data, int size)
 		for(; j < 1024; j++)
 		{
 			/* 找到未使用的块 */
-			if(index_area_get_used(j) == 0)
+			if(bitmap_get_used(j) == 0)
 			{
-				index_area_set_used(j);
-				index_area_save();
+				bitmap_set_used(j);
+				bitmap_save();
 				block_cleanup(j); //清除此数据块数据
 				break;
 			}
@@ -199,11 +204,12 @@ void file_remove(char *filename)
 	{
 		if(index_data[i] != 0)
 		{
-			index_area_set_unused(i); //标记块为未用
+			bitmap_set_unused(i); //标记块为未用
 			index_data[i] = 0;
 		}
 	}
-	index_area_save();
+	bitmap_set_unused(inode_list[file.inode].index_block);
+	bitmap_save();
 	inode_list[file.inode].type = TYPE_AVAILABLE; //此unode标记为未用
 	inode_save(); //保存inode
 	memfrag_free((unsigned int)index_data);

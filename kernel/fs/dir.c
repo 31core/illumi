@@ -12,14 +12,14 @@ void dir_create(char *path)
 	inode_list[dir.inode].type = TYPE_DIRECTOR; //类型更改为文件夹
 	inode_save();
 }
-/* 获取文件父目录inode编号 */
-int dir_get_parent(char *path)
+/* 获取文件inode编号 */
+int dir_get_inode(char *path)
 {
 	char now_name[20];
 	int times = 0;
 	int i = 0;
 	int now = 0;
-	for(; times < str_count(path, "/") - 1; times++)
+	for(; times < str_count(path, "/"); times++)
 	{
 		str_split(now_name, path, "/", times + 1); //获取目录名
 		for(i = 1; i < inode_count; i++)
@@ -38,7 +38,11 @@ int dir_get_parent(char *path)
 /* 列出子目录及文件inode */
 int dir_list_inode(int *ret, char *path)
 {
-	int inode = dir_get_parent(path);
+	if(path[str_len(path) - 1] == '/')
+	{
+		path[str_len(path) - 1] = '\0';
+	}
+	int inode = dir_get_inode(path);
 	int count = 0;
 	int i = 0;
 	for(i = 1; i < inode_count; i++)
