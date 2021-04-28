@@ -9,10 +9,6 @@ void path_get_basename(char *ret, char *path)
 {
 	char tmp_path[50];
 	str_cpy(tmp_path, path);
-	if(tmp_path[str_len(path) - 1] == '/')
-	{
-		tmp_path[str_len(path) - 1] = '\0';
-	}
 	str_split(ret, path, "/", str_count(path, "/"));
 }
 /* 获取父目录名称 */
@@ -20,11 +16,8 @@ void path_get_dirname(char *ret, char *path)
 {
 	char tmp_path[50];
 	str_cpy(tmp_path, path);
-	if(tmp_path[str_len(path) - 1] == '/')
-	{
-		tmp_path[str_len(path) - 1] = '\0';
-	}
-	str_split(ret, path, "/", str_count(path, "/") - 1);
+	tmp_path[str_find(path, "/", str_count(path, "/") - 1)] = '\0';
+	str_cpy(ret, tmp_path);
 	if(ret[0] == '\0')
 	{
 		str_cpy(ret, "/");
