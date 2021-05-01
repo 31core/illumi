@@ -23,6 +23,37 @@ void path_get_dirname(char *ret, char *path)
 		str_cpy(ret, "/");
 	}
 }
+/* 通过路径获取文件inode编号 */
+int path_get_inode(char *path)
+{
+	if(str_cmp(path, "/") == 1)
+	{
+		return 0;
+	}
+	if(path_exist(path) == 0)
+	{
+		return -1;
+	}
+	char now_name[20];
+	int times = 0;
+	int i = 0;
+	int now = 0;
+	for(; times < str_count(path, "/"); times++)
+	{
+		str_split(now_name, path, "/", times + 1); //获取目录名
+		for(i = 1; i < inode_count; i++)
+		{
+			if(str_cmp(inode_list[i].name, now_name) == 1)
+			{
+				if(inode_list[i].parent_inode == now)
+				{
+					now = i;
+				}
+			}
+		}
+	}
+	return now;
+}
 /* 检查路径是否存在 */
 int path_exist(char *path)
 {

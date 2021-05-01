@@ -10,7 +10,7 @@ extern struct super_block sblock;
 /* 获取可用inode编号 */
 int inode_get_available()
 {
-	int i = 1;
+	int i = 0;
 	/* 循环查找未使用的inode */
 	for(; i < inode_count; i++)
 	{
@@ -35,7 +35,7 @@ int inode_get_available()
 			}
 		}
 		inode_load(); //重新加载inode
-		for(i = 1; i < inode_count; i++)
+		for(i = 0; i < inode_count; i++)
 		{
 			if(inode_list[i].type == 0)
 			{

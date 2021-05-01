@@ -18,7 +18,7 @@ int file_create(struct file *file, char *name)
 	char dirname[50];
 	path_get_dirname(dirname, name);
 	/* 文件已存在 */
-	if(path_exist(name) == 1)
+	if(path_exist(name) == 1 && str_cmp(name, "/") == 0)
 	{
 		return -1;
 	}
@@ -47,7 +47,7 @@ int file_create(struct file *file, char *name)
 			break;
 		}
 	}
-	inode_list[inode].parent_inode = dir_get_inode(dirname);
+	inode_list[inode].parent_inode = path_get_inode(dirname);
 	inode_list[inode].type = TYPE_FILE;
 	path_get_basename(inode_list[inode].name, name);
 	inode_save(); //保存inode索引
@@ -68,11 +68,11 @@ int file_open(struct file *file, char *path)
 	{
 		return -1;
 	}
-	int i = 1;
+	int i = 0;
 	char dirname[50], basename[50];
 	path_get_basename(basename, path);
 	path_get_dirname(dirname, path);
-	int parent_inode = dir_get_inode(dirname);
+	int parent_inode = path_get_inode(dirname);
 	for(; i < inode_count; i++)
 	{
 		/* 此inode未被分配 */
