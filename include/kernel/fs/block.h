@@ -5,6 +5,8 @@ struct super_block
 	unsigned inode_table[1024 - 1]; //inode块编号
 };
 
+extern struct super_block sblock;
+
 void super_block_load(); //加载超级块的数据
 void super_block_save(); //保存超级块的数据
 int super_block_get_index(); //获取引导块的位置

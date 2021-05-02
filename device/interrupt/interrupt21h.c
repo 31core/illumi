@@ -1,10 +1,6 @@
-#include <device/video/graphics.h>
 #include <arch/x86/asmfunc.h>
 #include <kernel/fifo.h>
-
-struct fifo8 key_fifo;
-char key_caps = 1; //1未按下, 2按下
-char key_shift = 1; //1未按下, 2按下
+#include <device/input/keyboard.h>
 
 /* 键盘中断程序 */
 void interrupt21h()

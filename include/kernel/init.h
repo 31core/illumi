@@ -1,0 +1,1 @@
+void kernel_init(); //初始化内核

@@ -3,8 +3,6 @@
 #include <kernel/fs/path.h>
 #include <kernel/string.h>
 
-extern struct inode inode_list[INODE_NUM];
-extern int inode_count;
 /* 创建文件夹 */
 void dir_create(char *path)
 {

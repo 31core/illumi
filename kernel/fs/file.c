@@ -9,9 +9,6 @@
 
 #define DATA_BLOCK_BEGIN 2
 
-extern struct inode inode_list[INODE_NUM];
-extern int inode_count;
-
 /* 创建文件 */
 int file_create(struct file *file, char *name)
 {

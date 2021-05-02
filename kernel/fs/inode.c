@@ -5,8 +5,6 @@
 struct inode inode_list[INODE_NUM];
 int inode_count = 0; //node的数量
 
-extern struct super_block sblock;
-
 /* 获取可用inode编号 */
 int inode_get_available()
 {

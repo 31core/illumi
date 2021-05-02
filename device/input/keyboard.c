@@ -2,9 +2,9 @@
 #include <device/video/graphics.h>
 #include <device/input/keyboard.h>
 
-extern struct fifo8 key_fifo;
-extern char key_caps;
-extern char key_shift;
+struct fifo8 key_fifo;
+char key_caps = 1; //1未按下, 2按下
+char key_shift = 1; //1未按下, 2按下
 
 char keyboard_set[] = {' ', ' ', '1', '2', '3', '4', '5', '6', '7', '8', 
 '9', '0', '-', '=', 0x0e, ' ', 'q', 'w', 'e', 'r', 

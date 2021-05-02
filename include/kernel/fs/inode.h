@@ -5,6 +5,7 @@
 #define INODE_TABLE_SIZE sizeof(struct inode)
 #define INODE_NUM (4096 / INODE_TABLE_SIZE)
 
+/* inode数据 */
 struct inode
 {
 	char name[16]; //inode(文件)名
@@ -13,6 +14,9 @@ struct inode
 	int size;
 	int type; //inode类型
 };
+
+extern struct inode inode_list[INODE_NUM];
+extern int inode_count; //node的数量
 
 int inode_get_available(); //获取可用inode编号
 void inode_load(); //加载inode

@@ -1,8 +1,6 @@
 #include <kernel/fs/inode.h>
+#include <kernel/fs/path.h>
 #include <kernel/string.h>
-
-extern struct inode inode_list[INODE_NUM];
-extern int inode_count;
 
 /* 获取路径基名称 */
 void path_get_basename(char *ret, char *path)

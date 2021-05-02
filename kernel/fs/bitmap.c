@@ -1,8 +1,6 @@
 #include <kernel/fs/block.h>
 #include <kernel/fs/bitmap.h>
 
-extern struct super_block sblock;
-
 /* 创建引导块 */
 void bitmap_create()
 {

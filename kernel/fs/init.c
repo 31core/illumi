@@ -3,8 +3,6 @@
 #include <kernel/fs/inode.h>
 #include <kernel/fs/dir.h>
 
-extern int inode_count;
-
 /* 初始化文件系统 */
 void fs_init()
 {
