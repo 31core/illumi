@@ -45,8 +45,8 @@ void str_cat(char *a, char *b)
 	while(b[j] != '\0')
 	{
 		a[i] = b[j];
-		i +=1;
-		j +=1;
+		i += 1;
+		j += 1;
 	}
 	a[i] = '\0';
 }

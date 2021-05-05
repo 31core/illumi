@@ -1,6 +1,7 @@
 #include <kernel/init.h>
-#include <kernel/string.h>
 #include <kernel/types.h>
+#include <kernel/string.h>
+#include <kernel/string_format.h>
 #include <kernel/fs/init.h>
 #include <kernel/fs/file.h>
 #include <kernel/fs/dir.h>
@@ -38,24 +39,18 @@ int main()
 			print("PID  PPID  Name\n");
 			for(; j < i; j++)
 			{
-				char str[11];
-				int2str(str, pids[j]);
-				print(str);
-				print("   ");
-				int2str(str, task_get_parent_pid(pids[j]));
-				print(str);
-				print("    ");
-				task_get_name(str, j);
-				print(str);
-				printchar('\n');
+				char name[11];
+				int ppid = task_get_parent_pid(pids[j]);
+				task_get_name(name, j);
+				print_format("%d      %d    %s\n", pids[i], ppid, name);
 			}
 		}
 		/* 杀死任务 */
 		else if(str_cmp(cmd, "kill") == 1)
 		{
 			char strpid[5];
-			str_split(strpid, inp, " ",1);
-			int pid=str2int(strpid);
+			str_split(strpid, inp, " ", 1);
+			int pid = str2int(strpid);
 			task_kill(pid);
 		}
 		/* 打印子目录及文件 */
@@ -67,8 +62,7 @@ int main()
 			for(i = 0; i < count; i++)
 			{
 				file_get_name_by_inode(dirname, inode_list[i]);
-				print(dirname);
-				printchar('\n');
+				print_format("%s\n", dirname);
 			}
 		}
 		/* 创建文件夹 */
@@ -87,8 +81,7 @@ int main()
 			str_split(filename, inp, " ", 1);
 			if(file_open(&fp, filename) == -1)
 			{
-				print(filename);
-				print(": no such file.\n");
+				print_format("%s: no such file.\n", filename);
 				continue;
 			}
 			int size = file_read(&fp, data, 0);
@@ -108,23 +101,13 @@ int main()
 		else if(str_cmp(cmd, "mem") == 1)
 		{
 			unsigned int size = mem_get_size() / 1024;
-			char str_size[11];
-			print("Total: ");
-			int2str(str_size, size);
-			print(str_size);
-			print(" KB\n");
+			print_format("Total: %d KB\n", size);
 			size = mem_get_free_size() / 1024;
-			int2str(str_size, size);
-			print("Free: ");
-			print(str_size);
-			print(" KB\n");
+			print_format("Free: %d KB\n", size);
 		}
 		else if(str_cmp(cmd, "") != 1)
 		{
-			//char cmd[11];
-			//str_split(cmd, inp, " ", 0);
-			print(cmd);
-			print(": unkown command.\n");
+			print_format("%s: unkown command.\n", cmd);
 		}
 	}
 }
