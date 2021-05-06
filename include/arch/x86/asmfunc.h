@@ -1,8 +1,8 @@
 void GDTR_load(int, int); //加载GDRT寄存器
-void IDTR_load(int, int); //加载IDRT寄存器
-void io_out8(int, int); //写8位端口
-int io_in8(int); //写8位端口读
-void io_out16(int, int); //写16位端口
-int io_in16(int); //写16位端口读
-void io_cli(); //禁用中断
-void io_sti(); //启用中断
+void IDTR_load(int, int);
+void io_out8(int, int);
+int io_in8(int);
+void io_out16(int, int);
+int io_in16(int);
+void io_cli();
+void io_sti();

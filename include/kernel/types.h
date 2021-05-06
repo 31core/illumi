@@ -1,2 +1,4 @@
-void int2str(char*, unsigned int); //整形数字转字符串
-int str2int(char*); //字符串转整形数字
+void uint2str(char*, unsigned int);
+void int2str(char*, int);
+int str2uint(char*);
+int str2int(char*);

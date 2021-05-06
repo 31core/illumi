@@ -23,6 +23,17 @@ void print_format(char *str, ...)
 				int2str(str1, int0);
 				print(str1);
 			}
+			else if(str[i + 1] == 'u')
+			{
+				int int0 = (int)*(&str + arg);
+				char str1[50];
+				uint2str(str1, int0);
+				print(str1);
+			}
+			else if(str[i + 1] == '%')
+			{
+				printchar('%');
+			}
 			arg += 1;
 			i += 2;
 		}
@@ -53,6 +64,19 @@ void string_format(char *ret, char *str, ...)
 				int2str(str1, int0);
 				str_cat(ret, str1);
 				j += str_len(str1);
+			}
+			else if(str[i + 1] == 'u')
+			{
+				int int0 = (int)*(&str + arg);
+				char str1[50];
+				uint2str(str1, int0);
+				str_cat(ret, str1);
+				j += str_len(str1);
+			}
+			else if(str[i + 1] == '%')
+			{
+				ret[j] = '%';
+				j += 1;
 			}
 			arg += 1;
 			i += 2;

@@ -1,2 +1,2 @@
-void PIC_init(); //初始化PIC
-void PIT_init(); //初始化PIT
+void PIC_init();
+void PIT_init();

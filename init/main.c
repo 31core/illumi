@@ -50,7 +50,7 @@ int main()
 		{
 			char strpid[5];
 			str_split(strpid, inp, " ", 1);
-			int pid = str2int(strpid);
+			int pid = str2uint(strpid);
 			task_kill(pid);
 		}
 		/* 打印子目录及文件 */

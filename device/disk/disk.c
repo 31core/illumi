@@ -2,7 +2,7 @@
 #include <kernel/time.h>
 
 /* LBA读取磁盘 */
-void LBA28ReadDisk(short *buf, unsigned int offset, unsigned char count)
+void lba28_read(short *buf, unsigned int offset, unsigned char count)
 {
 	io_out8(0x1f2, count);
 	io_out8(0x1f3, offset & 0xff);
@@ -25,7 +25,7 @@ void LBA28ReadDisk(short *buf, unsigned int offset, unsigned char count)
 	}
 }
 /* LBA写入磁盘 */
-void LBA28WriteDisk(short *data, unsigned int offset, unsigned char count)
+void lba28_write(short *data, unsigned int offset, unsigned char count)
 {
 	io_out8(0x1f2, count);
 	io_out8(0x1f3, offset & 0xff);

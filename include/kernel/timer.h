@@ -1,4 +1,4 @@
-void timer_init(); //初始化计时器
-int timer_alloc(); //分配一个计时器
-int timer_get_time(int); //获取计时器时间
-void timer_free(int); //释放计时器
+void timer_init();
+int timer_alloc();
+int timer_get_time(int);
+void timer_free(int);

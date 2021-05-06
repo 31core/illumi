@@ -7,10 +7,10 @@ struct super_block
 
 extern struct super_block sblock;
 
-void super_block_load(); //加载超级块的数据
-void super_block_save(); //保存超级块的数据
-int super_block_get_index(); //获取引导块的位置
-void block_load(unsigned int, char*); //读取一个块的数据
-void block_save(unsigned int, char*); //写入一个块的数据
-void block_cleanup(unsigned int); //清除一个块的数据
-int block_create(); //创建一个块
+void super_block_load();
+void super_block_save();
+int super_block_get_index();
+void block_load(unsigned int, char*);
+void block_save(unsigned int, char*);
+void block_cleanup(unsigned int);
+int block_create();

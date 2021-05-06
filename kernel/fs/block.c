@@ -6,12 +6,12 @@
 /* 读取一个块的数据 */
 void block_load(unsigned int block, char *data)
 {
-	LBA28ReadDisk((short*)data, block * 8, 8);
+	lba28_read((short*)data, block * 8, 8);
 }
 /* 写入一个块的数据 */
 void block_save(unsigned int block, char *data)
 {
-	LBA28WriteDisk((short*)data, block * 8, 8);
+	lba28_write((short*)data, block * 8, 8);
 }
 /* 清除一个块的数据 */
 void block_cleanup(unsigned int block)

@@ -16,8 +16,8 @@ struct inode
 };
 
 extern struct inode inode_list[INODE_NUM];
-extern int inode_count; //node的数量
+extern int inode_count;
 
-int inode_get_available(); //获取可用inode编号
-void inode_load(); //加载inode
-void inode_save(); //保存inode
+int inode_get_available();
+void inode_load();
+void inode_save();

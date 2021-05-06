@@ -1,2 +1,2 @@
-void LBA28ReadDisk(short*, int, unsigned char); //LBA读取磁盘
-void LBA28WriteDisk(short*, int, unsigned char); //写入磁盘
+void lba28_read(short*, int, unsigned char);
+void lba28_write(short*, int, unsigned char);

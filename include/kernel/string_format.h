@@ -1,2 +1,2 @@
-void print_format(char*, ...); //格式化输出
-void string_format(char*, char*, ...); //格式化字符串
+void print_format(char*, ...);
+void string_format(char*, char*, ...);
