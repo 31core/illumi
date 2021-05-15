@@ -36,6 +36,7 @@ void print_format(char *str, ...)
 			}
 			arg += 1;
 			i += 2;
+			continue;
 		}
 		printchar(str[i]);
 		i += 1;
@@ -80,6 +81,7 @@ void string_format(char *ret, char *str, ...)
 			}
 			arg += 1;
 			i += 2;
+			continue;
 		}
 		ret[j] = str[i];
 		ret[j + 1] = '\0';
