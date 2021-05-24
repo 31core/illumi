@@ -16,7 +16,6 @@ void task_init()
 	}
 	/* 创建初始化任务 */
 	task_list[0].flags = TASK_RUNNING;
-	task_list[0].name[0] = '\0';
 	task_list[0].parent_pid = 0;
 	str_cpy(task_list[0].name, "init");
 }
@@ -125,7 +124,7 @@ void task_wait(int pid)
 	{
 		return;
 	}
-	while(task_list[pid].flags != TASK_RUNNING);
+	while(task_list[pid].flags != TASK_AVAILABLE);
 }
 /* 杀死任务 */
 void task_kill(int pid)
