@@ -27,7 +27,7 @@ int task_create(unsigned int);
 void task_kill(int);
 void task_wait(int);
 void task_set_name(int, char*);
-void task_get_name(char*, int);
+int task_get_name(char*, int);
 int task_get_parent_pid(int);
 int task_get_current_pid();
 int task_get_list(int*);
