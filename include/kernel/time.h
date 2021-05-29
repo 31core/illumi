@@ -10,6 +10,7 @@ struct time_stamp
 	int ts_low, ts_hight;
 };
 
-void sleep(unsigned int);
+void delay(unsigned int);
+void time(unsigned int);
 void time_localtime(struct local_time*);
 void time_get_stamp(struct time_stamp*, struct local_time);

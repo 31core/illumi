@@ -46,5 +46,5 @@ void lba28_write(short *data, unsigned int offset, unsigned char count)
 		}
 		io_out16(0x1f0, data[i]);
 	}
-	sleep(1);
+	delay(1);
 }
