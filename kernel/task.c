@@ -59,19 +59,12 @@ int task_create(unsigned int addr)
 		if(task_list[i].flags == TASK_AVAILABLE)
 		{
 			unsigned int esp_addr = memfrag_alloc(1024) + 1024; //分配该任务的栈地址
+			task_init_register(&task_list[i].status);
+			task_list[i].status.esp = esp_addr;
+			task_list[i].init_info.stack_addr = esp_addr;
 			task_list[i].flags = TASK_RUNNING;
 			task_list[i].parent_pid = now_task_pid;
 			task_list[i].name[0] = '\0';
-			/* 初始化寄存器 */
-			task_list[i].status.eax = 0;
-			task_list[i].status.ebx = 0;
-			task_list[i].status.ecx = 0;
-			task_list[i].status.edx = 0;
-			task_list[i].status.esi = 0;
-			task_list[i].status.edi = 0;
-			task_list[i].status.ebp = 0;
-			task_list[i].status.esp = esp_addr;
-			task_list[i].init_info.stack_addr = esp_addr;
 			int *p = (int*)esp_addr;
 			*p = addr; //[esp]为任务跳转地址
 			return i; //返回pid
@@ -89,14 +82,15 @@ void task_set_name(int pid, char *str)
 	}
 }
 /* 获取任务名字 */
-void task_get_name(char *ret, int pid)
+int task_get_name(char *ret, int pid)
 {
 	/* 任务没有运行 */
 	if(task_list[pid].flags == TASK_AVAILABLE)
 	{
-		return;
+		return -1;
 	}
 	str_cpy(ret, task_list[pid].name);
+	return 0;
 }
 /* 获取当前任务的pid */
 int task_get_current_pid()

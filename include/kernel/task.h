@@ -20,6 +20,7 @@ struct task_info
 };
 
 void task_init();
+void task_init_register(struct task_status*);
 int task_get_next_pid();
 void task_switch();
 int task_create(unsigned int);
@@ -28,5 +29,5 @@ void task_wait(int);
 void task_set_name(int, char*);
 void task_get_name(char*, int);
 int task_get_parent_pid(int);
-int task_get_current_pid();//获取当前任务的pid
+int task_get_current_pid();
 int task_get_list(int*);
