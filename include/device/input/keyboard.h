@@ -1,7 +1,10 @@
+#define KEY_UP 1
+#define KEY_DOWN 2
+
 extern struct fifo8 key_fifo;
 extern char key_caps;
 extern char key_shift;
 
-void input(char*);
+int input(char*);
 char inputchar();
 unsigned char inputcode();

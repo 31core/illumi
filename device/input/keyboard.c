@@ -20,7 +20,7 @@ char keyboard_set_shift[] = {' ', ' ', '!', '@', '#', '$', '%', '^', '&', '*',
 'M', '<', '>', '?', 0, ' ', ' ', ' ', 0, ' '};
 
 /* 输入字符串 */
-void input(char *str)
+int input(char *str)
 {
 	int i = 0;
 	while(1)
@@ -50,6 +50,7 @@ void input(char *str)
 		i += 1;
 	}
 	str[i] = '\0';
+	return i; //返回输入数据大小
 }
 /* 单字符输入 */
 char inputchar()
@@ -58,27 +59,27 @@ char inputchar()
 	{
 		if(fifo_get_info(key_fifo) != 0)
 		{
-			char data = fifo_read_data(&key_fifo);
+			unsigned char data = fifo_read_data(&key_fifo);
 			/* 按键抬起 */
-			if(data < 0)
+			if(data > 0x7f)
 			{
-				return 0;
+				continue;
 			}
-			if(key_shift == 1)
+			if(key_shift == KEY_UP)
 			{
 				char c = keyboard_set[(int)data];
 				/* caps lock且输入是字母 */
-				if(key_caps == 2 && c >= 0x61 && c <= 0x7a)
+				if(key_caps == KEY_DOWN && c >= 0x61 && c <= 0x7a)
 				{
 					return c - 32;
 				}
 				return c;
 			}
-			else if(key_shift == 2)
+			else if(key_shift == KEY_DOWN)
 			{
 				char c = keyboard_set_shift[(int)data];
 				/* caps lock且输入是字母 */
-				if(key_caps == 2 && c >= 0x41 && c <= 0x5a)
+				if(key_caps == KEY_DOWN && c >= 0x41 && c <= 0x5a)
 				{
 					return c + 32;
 				}

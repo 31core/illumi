@@ -10,23 +10,23 @@ void interrupt21h()
 	/* shift抬起 */
 	if(data == 0xaa || data == 0xb6)
 	{
-		key_shift = 1;
+		key_shift = KEY_UP;
 	}
 	/* shift按下 */
 	else if(data == 0x2a || data == 0x36)
 	{
-		key_shift = 2;
+		key_shift = KEY_DOWN;
 	}
 	/* caps按下 */
 	else if(data == 0xba)
 	{
-		if(key_caps == 1)
+		if(key_caps == KEY_UP)
 		{
-			key_caps = 2;
+			key_caps = KEY_DOWN;
 		}
-		else if(key_caps == 2)
+		else if(key_caps == KEY_DOWN)
 		{
-			key_caps = 1;
+			key_caps = KEY_UP;
 		}
 	}
 	fifo_write_data(&key_fifo, data); //将数据写入缓冲区
