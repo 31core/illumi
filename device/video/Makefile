@@ -1,1 +1,1 @@
-kernel_objs+=device/video/graphics.o device/video/cursor.o
+kernel_objs += device/video/graphics.o device/video/cursor.o

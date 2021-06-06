@@ -1,5 +1,5 @@
-global asm_interrupt20h,asm_interrupt21h
-extern interrupt20h,interrupt21h
+global asm_interrupt20h, asm_interrupt21h
+extern interrupt20h, interrupt21h
 
 asm_interrupt20h:
 	pushad

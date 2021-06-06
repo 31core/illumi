@@ -1,1 +1,1 @@
-kernel_objs+=device/disk/disk.o
+kernel_objs += device/disk/disk.o

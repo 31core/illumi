@@ -1,1 +1,1 @@
-kernel_objs+=device/input/keyboard.o
+kernel_objs += device/input/keyboard.o
