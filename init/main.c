@@ -42,7 +42,7 @@ int main()
 				char name[11];
 				int ppid = task_get_parent_pid(pids[j]);
 				task_get_name(name, j);
-				print_format("%d      %d    %s\n", pids[i], ppid, name);
+				print_format("%d      %d    %s\n", pids[j], ppid, name);
 			}
 		}
 		/* 杀死任务 */

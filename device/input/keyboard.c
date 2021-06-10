@@ -3,8 +3,8 @@
 #include <device/input/keyboard.h>
 
 struct fifo8 key_fifo;
-char key_caps = 1; //1未按下, 2按下
-char key_shift = 1; //1未按下, 2按下
+char key_caps = KEY_UP; //1未按下, 2按下
+char key_shift = KEY_UP; //1未按下, 2按下
 
 char keyboard_set[] = {' ', ' ', '1', '2', '3', '4', '5', '6', '7', '8', 
 '9', '0', '-', '=', 0x0e, ' ', 'q', 'w', 'e', 'r', 

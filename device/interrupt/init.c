@@ -24,7 +24,7 @@ void PIC_init()
 }
 
 #define HZ 100
-#define CLOCK_TICK_RATE 1193180 //1s发生中断次数
+#define CLOCK_TICK_RATE 1193180 //发生中断次数
 
 void PIT_init()
 {

@@ -11,7 +11,7 @@
 `/include`: 存放头文件.  
 `/init`: 内核入口点.  
 `/kernel`: 系统内核代码.  
-`/device` 存放一些设备的驱动代码.  
+`/device`: 存放一些设备的驱动代码.  
 `/doc`: 存放了操作系统开发文档.  
 `/config`: 内核编译时的配置文件.
 
@@ -24,8 +24,8 @@ ld: 链接器.
 dd: 镜像制作工具.
 
 #### 0x1 命令行选项
-```
-make #编译
-make run #编译并运行
-make clean #清理输出文件
+```shell
+$ make #编译
+$ make run #编译并运行
+$ make clean #清理输出文件
 ```
