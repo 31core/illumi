@@ -28,7 +28,7 @@ int main()
 		/* 显示内核版本 */
 		if(str_cmp(cmd, "rever") == 1)
 		{
-			print("Rexistum Kernel 0.0.3\n");
+			print("Recward Kernel 0.0.3\n");
 		}
 		/* 打印任务 */
 		else if(str_cmp(cmd, "ps") == 1)
