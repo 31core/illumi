@@ -29,6 +29,7 @@ unsigned int mem_get_size()
 /* 初始化内存碎片管理 */
 void memfrag_init()
 {
+	memory_size = 0;
 	mem_frag_num = 0;
 	memory_size = mem_get_size();
 	mem_frag_list[0].addr = 0;

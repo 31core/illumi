@@ -1,6 +1,6 @@
 #include <kernel/types.h>
 #include <kernel/string.h>
-#include <device/video/graphics.h>
+#include <device/video/cli_print.h>
 
 /* 格式化输出 */
 void print_format(char *str, ...)
@@ -14,31 +14,31 @@ void print_format(char *str, ...)
 			if(str[i + 1] == 's')
 			{
 				char *str0 = *(&str + arg);
-				print(str0);
+				cli_print(str0);
 			}
 			else if(str[i + 1] == 'd')
 			{
 				int int0 = (int)*(&str + arg);
 				char str1[50];
 				int2str(str1, int0);
-				print(str1);
+				cli_print(str1);
 			}
 			else if(str[i + 1] == 'u')
 			{
 				int int0 = (int)*(&str + arg);
 				char str1[50];
 				uint2str(str1, int0);
-				print(str1);
+				cli_print(str1);
 			}
 			else if(str[i + 1] == '%')
 			{
-				printchar('%');
+				cli_print_char('%');
 			}
 			arg += 1;
 			i += 2;
 			continue;
 		}
-		printchar(str[i]);
+		cli_print_char(str[i]);
 		i += 1;
 	}
 }

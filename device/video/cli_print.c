@@ -1,21 +1,21 @@
-#include <device/video/graphics.h>
+#include <device/video/cli_print.h>
 
 int vga_addr = VGA_ADDR; //显存地址
 int screen_x_size = 80; //屏幕宽
 int screen_y_size = 25; //屏幕高
 
 /* 打印字符串 */
-void print(char *str)
+void cli_print(char *str)
 {
 	int i = 0;
 	while(str[i] != '\0')
 	{
-		printchar(str[i]);
+		cli_print_char(str[i]);
 		i += 1;
 	}
 }
 /* 打印单字符 */
-void printchar(char c)
+void cli_print_char(char c)
 {
 	/* 回车字符处理 */
 	if(c == '\n')

@@ -1,5 +1,5 @@
 #include <kernel/fifo.h>
-#include <device/video/graphics.h>
+#include <device/video/cli_print.h>
 #include <device/input/keyboard.h>
 
 struct fifo8 key_fifo;
@@ -25,7 +25,7 @@ int input(char *str)
 	int i = 0;
 	while(1)
 	{
-		char data = inputchar();
+		char data = input_char();
 		if(data == 0)
 		{
 			continue;
@@ -37,12 +37,12 @@ int input(char *str)
 			{
 				continue; //str长度为0
 			}
-			printchar(0x0e);
+			cli_print_char(0x0e);
 			i -= 1; //删除上一个字符
 			continue; //仅打印不写入退格符
 		}
 		str[i] = data;
-		printchar(data);
+		cli_print_char(data);
 		if(data == '\n')
 		{
 			break;
@@ -53,7 +53,7 @@ int input(char *str)
 	return i; //返回输入数据大小
 }
 /* 单字符输入 */
-char inputchar()
+char input_char()
 {
 	while(1)
 	{
@@ -89,7 +89,7 @@ char inputchar()
 	}
 }
 /* 获取一个输入按键的键码 */
-unsigned char inputcode()
+unsigned char input_code()
 {
 	while(1)
 	{

@@ -8,7 +8,7 @@
 #include <kernel/memory.h>
 #include <kernel/timer.h>
 #include <kernel/fs/init.h>
-#include <device/video/graphics.h>
+#include <device/video/cli_print.h>
 
 /* 初始化内核 */
 void kernel_init()

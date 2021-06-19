@@ -6,5 +6,5 @@ extern char key_caps;
 extern char key_shift;
 
 int input(char*);
-char inputchar();
-unsigned char inputcode();
+char input_char();
+unsigned char input_code();

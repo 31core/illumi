@@ -7,7 +7,7 @@
 #include <kernel/fs/dir.h>
 #include <kernel/task.h>
 #include <kernel/memory.h>
-#include <device/video/graphics.h>
+#include <device/video/cli_print.h>
 #include <device/input/keyboard.h>
 
 int main()
@@ -20,7 +20,7 @@ int main()
 	while(1)
 	{
 		int i = 0;
-		print("[root /] ");
+		cli_print("[root /] ");
 		char inp[21],cmd[11];
 		char dirname[20];
 		input(inp);
@@ -28,7 +28,7 @@ int main()
 		/* 显示内核版本 */
 		if(str_cmp(cmd, "rever") == 1)
 		{
-			print("Recward Kernel 0.0.3\n");
+			cli_print("Recward Kernel 0.0.3\n");
 		}
 		/* 打印任务 */
 		else if(str_cmp(cmd, "ps") == 1)
@@ -36,7 +36,7 @@ int main()
 			int pids[1024];
 			int i = task_get_list(pids);
 			int j = 0;
-			print("PID  PPID  Name\n");
+			cli_print("PID  PPID  Name\n");
 			for(; j < i; j++)
 			{
 				char name[11];
@@ -87,7 +87,7 @@ int main()
 			int size = file_read(&fp, data, 0);
 			for(i = 0; i < size; i++)
 			{
-				printchar(data[i]);
+				cli_print_char(data[i]);
 			}
 		}
 		/* 删除文件 */
