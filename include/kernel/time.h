@@ -11,6 +11,5 @@ struct time_stamp
 };
 
 void delay(unsigned int);
-void time(unsigned int);
 void time_localtime(struct local_time*);
 void time_get_stamp(struct time_stamp*, struct local_time);

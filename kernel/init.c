@@ -7,6 +7,7 @@
 #include <kernel/ipc.h>
 #include <kernel/memory.h>
 #include <kernel/timer.h>
+#include <kernel/random.h>
 #include <kernel/fs/init.h>
 #include <device/video/cli_print.h>
 
@@ -20,6 +21,7 @@ void kernel_init()
 	cpu_init(); //初始化cpu相关设定
 	PIC_init(); //初始化PIC
 	io_sti(); //启用中断
+	random_init();
 	//fs_init(); //初始化文件系统
 	/* 初始化内存碎片管理 */
 	memfrag_init();
