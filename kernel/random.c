@@ -4,6 +4,21 @@
 
 unsigned int seed = 0;
 
+/* 调整随机数种子 */
+static int adjust_seed(int origin_seed)
+{
+	if(origin_seed < 1000)
+	{
+		origin_seed += 1000;
+	}
+	/* 最后2位为0以后的随机数最后2位的0会重复 */
+	if(origin_seed % 100 == 0)
+	{
+		origin_seed += 30;
+	}
+	return origin_seed;
+}
+
 /* 初始化随机数种子 */
 void random_init()
 {
@@ -18,14 +33,7 @@ void random_init()
 		uint2str(str, seed);
 		seed = str2int(&str[str_len(str) - 4]);
 	}
-	if(seed < 1000)
-	{
-		seed += 1000;
-	}
-	if(seed % 10 == 0)
-	{
-		seed += 3;
-	}
+	seed = adjust_seed(seed);
 }
 /* 生成随机数 */
 unsigned int random()
@@ -51,13 +59,26 @@ unsigned int random()
 	}
 	str[4] = '\0';
 	seed = str2uint(str);
-	if(seed < 1000)
+	seed = adjust_seed(seed);
+	int randint = seed;
+
+	/* 根据时间戳调整随机数种子以增强不确定性 */
+	struct local_time tm;
+	struct time_stamp ts;
+	time_localtime(&tm);
+	time_get_stamp(&ts, tm);
+
+	if(ts.ts_low % 2 == 0)
 	{
-		seed += 1000;
+		seed += 2;
 	}
-	if(seed % 10 == 0)
+	if(ts.ts_low % 3 == 0)
 	{
 		seed += 3;
 	}
-	return seed;
+	if(ts.ts_low % 5 == 0)
+	{
+		seed += 5;
+	}
+	return randint;
 }
