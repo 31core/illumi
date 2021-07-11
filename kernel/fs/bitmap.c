@@ -25,7 +25,7 @@ int bitmap_get_used(unsigned int block)
 {
 	int offset = block / 8; //计算用于存放信息的位置,char为8 bits
 	char p = block % 8;
-	if((index_area_data[offset] & (0x100 >> p)) != 0)
+	if((index_area_data[offset] & (0x100 >> (p + 1))) != 0)
 	{
 		return 1;
 	}
@@ -36,12 +36,12 @@ void bitmap_set_used(unsigned int block)
 {
 	int offset = block / 8;
 	char p = block % 8;
-	index_area_data[offset] |= (0x100 >> p);
+	index_area_data[offset] |= (0x100 >> (p + 1));
 }
 /* 标记block为可用 */
 void bitmap_set_unused(unsigned int block)
 {
 	int offset = block / 8;
 	char p = block % 8;
-	index_area_data[offset] &= !(0x100 >> p);
+	index_area_data[offset] &= !(0x100 >> (p + 1));
 }
