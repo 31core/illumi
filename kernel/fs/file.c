@@ -196,7 +196,7 @@ int file_read(struct file *file, char *data, int size)
 		/* 加载下一个引导块 */
 		if(i == 1024 && index_data[0] != 0)
 		{
-			block_load(index_data[0], index_data); //加载下一个引导块
+			block_load(index_data[0], (char*)index_data); //加载下一个引导块
 			i = 1;
 		}
 		else if(i == 1024)
@@ -247,7 +247,7 @@ void file_remove(char *filename)
 		/* 加载下一个引导块 */
 		if(i == 1024 && index_data[0] != 0)
 		{
-			block_load(index_data[0], index_data); //加载下一个引导块
+			block_load(index_data[0], (char*)index_data); //加载下一个引导块
 			bitmap_set_unused(index_block);
 			index_block = index_data[0];
 			i = 1;
