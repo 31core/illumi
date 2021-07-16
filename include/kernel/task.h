@@ -23,7 +23,7 @@ void task_init();
 void task_init_register(struct task_status*);
 int task_get_next_pid();
 void task_switch();
-int task_create(unsigned int);
+int task_alloc(unsigned int);
 void task_kill(int);
 void task_wait(int);
 void task_set_name(int, char*);

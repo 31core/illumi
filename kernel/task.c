@@ -51,7 +51,7 @@ void task_switch()
 	}
 }
 /* 创建任务 */
-int task_create(unsigned int addr)
+int task_alloc(unsigned int addr)
 {
 	int i = 0;
 	for(; i < 1024; i++)

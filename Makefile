@@ -2,7 +2,7 @@ include config/arch.mk
 include config/sources.mk
 
 MAKE = make
-GCC = gcc
+CC = gcc
 NASM = nasm
 LD = ld
 DD = dd
@@ -24,7 +24,7 @@ kernel.sys:$(kernel_bins) $(kernel_objs)
 	@$(NASM) -f elf $*.asm -o $*.bin
 %.o:%.c
 	@echo [CC] $@
-	@$(GCC) $(C_FLAGS) -c $*.c -o $*.o
+	@$(CC) $(C_FLAGS) -c $*.c -o $*.o
 #内核镜像
 image:
 	@echo [DD] hda.img
@@ -34,7 +34,7 @@ image:
 #运行
 run:
 	@$(MAKE) -s all
-	@$(QEMU) -hda hda.img
+	@$(QEMU) -drive file=hda.img,format=raw
 #清理生成的文件
 clean:
 	rm $(kernel_bins) $(kernel_objs)

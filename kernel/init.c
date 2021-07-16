@@ -22,7 +22,7 @@ void kernel_init()
 	PIC_init(); //初始化PIC
 	io_sti(); //启用中断
 	random_init();
-	//fs_init(); //初始化文件系统
+	fs_init(); //初始化文件系统
 	/* 初始化内存碎片管理 */
 	memfrag_init();
 	memfrag_alloc_with_addr(VGA_ADDR, 2 * 80 * 25); //显存

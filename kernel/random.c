@@ -22,9 +22,9 @@ static int adjust_seed(int origin_seed)
 /* 初始化随机数种子 */
 void random_init()
 {
-	struct local_time tm;
-	struct time_stamp ts;
-	time_localtime(&tm);
+	LOCAL_TIME tm;
+	TIME_STAMP ts;
+	time_local_time(&tm);
 	time_get_stamp(&ts, tm);
 	seed = ts.ts_low;
 	if(seed > 9999)
@@ -63,9 +63,9 @@ unsigned int random()
 	int randint = seed;
 
 	/* 根据时间戳调整随机数种子以增强不确定性 */
-	struct local_time tm;
-	struct time_stamp ts;
-	time_localtime(&tm);
+	LOCAL_TIME tm;
+	TIME_STAMP ts;
+	time_local_time(&tm);
 	time_get_stamp(&ts, tm);
 
 	if(ts.ts_low % 2 == 0)

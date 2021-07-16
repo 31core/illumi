@@ -2,7 +2,7 @@
 #include <kernel/time.h>
 
 /* 获取系统时间 */
-void time_localtime(struct local_time* lt)
+void time_local_time(struct local_time* lt)
 {
 	io_out8(0x70, 0x0);
 	char S = io_in8(0x71);

@@ -35,7 +35,7 @@ void super_block_load()
 /* 保存超级块的数据 */
 void super_block_save()
 {
-	block_save(1, (char*)&sblock.bitmap_block); //加载超级块
+	block_save(1, (char*)&sblock); //保存超级块
 }
 /* 获取引导块的位置 */
 int super_block_get_index()
