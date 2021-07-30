@@ -47,7 +47,7 @@ void task_switch()
 	{
 		int old_pid = now_task_pid;
 		now_task_pid = pid;
-		asm_task_switch(&task_list[old_pid].status, &task_list[pid].status);
+		asm_task_switch(&task_list[old_pid].state, &task_list[pid].state);
 	}
 }
 /* 创建任务 */
@@ -59,8 +59,8 @@ int task_alloc(unsigned int addr)
 		if(task_list[i].flags == TASK_AVAILABLE)
 		{
 			unsigned int esp_addr = memfrag_alloc(1024) + 1024; //分配该任务的栈地址
-			task_init_register(&task_list[i].status);
-			task_list[i].status.esp = esp_addr;
+			task_init_register(&task_list[i].state);
+			task_list[i].state.esp = esp_addr;
 			task_list[i].init_info.stack_addr = esp_addr;
 			task_list[i].flags = TASK_RUNNING;
 			task_list[i].parent_pid = now_task_pid;

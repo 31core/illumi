@@ -1,3 +1,4 @@
+#include <version.h>
 #include <kernel/init.h>
 #include <kernel/types.h>
 #include <kernel/string.h>
@@ -28,7 +29,7 @@ int main()
 		/* 显示内核版本 */
 		if(str_cmp(cmd, "rever") == 1)
 		{
-			cli_print("Recward Kernel 0.0.3\n");
+			print_format("%s %s\n", KERNEL_NAME, KERNEL_VERSION);
 		}
 		/* 打印任务 */
 		else if(str_cmp(cmd, "ps") == 1)

@@ -1,3 +1,4 @@
+#include <kernel/fs/fs.h>
 #include <kernel/fs/bitmap.h>
 #include <kernel/fs/inode.h>
 #include <kernel/fs/file.h>
@@ -17,18 +18,18 @@ int file_create(struct file *file, char *name)
 	/* 文件已存在 */
 	if(path_exist(name) == 1 && str_cmp(name, "/") == 0)
 	{
-		return FILE_CREATE_FAILED;
+		return FS_FAILED;
 	}
 	/* 父级目录不存在 */
 	else if(path_exist(dirname) == 0)
 	{
-		return FILE_CREATE_FAILED;
+		return FS_FAILED;
 	}
 	int inode = inode_get_available();
 	/* 未找到未使用的块 */
 	if(inode == -1)
 	{
-		return FILE_CREATE_FAILED;
+		return FS_FAILED;
 	}
 	int i = DATA_BLOCK_BEGIN;
 	/* 为文件分配块索引 */
@@ -50,7 +51,7 @@ int file_create(struct file *file, char *name)
 	inode_save(); //保存inode索引
 	file->inode = inode;
 	file->seek = 0;
-	return FILE_CREATE_SUCCESS;
+	return FS_SUCCESS;
 }
 /* 获取文件大小 */
 int file_get_size(struct file file)
@@ -63,7 +64,7 @@ int file_open(struct file *file, char *path)
 	/* 文件不存在 */
 	if(path_exist(path) == 0)
 	{
-		return FILE_OPEN_FAILED;
+		return FS_FAILED;
 	}
 	int i = 0;
 	char dirname[50], basename[50];
@@ -85,10 +86,10 @@ int file_open(struct file *file, char *path)
 			}
 			file->inode = i;
 			file->seek = 0;
-			return FILE_OPEN_SUCCESS;
+			return FS_SUCCESS;
 		}
 	}
-	return FILE_OPEN_FAILED;
+	return FS_FAILED;
 }
 /* 写入文件 */
 void file_write(struct file *file, char *data, int size)

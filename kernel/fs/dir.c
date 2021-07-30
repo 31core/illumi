@@ -1,17 +1,20 @@
+#include <kernel/fs/fs.h>
 #include <kernel/fs/file.h>
 #include <kernel/fs/inode.h>
 #include <kernel/fs/path.h>
 #include <kernel/string.h>
 
 /* 创建文件夹 */
-void dir_create(char *path)
+int dir_create(char *path)
 {
 	struct file dir;
-	if(file_create(&dir, path) != -1)
+	if(file_create(&dir, path) == FS_FAILED)
 	{
-		inode_list[dir.inode].type = TYPE_DIRECTOR; //类型更改为文件夹
-		inode_save();
+		return FS_FAILED;
 	}
+	inode_list[dir.inode].type = TYPE_DIRECTOR; //类型更改为文件夹
+	inode_save();
+	return FS_SUCCESS;
 }
 /* 列出子目录及文件inode */
 int dir_list_inode(int *ret, char *path)

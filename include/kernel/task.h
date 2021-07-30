@@ -13,14 +13,14 @@ struct task_init_info
 struct task_info
 {
 	struct task_init_info init_info;
-	char name[11]; //任务名称
-	struct task_status status; //任务状态
+	struct task_state state; //任务状态
+	char name[30]; //任务名称
 	int parent_pid; //父进程pid
 	int flags;
 };
 
 void task_init();
-void task_init_register(struct task_status*);
+void task_init_register(struct task_state*);
 int task_get_next_pid();
 void task_switch();
 int task_alloc(unsigned int);
