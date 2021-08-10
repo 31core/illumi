@@ -41,7 +41,7 @@ int main()
 			for(; j < i; j++)
 			{
 				char name[11];
-				int ppid = task_get_parent_pid(pids[j]);
+				int ppid = task_get_ppid(pids[j]);
 				task_get_name(name, j);
 				print_format("%d      %d    %s\n", pids[j], ppid, name);
 			}

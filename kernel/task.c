@@ -93,12 +93,12 @@ int task_get_name(char *ret, int pid)
 	return 0;
 }
 /* 获取当前任务的pid */
-int task_get_current_pid()
+int task_get_pid()
 {
 	return now_task_pid;
 }
 /* 获取父进程pid */
-int task_get_parent_pid(int pid)
+int task_get_ppid(int pid)
 {
 	if(pid == 0)
 	{

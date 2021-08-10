@@ -27,7 +27,7 @@ int pipe_get(struct pipe **pipe)
 	int i = 0;
 	for(; i < pipe_count; i++)
 	{
-		if(task_get_current_pid() == pipe_list[i]->target_pid)
+		if(task_get_pid() == pipe_list[i]->target_pid)
 		{
 			*pipe = pipe_list[i];
 			return 0;

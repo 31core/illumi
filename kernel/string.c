@@ -114,3 +114,11 @@ void str_split(char *ret, char *str, char *symbol, int index)
 	}
 	ret[i] = '\0'; //字符串结尾标志
 }
+/* 字符串切片 */
+void str_slice(char *ret, char *src, int start, int end)
+{
+	char str[100];
+	str_cpy(str, src);
+	str[end + 1] = '\0';
+	str_cpy(ret, str + start);
+}
