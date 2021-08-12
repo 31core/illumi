@@ -4,6 +4,8 @@
 #define TASK_RUNNING 1
 #define TASK_PAUSED 2
 
+#define TASK_DEFAULT_PRIORITY 2
+
 /* 任务初始化信息,释放任务时需要 */
 struct task_init_info
 {
@@ -16,6 +18,7 @@ struct task_info
 	struct task_state state; //任务状态
 	char name[30]; //任务名称
 	int pid, ppid;
+	int priority;
 	int flags;
 	int last_tick; //上一次任务切换tick
 };

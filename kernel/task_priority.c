@@ -88,25 +88,22 @@ void task_priority_append(struct task_info *task, int level)
 /* 移除task */
 void task_remove(struct task_info *task)
 {
-	int i = 0, level = 0;
-	for(; level < 4; level++)
+	struct task_priority *priority = get_task_priority_pointer(task->priority);
+	/* 遍历task_list */
+	int i = 0;
+	while(1)
 	{
-		struct task_priority *priority = get_task_priority_pointer(level);
-		/* 遍历task_list */
-		i = 0;
-		while(priority->task_list[i] != 0)
+		if(priority->task_list[i] == task)
 		{
-			if(priority->task_list[i] == task)
+			/* 向前移动成员 */
+			while(priority->task_list[i] != 0)
 			{
-				while(priority->task_list[i] != 0)
-				{
-					priority->task_list[i] = priority->task_list[i + 1];
-					i += 1;
-				}
-				return;
+				priority->task_list[i] = priority->task_list[i + 1];
+				i += 1;
 			}
-			i += 1;
+				return;
 		}
+		i += 1;
 	}
 }
 /* 设置任务优先级 */
@@ -114,4 +111,5 @@ void task_set_priority(int pid, int level)
 {
 	task_remove(&task_list[pid]);
 	task_priority_append(&task_list[pid], level);
+	task_list[pid].priority = level;
 }

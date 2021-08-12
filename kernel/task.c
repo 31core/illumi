@@ -19,6 +19,7 @@ void task_init()
 	/* 创建初始化任务 */
 	task_list[0].flags = TASK_RUNNING;
 	task_list[0].ppid = 0;
+	task_list[0].priority = 0;
 	str_cpy(task_list[0].name, "init");
 	task_priority_init();
 	task_priority_append(&task_list[0], 0);
@@ -47,11 +48,12 @@ int task_alloc(unsigned int addr)
 			task_list[i].init_info.stack_addr = stack_addr;
 			task_list[i].flags = TASK_RUNNING;
 			task_list[i].ppid = current_pid;
+			task_list[i].priority = TASK_DEFAULT_PRIORITY;
 			task_list[i].name[0] = '\0';
 			int *p = (int*)stack_addr;
 			*p = addr; //[esp]为任务跳转地址
 			task_set_stack(&task_list[i].state, stack_addr);
-			task_priority_append(&task_list[i], 2);
+			task_priority_append(&task_list[i], TASK_DEFAULT_PRIORITY);
 			return i; //返回pid
 		}
 	}

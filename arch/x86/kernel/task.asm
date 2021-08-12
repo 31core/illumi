@@ -20,4 +20,4 @@ asm_task_switch:
 	mov edx, [eax + 20]
 	mov esi, [eax + 24]
 	mov edi, [eax + 28]
-	jmp [esp] ;返回时会返回到esp栈所指向的地址
+	ret
