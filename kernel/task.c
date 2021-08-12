@@ -5,6 +5,7 @@
 
 struct task_info task_list[1024];
 int now_task_pid = 0; //当前运行的任务pid
+
 /* 初始化多任务 */
 void task_init()
 {
@@ -12,32 +13,15 @@ void task_init()
 	int i = 0;
 	for(; i < 1024; i++)
 	{
+		task_list[i].pid = i;
 		task_list[i].flags = TASK_AVAILABLE;
 	}
 	/* 创建初始化任务 */
 	task_list[0].flags = TASK_RUNNING;
 	task_list[0].parent_pid = 0;
 	str_cpy(task_list[0].name, "init");
-}
-/* 获取下一个任务pid */
-int task_get_next_pid()
-{
-	int i = now_task_pid + 1;
-	for(; i < 1024; i++)
-	{
-		if(task_list[i].flags == TASK_RUNNING)
-		{
-			return i;
-		}
-	}
-	for(i = 0; i < now_task_pid; i++)
-	{
-		if(task_list[i].flags == TASK_RUNNING)
-		{
-			return i;
-		}
-	}
-	return -1; //没有正在运行的任务
+	task_priority_init();
+	task_priority_append(&task_list[0], 0);
 }
 /* 切换任务 */
 void task_switch()
@@ -67,6 +51,7 @@ int task_alloc(unsigned int addr)
 			task_list[i].name[0] = '\0';
 			int *p = (int*)esp_addr;
 			*p = addr; //[esp]为任务跳转地址
+			task_priority_append(&task_list[i], 2);
 			return i; //返回pid
 		}
 	}
@@ -128,6 +113,7 @@ void task_kill(int pid)
 	{
 		task_list[pid].flags = TASK_AVAILABLE;
 		memfrag_free(task_list[pid].init_info.stack_addr);
+		task_remove(&task_list[pid]);
 		int i = 0;
 		/* 为子进程重新分配父进程 */
 		for(; i < 1024; i++)

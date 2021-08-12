@@ -16,7 +16,7 @@ int main()
 	kernel_init(); //初始化内核
 	fs_create();
 	fs_init();
-	video_cleanup();
+	//video_cleanup();
 	/* 操作系统主循环 */
 	while(1)
 	{
