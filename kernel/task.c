@@ -18,7 +18,7 @@ void task_init()
 	}
 	/* 创建初始化任务 */
 	task_list[0].flags = TASK_RUNNING;
-	task_list[0].parent_pid = 0;
+	task_list[0].ppid = 0;
 	str_cpy(task_list[0].name, "init");
 	task_priority_init();
 	task_priority_append(&task_list[0], 0);
@@ -47,7 +47,7 @@ int task_alloc(unsigned int addr)
 			task_list[i].state.esp = esp_addr;
 			task_list[i].init_info.stack_addr = esp_addr;
 			task_list[i].flags = TASK_RUNNING;
-			task_list[i].parent_pid = now_task_pid;
+			task_list[i].ppid = now_task_pid;
 			task_list[i].name[0] = '\0';
 			int *p = (int*)esp_addr;
 			*p = addr; //[esp]为任务跳转地址
@@ -91,7 +91,7 @@ int task_get_ppid(int pid)
 	}
 	if(task_list[pid].flags != TASK_AVAILABLE)
 	{
-		return task_list[pid].parent_pid;
+		return task_list[pid].ppid;
 	}
 	return -1;
 }
@@ -99,7 +99,7 @@ int task_get_ppid(int pid)
 void task_wait(int pid)
 {
 	/* 不是当前任务的子进程 */
-	if(task_list[pid].parent_pid != now_task_pid)
+	if(task_list[pid].ppid != now_task_pid)
 	{
 		return;
 	}
@@ -118,9 +118,9 @@ void task_kill(int pid)
 		/* 为子进程重新分配父进程 */
 		for(; i < 1024; i++)
 		{
-			if(task_list[i].flags != TASK_AVAILABLE && task_list[i].parent_pid == pid)
+			if(task_list[i].flags != TASK_AVAILABLE && task_list[i].ppid == pid)
 			{
-				task_list[i].parent_pid = 0;
+				task_list[i].ppid = 0;
 			}
 		}
 	}

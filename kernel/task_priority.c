@@ -5,6 +5,8 @@ struct task_priority priority_1;
 struct task_priority priority_2;
 struct task_priority priority_3;
 
+extern unsigned int time_count;
+
 /* 通过优先级获取task_priority指针 */
 static struct task_priority* get_task_priority_pointer(int level)
 {
@@ -13,15 +15,15 @@ static struct task_priority* get_task_priority_pointer(int level)
 	{
 		priority = (struct task_priority*)&priority_0;
 	}
-	if(level == 1)
+	else if(level == 1)
 	{
 		priority = (struct task_priority*)&priority_1;
 	}
-	if(level == 2)
+	else if(level == 2)
 	{
 		priority = (struct task_priority*)&priority_2;
 	}
-	if(level == 3)
+	else if(level == 3)
 	{
 		priority = (struct task_priority*)&priority_3;
 	}
@@ -41,7 +43,7 @@ void task_priority_init()
 	priority_2.pointer = 0;
 	priority_3.pointer = 0;
 }
-extern unsigned int time_count;
+
 /* 获取下一个任务pid */
 int task_get_next_pid()
 {
@@ -57,12 +59,13 @@ int task_get_next_pid()
 			if(priority->task_list[i]->last_tick + timeout <= time_count)
 			{
 				priority->pointer = i;
-				priority->task_list[i]->last_tick = time_count;
+				priority->task_list[i]->last_tick = time_count; //更新上一次任务切换tick
 				return priority->task_list[i]->pid;
 			}
 			i += 1;
 		}
 	}
+	/* 将priority_x的pointer重置为0 */
 	for(level = 0; level <= 3; level++)
 	{
 		struct task_priority *priority = get_task_priority_pointer(level);
@@ -70,7 +73,7 @@ int task_get_next_pid()
 	}
 	return -1; //没有正在运行的任务
 }
-/* 添加任务 */
+/* 向priority_x添加任务 */
 void task_priority_append(struct task_info *task, int level)
 {
 	struct task_priority *priority = get_task_priority_pointer(level);
