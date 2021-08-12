@@ -27,7 +27,7 @@ image:
 #运行
 run:
 	@$(MAKE) -s all
-	@$(QEMU) -drive file=hda.img,format=raw
+	@$(QEMU) -drive file=hda.img,format=raw -serial stdio
 #清理生成的文件
 clean:
 	rm $(kernel_bins) $(kernel_objs)
