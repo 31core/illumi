@@ -27,7 +27,7 @@ struct task_priority
 };
 
 extern struct task_info task_list[1024];
-extern int now_task_pid;
+extern int current_pid;
 
 void task_init();
 void task_priority_init();

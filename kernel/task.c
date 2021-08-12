@@ -4,12 +4,12 @@
 #include <arch/x86/asmfunc.h>
 
 struct task_info task_list[1024];
-int now_task_pid = 0; //当前运行的任务pid
+int current_pid = 0; //当前运行的任务pid
 
 /* 初始化多任务 */
 void task_init()
 {
-	now_task_pid = 0;
+	current_pid = 0;
 	int i = 0;
 	for(; i < 1024; i++)
 	{
@@ -29,8 +29,8 @@ void task_switch()
 	int pid = task_get_next_pid();
 	if(pid != -1)
 	{
-		int old_pid = now_task_pid;
-		now_task_pid = pid;
+		int old_pid = current_pid;
+		current_pid = pid;
 		asm_task_switch(&task_list[old_pid].state, &task_list[pid].state);
 	}
 }
@@ -42,15 +42,15 @@ int task_alloc(unsigned int addr)
 	{
 		if(task_list[i].flags == TASK_AVAILABLE)
 		{
-			unsigned int esp_addr = memfrag_alloc(1024) + 1024; //分配该任务的栈地址
+			unsigned int stack_addr = memfrag_alloc(1024) + 1024; //分配该任务的栈地址
 			task_init_register(&task_list[i].state);
-			task_list[i].state.esp = esp_addr;
-			task_list[i].init_info.stack_addr = esp_addr;
+			task_list[i].init_info.stack_addr = stack_addr;
 			task_list[i].flags = TASK_RUNNING;
-			task_list[i].ppid = now_task_pid;
+			task_list[i].ppid = current_pid;
 			task_list[i].name[0] = '\0';
-			int *p = (int*)esp_addr;
+			int *p = (int*)stack_addr;
 			*p = addr; //[esp]为任务跳转地址
+			task_set_stack(&task_list[i].state, stack_addr);
 			task_priority_append(&task_list[i], 2);
 			return i; //返回pid
 		}
@@ -80,7 +80,7 @@ int task_get_name(char *ret, int pid)
 /* 获取当前任务的pid */
 int task_get_pid()
 {
-	return now_task_pid;
+	return current_pid;
 }
 /* 获取父进程pid */
 int task_get_ppid(int pid)
@@ -99,7 +99,7 @@ int task_get_ppid(int pid)
 void task_wait(int pid)
 {
 	/* 不是当前任务的子进程 */
-	if(task_list[pid].ppid != now_task_pid)
+	if(task_list[pid].ppid != current_pid)
 	{
 		return;
 	}
@@ -125,7 +125,7 @@ void task_kill(int pid)
 		}
 	}
 	/* 杀死当前任务 */
-	if(pid == now_task_pid)
+	if(pid == current_pid)
 	{
 		task_switch();
 	}

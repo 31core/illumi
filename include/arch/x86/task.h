@@ -6,3 +6,4 @@ struct task_state
 };
 
 void asm_task_switch(struct task_state*, struct task_state*);
+void task_set_stack(struct task_state*, unsigned int);
