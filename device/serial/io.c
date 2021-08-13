@@ -28,13 +28,17 @@ void serial_recv(char *ret)
 	while(1)
 	{
 		ret[i] = serial_recv_char();
-		serial_send_char(ret[i]);
 		/* 回车 */
 		if(ret[i] == '\r')
 		{
+			serial_send_char('\n');
 			ret[i] = '\0';
 			return;
 		}
-		i += 1;
+		else
+		{
+			serial_send_char(ret[i]);
+			i += 1;
+		}
 	}
 }
