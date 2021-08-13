@@ -21,7 +21,7 @@ void task_init()
 	task_list[0].ppid = 0;
 	task_list[0].priority = 0;
 	str_cpy(task_list[0].name, "init");
-	task_priority_init();
+	task_priority_init(); //任务优先级初始化
 	task_priority_append(&task_list[0], 0);
 }
 /* 切换任务 */

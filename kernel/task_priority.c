@@ -58,8 +58,13 @@ int task_get_next_pid()
 			/* 找到了超时需要切换的任务 */
 			if(priority->task_list[i]->last_tick + timeout <= time_count)
 			{
-				priority->pointer = i;
+				priority->pointer = priority->task_list[i]->pid;
 				priority->task_list[i]->last_tick = time_count; //更新上一次任务切换tick
+				/* 为当前任务,不需要切换 */
+				if(priority->task_list[i]->pid == current_pid)
+				{
+					return -1;
+				}
 				return priority->task_list[i]->pid;
 			}
 			i += 1;
