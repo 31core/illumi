@@ -1,4 +1,4 @@
-#include <arch/x86/asmfunc.h>
+#include <arch/x86/x86_asm.h>
 
 /* 串口发送一个字符数据 */
 void serial_send_char(char c)

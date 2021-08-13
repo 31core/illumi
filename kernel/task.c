@@ -1,7 +1,7 @@
 #include <kernel/task.h>
 #include <kernel/memory.h>
 #include <kernel/string.h>
-#include <arch/x86/asmfunc.h>
+#include <arch/x86/x86_asm.h>
 
 struct task_info task_list[1024];
 int current_pid = 0; //当前运行的任务pid
@@ -63,7 +63,7 @@ int task_alloc(unsigned int addr)
 /* 设置任务名字 */
 void task_set_name(int pid, char *str)
 {
-	if(pid != 0)
+	if(pid != 0 && task_list[pid].flags != TASK_AVAILABLE)
 	{
 		str_cpy(task_list[pid].name, str);
 	}
@@ -87,10 +87,6 @@ int task_get_pid()
 /* 获取父进程pid */
 int task_get_ppid(int pid)
 {
-	if(pid == 0)
-	{
-		return 0; //init进程的父进程为0
-	}
 	if(task_list[pid].flags != TASK_AVAILABLE)
 	{
 		return task_list[pid].ppid;
@@ -110,8 +106,8 @@ void task_wait(int pid)
 /* 杀死任务 */
 void task_kill(int pid)
 {
-	/* 不能杀死init进程 */
-	if(pid != 0)
+	/* 不能杀死init进程 && 任务不在运行 */
+	if(pid != 0 && task_list[pid].flags != TASK_AVAILABLE)
 	{
 		task_list[pid].flags = TASK_AVAILABLE;
 		memfrag_free(task_list[pid].init_info.stack_addr);

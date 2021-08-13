@@ -1,5 +1,5 @@
 #include <arch/x86/cpu.h>
-#include <arch/x86/asmfunc.h>
+#include <arch/x86/x86_asm.h>
 #include <device/interrupt/interrupt.h>
 
 /* 初始化cpu */

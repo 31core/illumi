@@ -1,4 +1,4 @@
-#include <arch/x86/asmfunc.h>
+#include <arch/x86/x86_asm.h>
 
 /* 移动光标 */
 void video_move_cursor(short p)

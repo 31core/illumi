@@ -1,4 +1,4 @@
-#include <arch/x86/asmfunc.h>
+#include <arch/x86/x86_asm.h>
 #include <kernel/time.h>
 
 /* LBA读取磁盘 */
