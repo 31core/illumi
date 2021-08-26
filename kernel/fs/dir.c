@@ -7,6 +7,11 @@
 /* 创建文件夹 */
 int dir_create(char *path)
 {
+	/* 避免重复创建根目录 */
+	if(str_cmp(path, "/") == 1 && is_fs() == 1)
+	{
+		return FS_FAILED;
+	}
 	struct file dir;
 	if(file_create(&dir, path) == FS_FAILED)
 	{

@@ -1,9 +1,9 @@
 /* 超级块数据 */
 struct super_block
 {
-	char fs_header[4]; //文件系统标识
-	unsigned bitmap_block; //引导块编号
-	unsigned inode_table[1024 - 2]; //inode块编号
+	unsigned char fs_header[4]; //文件系统标识
+	unsigned int bitmap_block; //引导块编号
+	unsigned int inode_table[1024 - 2]; //inode块编号
 };
 
 extern struct super_block sblock;
