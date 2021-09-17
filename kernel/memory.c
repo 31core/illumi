@@ -1,16 +1,27 @@
 #include <kernel/memory.h>
+#include <kernel/sysinfo.h>
 
 struct mem_fragment mem_frag_list[4096];
 int mem_frag_num = 0; //内存碎片总数
-unsigned int memory_size = 0; //内存大小
+
+/* 刷新内存剩余空间 */
+static void refresh_free_size()
+{
+	int i = 1;
+	sysinfo.mem_free = sysinfo.mem_size;
+	for(; i <= mem_frag_num; i++)
+	{
+		sysinfo.mem_free -= mem_frag_list[i].size;
+	}
+}
 
 /* 获取内存大小 */
 unsigned int mem_get_size()
 {
 	/* 已经检测过内存则返回该值 */
-	if(memory_size != 0)
+	if(sysinfo.mem_size != 0)
 	{
-		return memory_size;
+		return sysinfo.mem_size;
 	}
 	int *p, old;
 	for(p = (int*)0x100000; p < (int*)0xffffffff; p += 4096)
@@ -29,12 +40,12 @@ unsigned int mem_get_size()
 /* 初始化内存碎片管理 */
 void memfrag_init()
 {
-	memory_size = 0;
 	mem_frag_num = 0;
-	memory_size = mem_get_size();
+	sysinfo.mem_size = mem_get_size();
+	sysinfo.mem_free = sysinfo.mem_size;
 	mem_frag_list[0].addr = 0;
 	mem_frag_list[0].size = 0;
-	mem_frag_list[1].addr = memory_size;  //结尾的地址为内存大小
+	mem_frag_list[1].addr = sysinfo.mem_size;  //结尾的地址为内存大小
 	mem_frag_list[1].size = 0;
 }
 /* 分配内存碎片 */
@@ -59,6 +70,7 @@ unsigned int memfrag_alloc(unsigned int size)
 	mem_frag_list[i].addr = addr;
 	mem_frag_list[i].size = size;
 	mem_frag_num += 1;
+	refresh_free_size();
 	return addr;
 }
 /* 分配内存时指定地址 */
@@ -88,6 +100,7 @@ void memfrag_alloc_with_addr(unsigned int addr, unsigned int size)
 	mem_frag_list[i].addr = addr;
 	mem_frag_list[i].size = size;
 	mem_frag_num += 1;
+	refresh_free_size();
 }
 /* 释放内存碎片 */
 void memfrag_free(unsigned int addr)
@@ -106,15 +119,11 @@ void memfrag_free(unsigned int addr)
 			return;
 		}
 	}
+	refresh_free_size();
 }
+
 /* 获取内存剩余空间 */
 unsigned int mem_get_free_size()
 {
-	int i = 1;
-	unsigned int size = memory_size;
-	for(; i <= mem_frag_num; i++)
-	{
-		size -= mem_frag_list[i].size;
-	}
-	return size;
+	return sysinfo.mem_free;
 }

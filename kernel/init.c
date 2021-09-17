@@ -8,12 +8,14 @@
 #include <kernel/memory.h>
 #include <kernel/timer.h>
 #include <kernel/random.h>
+#include <kernel/sysinfo.h>
 #include <kernel/fs/init.h>
 #include <device/video/cli_print.h>
 
 /* 初始化内核 */
 void kernel_init()
 {
+	sysinfo_init();
 	fifo_init(&key_fifo, 0, 10);
 	timer_init(); //初始化计时器
 	task_init(); //初始化多任务
