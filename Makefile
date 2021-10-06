@@ -11,6 +11,7 @@ all:
 kernel.sys:$(kernel_bins) $(kernel_objs)
 	@echo "LD  kernel.sys"
 	@$(LD) $(LD_FLAGS) $(kernel_bins) $(kernel_objs) -o kernel.sys
+	objcopy -S -O binary kernel.sys kernel.sys
 
 %.bin:%.asm
 	@echo "AS  $@"

@@ -2,7 +2,7 @@
 org 0x70000
 
 KERNEL_ADDR equ 0x100000 ;内核地址
-KERNEL_SIZE equ 56 ;内核大小(扇区)
+KERNEL_SIZE equ 65 ;内核大小(扇区)
 
 [bits 16]
 	mov ax, 0x07e0
@@ -43,37 +43,6 @@ load_kernel:
 	mov ebx, 9
 	mov edx, KERNEL_ADDR
 	call load_block ;加载内核到内存
-
-	mov si, [KERNEL_ADDR + 0x2c] ;si=program header个数
-	mov di, si
-	mov eax, KERNEL_ADDR
-	mov ebx, [KERNEL_ADDR + 0x1c] ;bl=program header文件偏移
-	add eax, ebx ;eax=program header地址
-	sub eax, 0x20
-	push ebp
-.loop_read_header:
-	add eax, 0x20 ;下一个program header地址
-	mov ebx, [eax + 4] ;eax=.text文件偏移数据地址
-	add ebx, KERNEL_ADDR ;ebx=.text偏移地址
-	mov edx, [eax + 8] ;edx=目标内存地址
-	mov ecx, [eax + 16] ;ecx=内存大小
-	mov [ebp], ebx ;记录值的寄存器的值
-	mov [ebp + 4], ecx
-	mov [ebp + 8], edx
-	add ebp, 12
-	sub si, 1
-	cmp si, 0
-	jg .loop_read_header
-	pop ebp
-.loop_load:
-	mov ebx, [ebp] ;记录值的寄存器压入栈
-	mov ecx, [ebp + 4]
-	mov edx, [ebp + 8]
-	add ebp, 12
-	call memcpy
-	sub di, 1
-	cmp di, 0
-	jg .loop_load
 	ret
 
 ;读取磁盘块
