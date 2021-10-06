@@ -49,7 +49,7 @@ void memfrag_init()
 	mem_frag_list[1].size = 0;
 }
 /* 分配内存碎片 */
-unsigned int memfrag_alloc(unsigned int size)
+void* memfrag_alloc(unsigned int size)
 {
 	int i = 1;
 	for(; i <= mem_frag_num + 1; i++)
@@ -71,7 +71,7 @@ unsigned int memfrag_alloc(unsigned int size)
 	mem_frag_list[i].size = size;
 	mem_frag_num += 1;
 	refresh_free_size();
-	return addr;
+	return (void*)addr;
 }
 /* 分配内存时指定地址 */
 void memfrag_alloc_with_addr(unsigned int addr, unsigned int size)
@@ -103,12 +103,12 @@ void memfrag_alloc_with_addr(unsigned int addr, unsigned int size)
 	refresh_free_size();
 }
 /* 释放内存碎片 */
-void memfrag_free(unsigned int addr)
+void memfrag_free(void* addr)
 {
 	int i = 1;
 	for(; i <= mem_frag_num; i++)
 	{
-		if(mem_frag_list[i].addr == addr)
+		if(mem_frag_list[i].addr == (unsigned int)addr)
 		{
 			/* 向前移动成员 */
 			for(; i <= mem_frag_num; i++)

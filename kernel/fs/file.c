@@ -94,7 +94,7 @@ int file_open(struct file *file, char *path)
 /* 写入文件 */
 void file_write(struct file *file, char *data, int size)
 {
-	int *index_data = (int*)memfrag_alloc(4096);
+	int *index_data = memfrag_alloc(4096);
 	block_load(inode_list[file->inode].index_block, (char*)index_data); //获取此inode中的索引块数据
 	int i = 1;
 	/* 释放此inode占用的数据块 */
@@ -114,7 +114,7 @@ void file_write(struct file *file, char *data, int size)
 	{
 		end += 1;
 	}
-	char *data_block = (char*)memfrag_alloc(4096);
+	char *data_block = memfrag_alloc(4096);
 	int data_w = 0; //用于访问data位置
 	int w = 0;
 	int index_block = inode_list[file->inode].index_block; //当前引导块编号
@@ -171,8 +171,8 @@ void file_write(struct file *file, char *data, int size)
 				block_save(index_data[i], data_block); //保存当前块数据
 				block_save(index_block, (char*)index_data); //保存索引块
 				inode_save(); //保存inode
-				memfrag_free((unsigned int)data_block);
-				memfrag_free((unsigned int)index_data);
+				memfrag_free(data_block);
+				memfrag_free(index_data);
 				return;
 			}
 		}
@@ -186,8 +186,8 @@ int file_read(struct file *file, char *data, int size)
 	{
 		size = file_get_size(*file);
 	}
-	int *index_data = (int*)memfrag_alloc(4096);
-	char *data_block = (char*)memfrag_alloc(4096);
+	int *index_data = memfrag_alloc(4096);
+	char *data_block = memfrag_alloc(4096);
 	block_load(inode_list[file->inode].index_block, (char*)index_data); //加载块索引
 	int i = 1;
 	int data_r = 0;
@@ -221,8 +221,8 @@ int file_read(struct file *file, char *data, int size)
 			/* 已读取所有数据 */
 			if(data_r == size)
 			{
-				memfrag_free((unsigned int)data_block);
-				memfrag_free((unsigned int)index_data);
+				memfrag_free(data_block);
+				memfrag_free(index_data);
 				return size;
 			}
 		} 
@@ -238,7 +238,7 @@ void file_remove(char *filename)
 	{
 		return;
 	}
-	int *index_data = (int*)memfrag_alloc(4096);
+	int *index_data = memfrag_alloc(4096);
 	block_load(inode_list[file.inode].index_block, (char*)index_data); //获取此inode中的索引块数据
 	int i = 1;
 	int index_block = inode_list[file.inode].index_block;
@@ -267,7 +267,7 @@ void file_remove(char *filename)
 	bitmap_save();
 	inode_list[file.inode].type = TYPE_AVAILABLE; //此unode标记为未用
 	inode_save(); //保存inode
-	memfrag_free((unsigned int)index_data);
+	memfrag_free(index_data);
 }
 /* 通过inode获取文件名 */
 void file_get_name_by_inode(char *ret, int inode)

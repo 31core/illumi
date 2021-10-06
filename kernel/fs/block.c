@@ -16,14 +16,14 @@ void block_save(unsigned int block, char *data)
 /* 清除一个块的数据 */
 void block_cleanup(unsigned int block)
 {
-	char *data = (char*)memfrag_alloc(4096);
+	char *data = memfrag_alloc(4096);
 	int i = 0;
 	for(; i < 4096; i++)
 	{
 		data[i] = 0;
 	}
 	block_save(block, data);
-	memfrag_free((unsigned int)data);
+	memfrag_free(data);
 }
 
 struct super_block sblock;

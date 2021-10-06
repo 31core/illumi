@@ -17,7 +17,7 @@ void pipe_create(struct pipe *pipe, int target_pid)
 	pipe->w = 0;
 	pipe->r = 0;
 	pipe->target_pid = target_pid;
-	pipe->data_addr = memfrag_alloc(1024);
+	pipe->data_addr = (unsigned int)memfrag_alloc(1024);
 	pipe_list[pipe_count] = pipe;
 	pipe_count += 1;
 }
