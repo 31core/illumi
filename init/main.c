@@ -16,7 +16,7 @@ int main()
 	kernel_init(); //初始化内核
 	fs_create();
 	fs_init();
-	//video_cleanup();
+	video_cleanup();
 	/* 操作系统主循环 */
 	while(1)
 	{
@@ -75,7 +75,7 @@ int main()
 		/* 显示文件内容 */
 		else if(str_cmp(cmd, "cat") == 1)
 		{
-			struct file fp;
+			ST_FILE fp;
 			char filename[10];
 			char data[1024];
 			str_cpy(data, "");

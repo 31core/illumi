@@ -4,7 +4,7 @@ struct file
 	int seek;
 };
 
-typedef struct file FILE;
+typedef struct file ST_FILE;
 
 int file_create(struct file*, char*);
 int file_open(struct file *file, char*);
