@@ -4,7 +4,7 @@
 #include <device/input/keyboard.h>
 #include <kernel/fifo.h>
 #include <kernel/task.h>
-#include <kernel/ipc.h>
+#include <kernel/pipe.h>
 #include <kernel/memory.h>
 #include <kernel/timer.h>
 #include <kernel/random.h>

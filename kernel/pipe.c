@@ -1,4 +1,4 @@
-#include <kernel/ipc.h>
+#include <kernel/pipe.h>
 #include <kernel/memory.h>
 #include <kernel/task.h>
 

@@ -1,2 +1,2 @@
-kernel_objs += device/interrupt/init.o device/interrupt/interrupt20h.o\
-device/interrupt/interrupt21h.o
+kernel_objs += device/interrupt/init.o device/interrupt/timer.o\
+device/interrupt/keyboard.o
