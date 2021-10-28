@@ -2,7 +2,7 @@
 #include <arch/x86/x86_asm.h>
 #include <device/interrupt/init.h>
 #include <device/input/keyboard.h>
-#include <kernel/fifo.h>
+//#include <kernel/fifo.h>
 #include <kernel/task.h>
 #include <kernel/pipe.h>
 #include <kernel/memory.h>

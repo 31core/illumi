@@ -13,11 +13,8 @@ void pipe_init()
 /* 分配一个pipe */
 void pipe_create(struct pipe *pipe, int target_pid)
 {
-	pipe->size = 1024;
-	pipe->w = 0;
-	pipe->r = 0;
+	fifo_init(&pipe->fifo, memfrag_alloc(1024), 1024);
 	pipe->target_pid = target_pid;
-	pipe->data_addr = (unsigned int)memfrag_alloc(1024);
 	pipe_list[pipe_count] = pipe;
 	pipe_count += 1;
 }
@@ -38,33 +35,22 @@ int pipe_get(struct pipe **pipe)
 /* 写入管道数据 */
 int pipe_write(struct pipe *pipe, char *data, int size)
 {
-	char *p = (char*)pipe->data_addr;
 	int i = 0;
 	for(; i < size; i++)
 	{
-		if(pipe->w == (pipe->size - 1))
-		{
-			return i; //返回写入数据大小
-		}
-		p[pipe->w] = data[i];
-		pipe->w += 1;
+		fifo_write_data(&pipe->fifo, data[i]);
 	}
 	return size;
 }
 /* 读取管道数据 */
 int pipe_read(struct pipe *pipe, char* data, int size)
 {
-	char *p = (char*)pipe->data_addr;
 	int i = 0;
 	for(; i < size; i++)
 	{
-		if(pipe->r == pipe->w)
-		{
-			return i; //返回读取数据大小
-		}
-		data[i] = p[pipe->r];
-		pipe->r += 1;
+		data[i] = fifo_read_data(&pipe->fifo);
 	}
+	return size;
 	return size;
 }
 /* 关闭管道 */

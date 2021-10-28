@@ -1,8 +1,10 @@
+#include <kernel/fifo.h>
+
 struct pipe
 {
 	int target_pid;
-	unsigned int data_addr; //数据的内存地址
-	int size, w, r;
+	void *data_addr; //数据的内存地址
+	struct fifo8 fifo;
 };
 
 void pipe_init();

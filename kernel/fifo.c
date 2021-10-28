@@ -1,6 +1,6 @@
 #include <kernel/fifo.h>
 /* 初始化缓冲区 */
-void fifo_init(struct fifo8 *fifo, unsigned int addr, int size)
+void fifo_init(struct fifo8 *fifo, void* addr, int size)
 {
 	fifo->addr = addr;
 	fifo->size = size;
