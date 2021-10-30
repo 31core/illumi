@@ -5,13 +5,15 @@ include config/env.mk
 
 all:
 	@$(MAKE) -s -C $(ARCH_DIR)/boot
-	@$(MAKE) -s kernel.sys
+	@$(MAKE) -s kernel.bin
 	@$(MAKE) -s image
 #系统内核文件
 kernel.sys:$(kernel_bins) $(kernel_objs)
 	@echo "LD  kernel.sys"
 	@$(LD) $(LD_FLAGS) $(kernel_bins) $(kernel_objs) -o kernel.sys
-	objcopy -S -O binary kernel.sys kernel.sys
+
+kernel.bin:kernel.sys
+	objcopy -S -O binary kernel.sys kernel.bin
 
 %.bin:%.asm
 	@echo "AS  $@"
@@ -24,7 +26,7 @@ image:
 	@echo "DD  hda.img"
 	@$(DD) if=$(ARCH_DIR)/boot/boot.bin of=hda.img bs=512 count=1
 	@$(DD) if=$(ARCH_DIR)/boot/loader.bin of=hda.img bs=512 seek=1 count=8
-	@$(DD) if=kernel.sys of=hda.img bs=512 seek=9 count=348
+	@$(DD) if=kernel.bin of=hda.img bs=512 seek=9 count=348
 #运行
 run:
 	@$(MAKE) -s all

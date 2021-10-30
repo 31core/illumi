@@ -9,7 +9,7 @@
 /* 任务初始化信息,释放任务时需要 */
 struct task_init_info
 {
-	unsigned int stack_addr;
+	void *stack_addr;
 };
 
 struct task_info

@@ -45,7 +45,7 @@ void memfrag_init()
 	sysinfo.mem_free = sysinfo.mem_size;
 	mem_frag_list[0].addr = 0;
 	mem_frag_list[0].size = 0;
-	mem_frag_list[1].addr = sysinfo.mem_size;  //结尾的地址为内存大小
+	mem_frag_list[1].addr = (void*)sysinfo.mem_size;  //结尾的地址为内存大小
 	mem_frag_list[1].size = 0;
 }
 /* 分配内存碎片 */
@@ -61,7 +61,7 @@ void* memfrag_alloc(unsigned int size)
 			break;
 		}
 	}
-	int addr = mem_frag_list[i - 1].addr + mem_frag_list[i - 1].size;
+	void *addr = mem_frag_list[i - 1].addr + mem_frag_list[i - 1].size;
 	int j = mem_frag_num + 1;
 	for(; j >= i; j--)
 	{
@@ -74,7 +74,7 @@ void* memfrag_alloc(unsigned int size)
 	return (void*)addr;
 }
 /* 分配内存时指定地址 */
-void memfrag_alloc_with_addr(unsigned int addr, unsigned int size)
+void memfrag_alloc_with_addr(void *addr, unsigned int size)
 {
 	int i = 1;
 	/* 查找插入内存片段位置 */
@@ -108,7 +108,7 @@ void memfrag_free(void* addr)
 	int i = 1;
 	for(; i <= mem_frag_num; i++)
 	{
-		if(mem_frag_list[i].addr == (unsigned int)addr)
+		if(mem_frag_list[i].addr == addr)
 		{
 			/* 向前移动成员 */
 			for(; i <= mem_frag_num; i++)

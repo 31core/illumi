@@ -12,7 +12,7 @@ void task_init_register(struct task_state *state)
 	state->ebp = 0;
 }
 /* 设置任务栈地址 */
-void task_set_stack(struct task_state *state, unsigned int addr)
+void task_set_stack(struct task_state *state, void *addr)
 {
-	state->esp = addr;
+	state->esp = (unsigned int)addr;
 }

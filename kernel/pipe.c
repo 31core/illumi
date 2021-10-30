@@ -51,7 +51,6 @@ int pipe_read(struct pipe *pipe, char* data, int size)
 		data[i] = fifo_read_data(&pipe->fifo);
 	}
 	return size;
-	return size;
 }
 /* 关闭管道 */
 void pipe_close(struct pipe *pipe)

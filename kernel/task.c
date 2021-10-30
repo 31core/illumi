@@ -43,7 +43,7 @@ int task_alloc(unsigned int addr)
 	{
 		if(task_list[i].flags == TASK_AVAILABLE)
 		{
-			unsigned int stack_addr = (unsigned int)memfrag_alloc(1024) + 1024; //分配该任务的栈地址
+			void *stack_addr = memfrag_alloc(1024) + 1024; //分配该任务的栈地址
 			task_init_register(&task_list[i].state);
 			task_list[i].init_info.stack_addr = stack_addr;
 			task_list[i].flags = TASK_RUNNING;
