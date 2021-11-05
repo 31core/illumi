@@ -37,7 +37,7 @@ void task_priority_init();
 void task_init_register(struct task_state*);
 int task_get_next_pid();
 void task_switch();
-int task_alloc(unsigned int);
+int task_alloc(void*);
 void task_kill(int);
 void task_wait(int);
 void task_set_name(int, char*);

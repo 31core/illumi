@@ -36,7 +36,7 @@ void task_switch()
 	}
 }
 /* 创建任务 */
-int task_alloc(unsigned int addr)
+int task_alloc(void *addr)
 {
 	int i = 0;
 	for(; i < 1024; i++)
@@ -51,7 +51,7 @@ int task_alloc(unsigned int addr)
 			task_list[i].priority = TASK_DEFAULT_PRIORITY;
 			task_list[i].name[0] = '\0';
 			int *p = (int*)stack_addr;
-			*p = addr; //[esp]为任务跳转地址
+			*p = (int)addr; //[esp]为任务跳转地址
 			task_set_stack(&task_list[i].state, stack_addr);
 			task_priority_append(&task_list[i], TASK_DEFAULT_PRIORITY);
 			return i; //返回pid

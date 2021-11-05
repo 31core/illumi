@@ -48,6 +48,10 @@ int pipe_read(struct pipe *pipe, char* data, int size)
 	int i = 0;
 	for(; i < size; i++)
 	{
+		if(fifo_get_info(pipe->fifo) == 0)
+		{
+			return i;
+		}
 		data[i] = fifo_read_data(&pipe->fifo);
 	}
 	return size;
