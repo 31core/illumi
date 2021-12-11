@@ -16,7 +16,7 @@ int file_create(ST_FILE *file, char *name)
 	char dirname[50];
 	path_get_dirname(dirname, name);
 	/* 文件已存在 */
-	if(path_exist(name) == 1 && str_cmp(name, "/") == 0)
+	if(path_exist(name) == 1 && !str_cmp(name, "/"))
 	{
 		return FS_FAILED;
 	}
@@ -78,7 +78,7 @@ int file_open(ST_FILE *file, char *path)
 		{
 			continue;
 		}
-		else if(str_cmp(inode_list[i].name, basename) == 1)
+		else if(!str_cmp(inode_list[i].name, basename))
 		{
 			if(inode_list[i].parent_inode != parent_inode)
 			{

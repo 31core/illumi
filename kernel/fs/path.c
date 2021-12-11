@@ -24,7 +24,7 @@ void path_get_dirname(char *ret, char *path)
 /* 通过路径获取文件inode编号 */
 int path_get_inode(char *path)
 {
-	if(str_cmp(path, "/") == 1)
+	if(!str_cmp(path, "/"))
 	{
 		return 0;
 	}
@@ -41,7 +41,7 @@ int path_get_inode(char *path)
 		str_split(now_name, path, "/", times + 1); //获取目录名
 		for(i = 1; i < inode_count; i++)
 		{
-			if(str_cmp(inode_list[i].name, now_name) == 1)
+			if(!str_cmp(inode_list[i].name, now_name))
 			{
 				if(inode_list[i].parent_inode == now)
 				{
@@ -55,7 +55,7 @@ int path_get_inode(char *path)
 /* 检查路径是否存在 */
 int path_exist(char *path)
 {
-	if(str_cmp(path, "/") == 1)
+	if(!str_cmp(path, "/"))
 	{
 		return 1;
 	}
@@ -68,7 +68,7 @@ int path_exist(char *path)
 		str_split(now_name, path, "/", times + 1); //获取目录名
 		for(i = 1; i < inode_count; i++)
 		{
-			if(str_cmp(inode_list[i].name, now_name) == 1 && inode_list[i].parent_inode == now)
+			if(!str_cmp(inode_list[i].name, now_name) && inode_list[i].parent_inode == now)
 			{
 				/* 存在 */
 				if(inode_list[i].type != TYPE_AVAILABLE)

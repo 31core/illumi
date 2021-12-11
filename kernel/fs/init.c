@@ -12,7 +12,7 @@ void fs_init()
 	inode_count = 0;
 	super_block_load(); //加载超级块
 	/* 磁盘上没有文件系统 */
-	if(is_fs() == 0)
+	if(!is_fs())
 	{
 		return;
 	}

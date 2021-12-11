@@ -27,12 +27,12 @@ int main()
 		input(inp);
 		str_split(cmd, inp, " ", 0);
 		/* 显示内核版本 */
-		if(str_cmp(cmd, "rever") == 1)
+		if(!str_cmp(cmd, "rever"))
 		{
 			print_format("%s %s\n", KERNEL_NAME, KERNEL_VERSION);
 		}
 		/* 打印任务 */
-		else if(str_cmp(cmd, "ps") == 1)
+		else if(!str_cmp(cmd, "ps"))
 		{
 			int pids[1024];
 			int i = task_get_list(pids);
@@ -47,7 +47,7 @@ int main()
 			}
 		}
 		/* 杀死任务 */
-		else if(str_cmp(cmd, "kill") == 1)
+		else if(!str_cmp(cmd, "kill"))
 		{
 			char strpid[5];
 			str_split(strpid, inp, " ", 1);
@@ -55,7 +55,7 @@ int main()
 			task_kill(pid);
 		}
 		/* 打印子目录及文件 */
-		else if(str_cmp(cmd, "ls") == 1)
+		else if(!str_cmp(cmd, "ls"))
 		{
 			int inode_list[20];
 			str_split(dirname, inp, " ", 1);
@@ -67,13 +67,13 @@ int main()
 			}
 		}
 		/* 创建文件夹 */
-		else if(str_cmp(cmd, "mkdir") == 1)
+		else if(!str_cmp(cmd, "mkdir"))
 		{
 			str_split(dirname, inp, " ", 1);
 			dir_create(dirname);
 		}
 		/* 显示文件内容 */
-		else if(str_cmp(cmd, "cat") == 1)
+		else if(!str_cmp(cmd, "cat"))
 		{
 			ST_FILE fp;
 			char filename[10];
@@ -92,21 +92,21 @@ int main()
 			}
 		}
 		/* 删除文件 */
-		else if(str_cmp(cmd, "rm") == 1)
+		else if(!str_cmp(cmd, "rm"))
 		{
 			char filename[10];
 			str_split(filename, inp, " ", 1);
 			file_remove(filename);
 		}
 		/* 打印内存使用情况 */
-		else if(str_cmp(cmd, "mem") == 1)
+		else if(!str_cmp(cmd, "mem"))
 		{
 			unsigned int size = mem_get_size() / 1024;
 			print_format("Total: %d KB\n", size);
 			size = mem_get_free_size() / 1024;
 			print_format("Free: %d KB\n", size);
 		}
-		else if(str_cmp(cmd, "") != 1)
+		else if(str_cmp(cmd, ""))
 		{
 			print_format("%s: unkown command.\n", cmd);
 		}
