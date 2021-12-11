@@ -1,6 +1,7 @@
-MAKE = make
 CC = gcc
-AS = nasm
 LD = ld
-DD = dd
-QEMU = qemu-system-i386
+MAKE = make
+ifeq ($(ARCH), x86)
+	AS = nasm
+	QEMU = qemu-system-i386
+endif
