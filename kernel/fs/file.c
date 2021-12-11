@@ -11,7 +11,7 @@
 #define DATA_BLOCK_BEGIN 2
 
 /* 创建文件 */
-int file_create(struct file *file, char *name)
+int file_create(ST_FILE *file, char *name)
 {
 	char dirname[50];
 	path_get_dirname(dirname, name);
@@ -54,12 +54,12 @@ int file_create(struct file *file, char *name)
 	return FS_SUCCESS;
 }
 /* 获取文件大小 */
-int file_get_size(struct file file)
+int file_get_size(ST_FILE file)
 {
 	return inode_list[file.inode].size;
 }
 /* 打开文件 */
-int file_open(struct file *file, char *path)
+int file_open(ST_FILE *file, char *path)
 {
 	/* 文件不存在 */
 	if(path_exist(path) == 0)
@@ -92,7 +92,7 @@ int file_open(struct file *file, char *path)
 	return FS_FAILED;
 }
 /* 写入文件 */
-void file_write(struct file *file, char *data, int size)
+void file_write(ST_FILE *file, char *data, int size)
 {
 	int *index_data = memfrag_alloc(4096);
 	block_load(inode_list[file->inode].index_block, (char*)index_data); //获取此inode中的索引块数据
@@ -180,7 +180,7 @@ void file_write(struct file *file, char *data, int size)
 	}
 }
 /* 读取文件 */
-int file_read(struct file *file, char *data, int size)
+int file_read(ST_FILE *file, char *data, int size)
 {
 	if(size == 0)
 	{
