@@ -37,13 +37,14 @@ int main()
 			int pids[1024];
 			int i = task_get_list(pids);
 			int j = 0;
-			cli_print("PID  PPID  Name\n");
+			cli_print("PID PPID UID Name\n");
 			for(; j < i; j++)
 			{
 				char name[11];
 				int ppid = task_get_ppid(pids[j]);
+				int uid = task_get_uid(pids[j]);
 				task_get_name(name, j);
-				print_format("%d      %d    %s\n", pids[j], ppid, name);
+				print_format("%d   %d   %d   %s\n", pids[j], ppid, uid, name);
 			}
 		}
 		/* 杀死任务 */

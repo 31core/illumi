@@ -10,14 +10,15 @@ int current_pid = 0; //当前运行的任务pid
 void task_init()
 {
 	current_pid = 0;
-	int i = 0;
-	for(; i < 1024; i++)
+	for(int i = 1; i < 1024; i++)
 	{
 		task_list[i].pid = i;
+		task_list[i].uid = -1;
 		task_list[i].flags = TASK_AVAILABLE;
 	}
 	/* 创建初始化任务 */
 	task_list[0].flags = TASK_RUNNING;
+	task_list[0].uid = 0;
 	task_list[0].ppid = 0;
 	task_list[0].priority = 0;
 	str_cpy(task_list[0].name, "init");
@@ -47,6 +48,7 @@ int task_alloc(void *addr)
 			task_init_register(&task_list[i].state);
 			task_list[i].init_info.stack_addr = stack_addr;
 			task_list[i].flags = TASK_RUNNING;
+			task_list[i].uid = task_list[current_pid].uid;
 			task_list[i].ppid = current_pid;
 			task_list[i].priority = TASK_DEFAULT_PRIORITY;
 			task_list[i].name[0] = '\0';
@@ -83,6 +85,15 @@ int task_get_name(char *ret, int pid)
 int task_get_pid()
 {
 	return current_pid;
+}
+/* 获取进程uid */
+int task_get_uid(int pid)
+{
+	if(task_list[pid].flags != TASK_AVAILABLE)
+	{
+		return task_list[pid].uid;
+	}
+	return -1;
 }
 /* 获取父进程pid */
 int task_get_ppid(int pid)

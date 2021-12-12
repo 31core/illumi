@@ -2,7 +2,7 @@
 #include <arch/x86/x86_asm.h>
 #include <device/interrupt/init.h>
 #include <device/input/keyboard.h>
-//#include <kernel/fifo.h>
+#include <kernel/user.h>
 #include <kernel/task.h>
 #include <kernel/pipe.h>
 #include <kernel/memory.h>
@@ -25,6 +25,7 @@ void kernel_init()
 	io_sti(); //启用中断
 	random_init();
 	fs_init(); //初始化文件系统
+	user_init();
 	/* 初始化内存碎片管理 */
 	memfrag_init();
 	memfrag_alloc_with_addr((void*)VGA_ADDR, 2 * 80 * 25); //显存

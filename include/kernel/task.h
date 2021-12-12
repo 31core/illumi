@@ -17,7 +17,7 @@ struct task_info
 	struct task_init_info init_info;
 	struct task_state state; //任务状态
 	char name[30]; //任务名称
-	int pid, ppid;
+	int pid, ppid, uid;
 	int priority;
 	int flags;
 	int last_tick; //上一次任务切换tick
@@ -43,6 +43,7 @@ void task_wait(int);
 void task_set_name(int, char*);
 int task_get_name(char*, int);
 int task_get_pid();
+int task_get_uid(int);
 int task_get_ppid(int);
 int task_get_list(int*);
 void task_set_priority(int, int);
