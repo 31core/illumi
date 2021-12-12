@@ -22,7 +22,7 @@ void fs_init()
 /* 创建文件系统 */
 void fs_create()
 {
-	block_cleanup(1); //清除超级块
+	block_cleanup(SUPER_BLOCK); //清除超级块
 	super_block_load();
 	bitmap_create();
 	bitmap_load();

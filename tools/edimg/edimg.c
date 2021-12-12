@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <kernel/fs/fs.h>
 #include <kernel/fs/init.h>
 #include <kernel/fs/file.h>
 
@@ -27,18 +28,22 @@ int main(int argc, char *argv[])
 		printf("usage:\n");
 		printf("edimg <image> <option> <args>...\n");
 		printf("options:\n\
+create\tCreate a file-system.\n\
 write\tWrite a file into image.\n");
 		exit(0);
 	}
 
 	strcpy(image_file, IMAGE);
-	fs_create();
 	fs_init();
 
 	ST_FILE file;
 	FILE *fp;
+	if(!strcmp(OPTION, "create"))
+	{
+		fs_create();
+	}
 	/* 写入文件 */
-	if(!strcmp(OPTION, "write"))
+	else if(!strcmp(OPTION, "write"))
 	{
 		file_create(&file, ARG2);
 		int size = get_file_size(ARG1);
@@ -54,7 +59,11 @@ write\tWrite a file into image.\n");
 	/* 读取文件 */
 	else if(!strcmp(OPTION, "read"))
 	{
-		file_open(&file, ARG1);
+		if(file_open(&file, ARG1) == FS_FAILED)
+		{
+			printf("edimg: unable to open '%s'.\n", ARG1);
+			return -1;
+		}
 		fp = fopen(ARG2, "w");
 		int size = file_get_size(file);
 		char *data = malloc(size);
@@ -64,6 +73,10 @@ write\tWrite a file into image.\n");
 			fputc(data[i], fp);
 		}
 		fclose(fp);
+	}
+	else
+	{
+		printf("edimg: %s: unkown option.\n", OPTION);
 	}
 	return 0;
 }
