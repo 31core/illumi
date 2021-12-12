@@ -1,5 +1,5 @@
 #define SUPER_BLOCK 1
-#define DATA_BLOCK_BEGIN 2
+#define DATA_BLOCK_BEGIN 3
 
 /* 超级块数据 */
 struct super_block

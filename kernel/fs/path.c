@@ -60,13 +60,11 @@ int path_exist(char *path)
 		return 1;
 	}
 	char now_name[20];
-	int times = 0;
-	int i = 0;
 	int now = 0;
-	for(; times < str_count(path, "/"); times++)
+	for(int times = 0; times < str_count(path, "/"); times++)
 	{
 		str_split(now_name, path, "/", times + 1); //获取目录名
-		for(i = 1; i < inode_count; i++)
+		for(int i = 1; i < inode_count; i++)
 		{
 			if(!str_cmp(inode_list[i].name, now_name) && inode_list[i].parent_inode == now)
 			{

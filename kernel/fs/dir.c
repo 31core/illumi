@@ -8,11 +8,11 @@
 int dir_create(char *path)
 {
 	/* 避免重复创建根目录 */
-	if(!str_cmp(path, "/") && is_fs() == 1)
+	if(!str_cmp(path, "/") && is_fs())
 	{
 		return FS_FAILED;
 	}
-	struct file dir;
+	ST_FILE dir;
 	if(file_create(&dir, path) == FS_FAILED)
 	{
 		return FS_FAILED;
@@ -26,8 +26,7 @@ int dir_list_inode(int *ret, char *path)
 {
 	int inode = path_get_inode(path);
 	int count = 0;
-	int i = 1;
-	for(; i < inode_count; i++)
+	for(int i = 1; i < inode_count; i++)
 	{
 		if(inode_list[i].parent_inode == inode && inode_list[i].type != TYPE_AVAILABLE)
 		{

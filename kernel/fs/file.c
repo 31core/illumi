@@ -14,12 +14,12 @@ int file_create(ST_FILE *file, char *name)
 	char dirname[50];
 	path_get_dirname(dirname, name);
 	/* 文件已存在 */
-	if(path_exist(name) == 1 && !str_cmp(name, "/"))
+	if(path_exist(name) && str_cmp(name, "/"))
 	{
 		return FS_FAILED;
 	}
 	/* 父级目录不存在 */
-	else if(path_exist(dirname) == 0)
+	else if(!path_exist(dirname))
 	{
 		return FS_FAILED;
 	}
@@ -34,7 +34,7 @@ int file_create(ST_FILE *file, char *name)
 	for(; i < 1024; i++)
 	{
 		/* 找到未使用的块 */
-		if(bitmap_get_used(i) == 0)
+		if(!bitmap_get_used(i))
 		{
 			bitmap_set_used(i); //标记块为已用
 			bitmap_save();
@@ -60,7 +60,7 @@ int file_get_size(ST_FILE file)
 int file_open(ST_FILE *file, char *path)
 {
 	/* 文件不存在 */
-	if(path_exist(path) == 0)
+	if(!path_exist(path))
 	{
 		return FS_FAILED;
 	}
@@ -232,7 +232,7 @@ void file_remove(char *filename)
 {
 	struct file file;
 	/* 文件不存在 */
-	if(file_open(&file, filename) == -1)
+	if(file_open(&file, filename) == FS_FAILED)
 	{
 		return;
 	}

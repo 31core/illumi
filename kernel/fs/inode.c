@@ -46,14 +46,13 @@ int inode_get_available()
 /* 从超级块加载inode */
 void inode_load()
 {
-	int i = 0;
 	int j = 0;
-	for(; i < sizeof(sblock.inode_table) / sizeof(sblock.inode_table[0]); i++)
+	for(int i = 0; i < sizeof(sblock.inode_table) / sizeof(sblock.inode_table[0]); i++)
 	{
 		/* 指向了一个存在的块 */
 		if(sblock.inode_table[i] != 0)
 		{
-			block_load(sblock.inode_table[i], (char*)&inode_list[INODE_NUM * j]); //加载该块的数据
+			block_load(sblock.inode_table[i], &inode_list[INODE_NUM * j]); //加载该块的数据
 			j += 1;
 		}
 	}
@@ -62,9 +61,8 @@ void inode_load()
 /* 保存inode */
 void inode_save()
 {
-	int i = 0;
-	for(; i < inode_count / INODE_NUM; i++)
+	for(int i = 0; i < inode_count / INODE_NUM; i++)
 	{
-		block_save(sblock.inode_table[i], (char*)&inode_list[INODE_TABLE_SIZE * i]);
+		block_save(sblock.inode_table[i], &inode_list[INODE_TABLE_SIZE * i]);
 	}
 }
