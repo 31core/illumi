@@ -3,10 +3,9 @@
 #include <kernel/types.h>
 #include <kernel/string.h>
 #include <kernel/string_format.h>
-#include <kernel/fs/init.h>
-#include <kernel/fs/file.h>
-#include <kernel/fs/dir.h>
+#include <kernel/fs/fs.h>
 #include <kernel/task.h>
+#include <kernel/user.h>
 #include <kernel/memory.h>
 #include <device/video/cli_print.h>
 #include <device/input/keyboard.h>
@@ -17,11 +16,14 @@ int main()
 	fs_create();
 	fs_init();
 	video_cleanup();
+
+	char user[20];
+	user_get_name(user, task_get_uid(task_get_pid()));
 	/* 操作系统主循环 */
 	while(1)
 	{
 		int i = 0;
-		cli_print("[root /] ");
+		print_format("[%s /] ", user);
 		char inp[21],cmd[11];
 		char dirname[20];
 		input(inp);

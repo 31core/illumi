@@ -9,7 +9,7 @@
 #include <kernel/timer.h>
 #include <kernel/random.h>
 #include <kernel/sysinfo.h>
-#include <kernel/fs/init.h>
+#include <kernel/fs/fs.h>
 #include <device/video/cli_print.h>
 
 /* 初始化内核 */

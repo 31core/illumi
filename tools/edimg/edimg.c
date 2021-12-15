@@ -3,8 +3,6 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <kernel/fs/fs.h>
-#include <kernel/fs/init.h>
-#include <kernel/fs/file.h>
 
 #define IMAGE argv[1]
 #define OPTION argv[2]

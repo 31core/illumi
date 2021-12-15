@@ -1,8 +1,6 @@
 #include <kernel/fs/fs.h>
 #include <kernel/fs/bitmap.h>
 #include <kernel/fs/inode.h>
-#include <kernel/fs/file.h>
-#include <kernel/fs/dir.h>
 #include <kernel/fs/block.h>
 #include <kernel/fs/path.h>
 #include <kernel/string.h>
@@ -29,9 +27,9 @@ int file_create(ST_FILE *file, char *name)
 	{
 		return FS_FAILED;
 	}
-	int i = DATA_BLOCK_BEGIN;
+
 	/* 为文件分配块索引 */
-	for(; i < 1024; i++)
+	for(int i = DATA_BLOCK_BEGIN; i < 1024; i++)
 	{
 		/* 找到未使用的块 */
 		if(!bitmap_get_used(i))

@@ -1,5 +1,4 @@
 #include <kernel/fs/fs.h>
-#include <kernel/fs/file.h>
 #include <kernel/fs/inode.h>
 #include <kernel/fs/path.h>
 #include <kernel/string.h>
