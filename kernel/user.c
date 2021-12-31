@@ -3,7 +3,7 @@
 
 struct user users[100];
 
-void user_init()
+void user_init(void)
 {
 	str_cpy(users[0].name, "root");
 	users[0].uid = 0;

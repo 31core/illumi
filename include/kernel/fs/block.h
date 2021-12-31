@@ -11,10 +11,10 @@ struct super_block
 
 extern struct super_block sblock;
 
-void super_block_load();
-void super_block_save();
-int super_block_get_index();
+void super_block_load(void);
+void super_block_save(void);
+int super_block_get_index(void);
 void block_load(unsigned int, void*);
 void block_save(unsigned int, void*);
 void block_cleanup(unsigned int);
-int block_create();
+int block_create(void);

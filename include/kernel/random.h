@@ -1,2 +1,2 @@
-void random_init();
-unsigned int random();
+void random_init(void);
+unsigned int random(void);

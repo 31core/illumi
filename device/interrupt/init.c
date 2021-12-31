@@ -2,7 +2,7 @@
 #include <device/interrupt/init.h>
 
 /* 初始化PIC */
-void PIC_init()
+void PIC_init(void)
 {
 	io_out8(0x21, 0xff); //禁止所有中断
 	io_out8(0xa1, 0xff); //禁止所有中断
@@ -26,7 +26,7 @@ void PIC_init()
 #define HZ 100
 #define CLOCK_TICK_RATE 1193180 //发生中断次数
 
-void PIT_init()
+void PIT_init(void)
 {
 	io_out8(0x43, 0x34);
 	/* 设定值=1193180/频率 */

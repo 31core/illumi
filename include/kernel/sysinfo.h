@@ -6,4 +6,4 @@ struct sysinfo
 
 extern struct sysinfo sysinfo;
 
-void sysinfo_init();
+void sysinfo_init(void);

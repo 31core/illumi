@@ -10,7 +10,7 @@
 #include <device/video/cli_print.h>
 #include <device/input/keyboard.h>
 
-int main()
+int main(void)
 {
 	kernel_init(); //初始化内核
 	fs_create();

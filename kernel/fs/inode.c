@@ -6,7 +6,7 @@ struct inode inode_list[INODE_NUM];
 int inode_count = 0; //node的数量
 
 /* 获取可用inode编号 */
-int inode_get_available()
+int inode_get_available(void)
 {
 	int i = 0;
 	/* 循环查找未使用的inode */
@@ -44,7 +44,7 @@ int inode_get_available()
 	return -1;
 }
 /* 从超级块加载inode */
-void inode_load()
+void inode_load(void)
 {
 	int j = 0;
 	for(int i = 0; i < sizeof(sblock.inode_table) / sizeof(sblock.inode_table[0]); i++)
@@ -59,7 +59,7 @@ void inode_load()
 	inode_count = j * INODE_NUM; //更新inode数量
 }
 /* 保存inode */
-void inode_save()
+void inode_save(void)
 {
 	for(int i = 0; i < inode_count / INODE_NUM; i++)
 	{

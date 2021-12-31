@@ -27,22 +27,22 @@ void block_cleanup(unsigned int block)
 
 struct super_block sblock;
 /* 加载超级块的数据 */
-void super_block_load()
+void super_block_load(void)
 {
 	block_load(SUPER_BLOCK, &sblock); //加载超级块
 }
 /* 保存超级块的数据 */
-void super_block_save()
+void super_block_save(void)
 {
 	block_save(SUPER_BLOCK, &sblock); //保存超级块
 }
 /* 获取引导块的位置 */
-int super_block_get_index()
+int super_block_get_index(void)
 {
 	return sblock.bitmap_block;
 }
 /* 创建一个块 */
-int block_create()
+int block_create(void)
 {
 	for(int i = 2; i < 1024; i++)
 	{

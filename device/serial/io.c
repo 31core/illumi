@@ -16,7 +16,7 @@ void serial_send(char *str)
 	}
 }
 /* 串口接收一个字符数据 */
-char serial_recv_char()
+char serial_recv_char(void)
 {
 	while((io_in8(0x3f8 + 5) & 1) == 0);
 	return io_in8(0x3f8);

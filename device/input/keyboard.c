@@ -53,7 +53,7 @@ int input(char *str)
 	return i; //返回输入数据大小
 }
 /* 单字符输入 */
-char input_char()
+char input_char(void)
 {
 	while(1)
 	{

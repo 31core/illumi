@@ -2,7 +2,7 @@
 #include <kernel/fs/bitmap.h>
 
 /* 创建引导块 */
-void bitmap_create()
+void bitmap_create(void)
 {
 	block_cleanup(2);
 	sblock.bitmap_block = 2; //设置super block中的引导块编号
@@ -11,12 +11,12 @@ void bitmap_create()
 
 char bitmap_data[4096];
 /* 加载引导块 */
-void bitmap_load()
+void bitmap_load(void)
 {
 	block_load(sblock.bitmap_block, bitmap_data);
 }
 /* 保存引导块 */
-void bitmap_save()
+void bitmap_save(void)
 {
 	block_save(sblock.bitmap_block, bitmap_data);
 }

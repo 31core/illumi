@@ -1,2 +1,2 @@
-void fs_init();
-void fs_create();
+void fs_init(void);
+void fs_create(void);

@@ -13,7 +13,7 @@
 #include <device/video/cli_print.h>
 
 /* 初始化内核 */
-void kernel_init()
+void kernel_init(void)
 {
 	sysinfo_init();
 	fifo_init(&key_fifo, 0, 10);

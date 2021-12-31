@@ -3,7 +3,7 @@
 #include <device/interrupt/interrupt.h>
 
 /* 初始化cpu */
-void cpu_init()
+void cpu_init(void)
 {
 	short i;
 	for(i = 0; i < 0x2000; i++)

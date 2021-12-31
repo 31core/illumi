@@ -7,7 +7,7 @@
 extern struct super_block sblock;
 
 /* 初始化文件系统 */
-void fs_init()
+void fs_init(void)
 {
 	inode_count = 0;
 	super_block_load(); //加载超级块
@@ -20,7 +20,7 @@ void fs_init()
 	inode_load(); //加载inode表到内存
 }
 /* 创建文件系统 */
-void fs_create()
+void fs_create(void)
 {
 	block_cleanup(SUPER_BLOCK); //清除超级块
 	super_block_load();

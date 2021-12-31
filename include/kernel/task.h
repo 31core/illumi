@@ -32,17 +32,17 @@ struct task_priority
 extern struct task_info task_list[1024];
 extern int current_pid;
 
-void task_init();
-void task_priority_init();
+void task_init(void);
+void task_priority_init(void);
 void task_init_register(struct task_state*);
-int task_get_next_pid();
-void task_switch();
+int task_get_next_pid(void);
+void task_switch(void);
 int task_alloc(void*);
 void task_kill(int);
 void task_wait(int);
 void task_set_name(int, char*);
 int task_get_name(char*, int);
-int task_get_pid();
+int task_get_pid(void);
 int task_get_uid(int);
 int task_get_ppid(int);
 int task_get_list(int*);

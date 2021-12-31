@@ -1,1 +1,1 @@
-void kernel_init();
+void kernel_init(void);

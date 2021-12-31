@@ -5,7 +5,7 @@ struct mem_fragment mem_frag_list[4096];
 int mem_frag_num = 0; //内存碎片总数
 
 /* 刷新内存剩余空间 */
-static void refresh_free_size()
+static void refresh_free_size(void)
 {
 	int i = 1;
 	sysinfo.mem_free = sysinfo.mem_size;
@@ -16,7 +16,7 @@ static void refresh_free_size()
 }
 
 /* 获取内存大小 */
-unsigned int mem_get_size()
+unsigned int mem_get_size(void)
 {
 	/* 已经检测过内存则返回该值 */
 	if(sysinfo.mem_size != 0)
@@ -38,7 +38,7 @@ unsigned int mem_get_size()
 }
 
 /* 初始化内存碎片管理 */
-void memfrag_init()
+void memfrag_init(void)
 {
 	mem_frag_num = 0;
 	sysinfo.mem_size = mem_get_size();
@@ -123,7 +123,7 @@ void memfrag_free(void* addr)
 }
 
 /* 获取内存剩余空间 */
-unsigned int mem_get_free_size()
+unsigned int mem_get_free_size(void)
 {
 	return sysinfo.mem_free;
 }

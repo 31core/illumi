@@ -65,7 +65,7 @@ void cli_print_char(char c)
 	video_move_cursor((vga_addr - VGA_ADDR) / 2);
 }
 /* 清屏 */
-void video_cleanup()
+void video_cleanup(void)
 {
 	int i;
 	short *p = (short*)VGA_ADDR;

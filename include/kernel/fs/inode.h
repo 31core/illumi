@@ -18,6 +18,6 @@ struct inode
 extern struct inode inode_list[INODE_NUM];
 extern int inode_count;
 
-int inode_get_available();
-void inode_load();
-void inode_save();
+int inode_get_available(void);
+void inode_load(void);
+void inode_save(void);
