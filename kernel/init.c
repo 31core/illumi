@@ -1,4 +1,5 @@
 #include <arch/x86/cpu.h>
+#include <arch/x86/page.h>
 #include <arch/x86/x86_asm.h>
 #include <device/interrupt/init.h>
 #include <device/input/keyboard.h>
@@ -21,6 +22,7 @@ void kernel_init(void)
 	task_init(); //初始化多任务
 	pipe_init(); //初始化管道(pipe)
 	cpu_init(); //初始化cpu相关设定
+	page_init();
 	PIC_init(); //初始化PIC
 	io_sti(); //启用中断
 	random_init();

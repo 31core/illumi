@@ -10,8 +10,8 @@ void cpu_init(void)
 	{
 		GDT_set(i, 0, 0, 0);
 	}
-	GDT_set(1, 0, 0xffffffff, 0x409a);
-	GDT_set(2, 0, 0xffffffff, 0x4092);
+	GDT_set(1, 0, 0xffffffff, 0x4000 | ACC_CODE | ACC_READ);
+	GDT_set(2, 0, 0xffffffff, 0x4000 | ACC_DATA | ACC_WRITE);
 	GDTR_load(GDT_ADDR, 0xffff); //加载GDTR寄存器
 	for(i = 0; i < 256; i++)
 	{

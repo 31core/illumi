@@ -1,6 +1,11 @@
 #define GDT_ADDR 0x200800 //GDT地址
 #define IDT_ADDR 0x200000 //IDT地址
 
+#define ACC_CODE 0b10011000
+#define ACC_DATA 0b10010000
+#define ACC_READ 0b0010
+#define ACC_WRITE 0b0010
+
 /* GDT数据结构体 */
 struct GDT_data
 {
