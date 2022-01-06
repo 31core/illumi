@@ -47,7 +47,7 @@ int block_create(void)
 	for(int i = 2; i < 1024; i++)
 	{
 		/* 找到未使用的块 */
-		if(bitmap_get_used(i) == 0)
+		if(!bitmap_get_used(i))
 		{
 			bitmap_set_used(i); //设置为已用
 			bitmap_save();

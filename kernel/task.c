@@ -39,8 +39,7 @@ void task_switch()
 /* 创建任务 */
 int task_alloc(void *addr)
 {
-	int i = 0;
-	for(; i < 1024; i++)
+	for(int i = 0; i < 1024; i++)
 	{
 		if(task_list[i].flags == TASK_AVAILABLE)
 		{

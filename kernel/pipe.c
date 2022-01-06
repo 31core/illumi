@@ -21,8 +21,7 @@ void pipe_create(struct pipe *pipe, int target_pid)
 /* 获取pipe */
 int pipe_get(struct pipe **pipe)
 {
-	int i = 0;
-	for(; i < pipe_count; i++)
+	for(int i = 0; i < pipe_count; i++)
 	{
 		if(task_get_pid() == pipe_list[i]->target_pid)
 		{
@@ -35,8 +34,7 @@ int pipe_get(struct pipe **pipe)
 /* 写入管道数据 */
 int pipe_write(struct pipe *pipe, char *data, int size)
 {
-	int i = 0;
-	for(; i < size; i++)
+	for(int i = 0; i < size; i++)
 	{
 		fifo_write_data(&pipe->fifo, data[i]);
 	}
@@ -45,8 +43,7 @@ int pipe_write(struct pipe *pipe, char *data, int size)
 /* 读取管道数据 */
 int pipe_read(struct pipe *pipe, char* data, int size)
 {
-	int i = 0;
-	for(; i < size; i++)
+	for(int i = 0; i < size; i++)
 	{
 		if(fifo_get_info(pipe->fifo) == 0)
 		{
@@ -59,8 +56,7 @@ int pipe_read(struct pipe *pipe, char* data, int size)
 /* 关闭管道 */
 void pipe_close(struct pipe *pipe)
 {
-	int i = 0;
-	for(; i < pipe_count; i++)
+	for(int i = 0; i < pipe_count; i++)
 	{
 		if(pipe_list[i] == pipe)
 		{
