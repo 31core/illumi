@@ -16,7 +16,7 @@ void block_save(unsigned int block, void *data)
 /* 清除一个块的数据 */
 void block_cleanup(unsigned int block)
 {
-	char *data = memfrag_alloc(4096);
+	char *data = memfrag_alloc_4k(1);
 	for(int i = 0; i < 4096; i++)
 	{
 		data[i] = 0;

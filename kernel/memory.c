@@ -73,6 +73,33 @@ void* memfrag_alloc(unsigned int size)
 	refresh_free_size();
 	return (void*)addr;
 }
+/* 以4kb为单位分配内存 */
+void* memfrag_alloc_4k(unsigned int size)
+{
+	size *= 4096;
+	int i = 1;
+	void* addr;
+	for(; i <= mem_frag_num + 1; i++)
+	{
+		addr = (void*)(((unsigned int)mem_frag_list[i - 1].addr + mem_frag_list[i - 1].size + 0xfff) & 0xfffff000);
+		/* 找到了足够大的内存碎片 */
+		if(mem_frag_list[i].addr - addr >= size)
+		{
+			break;
+		}
+	}
+
+	int j = mem_frag_num + 1;
+	for(; j >= i; j--)
+	{
+		mem_frag_list[j + 1] = mem_frag_list[j];
+	}
+	mem_frag_list[i].addr = addr;
+	mem_frag_list[i].size = size;
+	mem_frag_num += 1;
+	refresh_free_size();
+	return addr;
+}
 /* 分配内存时指定地址 */
 void memfrag_alloc_with_addr(void *addr, unsigned int size)
 {

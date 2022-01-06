@@ -90,7 +90,7 @@ int file_open(ST_FILE *file, char *path)
 /* 写入文件 */
 void file_write(ST_FILE *file, char *data, int size)
 {
-	int *index_data = memfrag_alloc(4096);
+	int *index_data = memfrag_alloc_4k(1);
 	block_load(inode_list[file->inode].index_block, index_data); //获取此inode中的索引块数据
 	int i = 1;
 	/* 释放此inode占用的数据块 */
@@ -110,7 +110,7 @@ void file_write(ST_FILE *file, char *data, int size)
 	{
 		end += 1;
 	}
-	char *data_block = memfrag_alloc(4096);
+	char *data_block = memfrag_alloc_4k(1);
 	int data_w = 0; //用于访问data位置
 	int w = 0;
 	int index_block = inode_list[file->inode].index_block; //当前引导块编号
@@ -182,8 +182,8 @@ int file_read(ST_FILE *file, char *data, int size)
 	{
 		size = file_get_size(*file);
 	}
-	int *index_data = memfrag_alloc(4096);
-	char *data_block = memfrag_alloc(4096);
+	int *index_data = memfrag_alloc_4k(1);
+	char *data_block = memfrag_alloc_4k(1);
 	block_load(inode_list[file->inode].index_block, index_data); //加载块索引
 	int i = 1;
 	int data_r = 0;
@@ -234,7 +234,7 @@ void file_remove(char *filename)
 	{
 		return;
 	}
-	int *index_data = memfrag_alloc(4096);
+	int *index_data = memfrag_alloc_4k(1);
 	block_load(inode_list[file.inode].index_block, index_data); //获取此inode中的索引块数据
 	int i = 1;
 	int index_block = inode_list[file.inode].index_block;

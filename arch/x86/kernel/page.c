@@ -1,9 +1,11 @@
 #include <arch/x86/page.h>
+#include <kernel/memory.h>
 
-unsigned int *kernel_page_table_entry = (void*)0x5e8000;
+unsigned int *kernel_page_table_entry;
 
 void page_init(void)
 {
+    kernel_page_table_entry =  memfrag_alloc_4k(1 + 1024);
 	for(short i = 0; i < 1024; i++)
 	{
 		page_set_table_entry(kernel_page_table_entry ,i, 0x5e9000 + 4096 * i);
