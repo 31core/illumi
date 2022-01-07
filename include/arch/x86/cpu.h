@@ -21,6 +21,6 @@ struct IDT_data
 	short offset_high;
 };
 
-void cpu_init();
+void cpu_init(void);
 void GDT_set(short, int, int, short);
 void IDT_set(char, int, short, char);

@@ -1,2 +1,2 @@
-void PIC_init();
-void PIT_init();
+void PIC_init(void);
+void PIT_init(void);
