@@ -1,8 +1,8 @@
 #include <arch/x86/cpu.h>
-#include <arch/x86/page.h>
 #include <arch/x86/x86_asm.h>
 #include <device/interrupt/init.h>
 #include <device/input/keyboard.h>
+#include <kernel/page.h>
 #include <kernel/user.h>
 #include <kernel/task.h>
 #include <kernel/pipe.h>
