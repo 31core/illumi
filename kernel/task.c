@@ -9,7 +9,6 @@ int current_pid = 0; //当前运行的任务pid
 /* 初始化多任务 */
 void task_init(void)
 {
-	current_pid = 0;
 	for(int i = 1; i < 1024; i++)
 	{
 		task_list[i].pid = i;

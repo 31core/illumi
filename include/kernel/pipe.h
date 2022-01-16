@@ -7,7 +7,6 @@ struct pipe
 	struct fifo8 fifo;
 };
 
-void pipe_init(void);
 void pipe_create(struct pipe*, int);
 int pipe_get(struct pipe**);
 int pipe_write(struct pipe*, char*, int);

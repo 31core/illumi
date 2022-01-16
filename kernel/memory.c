@@ -40,7 +40,6 @@ unsigned int mem_get_size(void)
 /* 初始化内存碎片管理 */
 void memfrag_init(void)
 {
-	mem_frag_num = 0;
 	sysinfo.mem_size = mem_get_size();
 	sysinfo.mem_free = sysinfo.mem_size;
 	mem_frag_list[0].addr = 0;

@@ -5,11 +5,6 @@
 int pipe_count = 0; //pipe数量
 struct pipe *pipe_list[1024];
 
-/* 初始化管道(pipe) */
-void pipe_init(void)
-{
-	pipe_count = 0;
-}
 /* 分配一个pipe */
 void pipe_create(struct pipe *pipe, int target_pid)
 {

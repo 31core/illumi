@@ -24,9 +24,7 @@ void kernel_init(void)
 	memfrag_alloc_with_addr((void*)IDT_ADDR, 8 * 0x100);
 	memfrag_alloc_with_addr((void*)0x100000, 64 * 1024); //为内核分配64 kb空间
 	fifo_init(&key_fifo, memfrag_alloc_4k(1), 0x1000);
-	timer_init(); //初始化计时器
 	task_init(); //初始化多任务
-	pipe_init(); //初始化管道(pipe)
 	cpu_init(); //初始化cpu相关设定
 	PIC_init(); //初始化PIC
 	io_sti(); //启用中断
