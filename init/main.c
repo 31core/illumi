@@ -15,7 +15,7 @@ int main(void)
 	kernel_init(); //初始化内核
 	fs_create();
 	fs_init();
-	//video_cleanup();
+	video_cleanup();
 
 	char user[20];
 	user_get_name(user, task_get_uid(task_get_pid()));
