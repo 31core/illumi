@@ -7,9 +7,8 @@ int mem_frag_num = 0; //内存碎片总数
 /* 刷新内存剩余空间 */
 static void refresh_free_size(void)
 {
-	int i = 1;
 	sysinfo.mem_free = sysinfo.mem_size;
-	for(; i <= mem_frag_num; i++)
+	for(int i = 1; i <= mem_frag_num; i++)
 	{
 		sysinfo.mem_free -= mem_frag_list[i].size;
 	}
@@ -70,7 +69,7 @@ void* memfrag_alloc(unsigned int size)
 	mem_frag_list[i].size = size;
 	mem_frag_num += 1;
 	refresh_free_size();
-	return (void*)addr;
+	return addr;
 }
 /* 以4kb为单位分配内存 */
 void* memfrag_alloc_4k(unsigned int size)
@@ -142,7 +141,7 @@ void memfrag_free(void* addr)
 				mem_frag_list[i] = mem_frag_list[i + 1];
 			}
 			mem_frag_num -= 1;
-			return;
+			break;
 		}
 	}
 	refresh_free_size();
