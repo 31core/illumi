@@ -1,9 +1,16 @@
-global page_enable, set_cr3
+global page_enable, page_disable
+global set_cr3
 
 ;启用分页
 page_enable:
 	mov eax, cr0
-	or eax, 0x80000000
+	or eax, 0x80000001
+	mov cr0, eax
+	ret
+
+page_disable:
+	mov eax, cr0
+	and eax, 0x7fffffff
 	mov cr0, eax
 	ret
 
