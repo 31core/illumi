@@ -26,7 +26,8 @@ image:
 	@echo "DD  hda.img"
 	dd if=$(ARCH_DIR)/boot/boot.bin of=hda.img bs=512 count=1
 	dd if=$(ARCH_DIR)/boot/loader.bin of=hda.img bs=512 seek=1 count=8
-	dd if=kernel.bin of=hda.img bs=512 seek=9 count=348
+	dd if=kernel.bin of=hda.img bs=512 seek=9 count=10240
+	qemu-img resize hda.img 10M
 #运行
 run:
 	@$(MAKE) -s all

@@ -3,13 +3,15 @@
 #include <kernel/string.h>
 #include <arch/x86/x86_asm.h>
 
+void init_proc(void);
+
 struct task_info task_list[1024];
 int current_pid = 0; //当前运行的任务pid
 
 /* 初始化多任务 */
 void task_init(void)
 {
-	for(int i = 1; i < 1024; i++)
+	for(int i = 1; i < TASKS_MAX; i++)
 	{
 		task_list[i].pid = i;
 		task_list[i].uid = -1;
@@ -19,16 +21,20 @@ void task_init(void)
 	task_list[0].flags = TASK_RUNNING;
 	task_list[0].uid = 0;
 	task_list[0].ppid = 0;
-	task_list[0].priority = 0;
-	str_cpy(task_list[0].name, "init");
-	task_priority_init(); //任务优先级初始化
-	task_priority_append(&task_list[0], 0);
+	task_list[0].nice = 0;
+	str_cpy(task_list[0].name, "idle");
+	task_priority_add(&task_list[0]);
+
+	/* 创建init进程 */
+	int init_pid = task_alloc(init_proc);
+	task_run(init_pid);
+	task_set_name(init_pid, "init");
 }
 /* 切换任务 */
 void task_switch()
 {
 	int pid = task_get_next_pid();
-	if(pid != -1)
+	if(pid != -1 && pid != current_pid)
 	{
 		int old_pid = current_pid;
 		current_pid = pid;
@@ -38,26 +44,37 @@ void task_switch()
 /* 创建任务 */
 int task_alloc(void *addr)
 {
-	for(int i = 0; i < 1024; i++)
+	for(int i = 0; i < TASKS_MAX; i++)
 	{
 		if(task_list[i].flags == TASK_AVAILABLE)
 		{
 			void *stack_addr = memfrag_alloc(1024) + 1024; //分配该任务的栈地址
 			task_init_register(&task_list[i].state);
 			task_list[i].init_info.stack_addr = stack_addr;
-			task_list[i].flags = TASK_RUNNING;
+			task_list[i].flags = TASK_PENDING;
 			task_list[i].uid = task_list[current_pid].uid;
 			task_list[i].ppid = current_pid;
-			task_list[i].priority = TASK_DEFAULT_PRIORITY;
+			task_list[i].nice = TASK_DEFAULT_PRIORITY;
 			task_list[i].name[0] = '\0';
 			int *p = (int*)stack_addr;
 			*p = (int)addr; //[esp]为任务跳转地址
 			task_set_stack(&task_list[i].state, stack_addr);
-			task_priority_append(&task_list[i], TASK_DEFAULT_PRIORITY);
+
+			task_list[i].cpu_time = 20 - task_list[i].nice;
+
 			return i; //返回pid
 		}
 	}
 	return -1;
+}
+/* 运行任务 */
+void task_run(int pid)
+{
+	if(task_list[pid].flags == TASK_PENDING)
+	{
+		task_list[pid].flags = TASK_RUNNING;
+		task_priority_add(&task_list[pid]);
+	}
 }
 
 /* 设置任务名字 */
@@ -123,7 +140,7 @@ void task_kill(int pid)
 		task_remove(&task_list[pid]);
 		int i = 0;
 		/* 为子进程重新分配父进程 */
-		for(; i < 1024; i++)
+		for(; i < TASKS_MAX; i++)
 		{
 			if(task_list[i].flags != TASK_AVAILABLE && task_list[i].ppid == pid)
 			{
@@ -141,7 +158,7 @@ void task_kill(int pid)
 int task_get_list(int *ret)
 {
 	int i, j = 0;
-	for(i = 0; i < 1024; i++)
+	for(i = 0; i < TASKS_MAX; i++)
 	{
 		if(task_list[i].flags != TASK_AVAILABLE)
 		{

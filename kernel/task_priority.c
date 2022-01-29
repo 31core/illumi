@@ -1,120 +1,77 @@
 #include <kernel/task.h>
 
-struct task_priority priority_0;
-struct task_priority priority_1;
-struct task_priority priority_2;
-struct task_priority priority_3;
-
+struct task_info *tasks[TASKS_MAX];
+int tasks_count = 0;
+int tasks_posit = 1;
+extern struct task_info task_list[TASKS_MAX];
 extern unsigned int time_count;
-
-/* 通过优先级获取task_priority指针 */
-static struct task_priority* get_task_priority_pointer(int level)
-{
-	struct task_priority *priority;
-	if(level == 0)
-	{
-		priority = (struct task_priority*)&priority_0;
-	}
-	else if(level == 1)
-	{
-		priority = (struct task_priority*)&priority_1;
-	}
-	else if(level == 2)
-	{
-		priority = (struct task_priority*)&priority_2;
-	}
-	else if(level == 3)
-	{
-		priority = (struct task_priority*)&priority_3;
-	}
-	return priority;
-}
-
-/* 任务优先级初始化 */
-void task_priority_init()
-{
-	priority_0.task_list[0] = 0;
-	priority_1.task_list[0] = 0;
-	priority_2.task_list[0] = 0;
-	priority_3.task_list[0] = 0;
-
-	priority_0.pointer = 0;
-	priority_1.pointer = 0;
-	priority_2.pointer = 0;
-	priority_3.pointer = 0;
-}
 
 /* 获取下一个任务pid */
 int task_get_next_pid()
 {
-	int level = 0;
-	for(; level <= 3; level++)
+	if(time_count % 100 == 0)
 	{
-		struct task_priority *priority = get_task_priority_pointer(level);
-		int i = priority->pointer;
-		while(priority->task_list[i] != 0)
+		tasks_posit = 1;
+		/* 重新计算cpu_time */
+		for(int i = 1; i < tasks_count; i++)
 		{
-			int timeout = 5 + 5 * level;
-			/* 找到了超时需要切换的任务 */
-			if(priority->task_list[i]->last_tick + timeout <= time_count)
-			{
-				priority->pointer = priority->task_list[i]->pid;
-				priority->task_list[i]->last_tick = time_count; //更新上一次任务切换tick
-				/* 为当前任务,不需要切换 */
-				if(priority->task_list[i]->pid == current_pid)
-				{
-					return -1;
-				}
-				return priority->task_list[i]->pid;
-			}
-			i += 1;
+			tasks[i]->cpu_time = 20 - tasks[i]->nice;
 		}
 	}
-	/* 将priority_x的pointer重置为0 */
-	for(level = 0; level <= 3; level++)
+	for(int i = tasks_posit; i < tasks_count; i++)
 	{
-		struct task_priority *priority = get_task_priority_pointer(level);
-		priority->pointer = 0;
+		if(tasks[tasks_posit]->cpu_time > 0)
+		{
+			tasks[tasks_posit]->cpu_time -= 1;
+			return tasks[tasks_posit]->pid;
+		}
+		tasks_posit += 1;
 	}
-	return -1; //没有正在运行的任务
+	return 0;
 }
-/* 向priority_x添加任务 */
-void task_priority_append(struct task_info *task, int level)
+/* nice从低到高添加任务 */
+void task_priority_add(struct task_info *task)
 {
-	struct task_priority *priority = get_task_priority_pointer(level);
-	int i = 0;
-	while(priority->task_list[i] != 0)
+	for(int i = 0; i < tasks_count; i++)
 	{
-		i += 1;
+		if(tasks[i]->nice <= task->nice && tasks[i + 1]->nice > task->nice)
+		{
+			for(int j = tasks_count; j > i + 1; j--)
+			{
+				tasks[j] = tasks[j - 1];
+			}
+			tasks_count += 1;
+			tasks[i + 1] = task;
+			return;
+		}
 	}
-	priority->task_list[i] = task;
-	priority->task_list[i + 1] = 0;
+	/* 添加到列表最后 */
+	tasks[tasks_count] = task;
+	tasks_count += 1;
 }
 /* 移除task */
 void task_remove(struct task_info *task)
 {
-	struct task_priority *priority = get_task_priority_pointer(task->priority);
-	/* 遍历task_list */
-	int i = 0;
-	while(1)
+	for(int i = 0; i < TASKS_MAX; i++)
 	{
-		if(priority->task_list[i] == task)
+		if(tasks[i] == 0)
 		{
-			/* 向前移动成员 */
-			while(priority->task_list[i] != 0)
-			{
-				priority->task_list[i] = priority->task_list[i + 1];
-				i += 1;
-			}
-				return;
+			return;
 		}
-		i += 1;
+		if(tasks[i] == task)
+		{
+			for(int j = i; j < tasks_count - 1; j++)
+			{
+				tasks[j] = tasks[j + 1];
+			}
+			tasks_count -= 1;
+		}
 	}
 }
 /* 设置任务优先级 */
-void task_set_priority(int pid, int level)
+void task_set_priority(int pid, int nice)
 {
 	task_remove(&task_list[pid]);
-	task_priority_append(&task_list[pid], level);
-	task_list[pid].priority = level;
+	task_list[pid].nice = nice;
+	task_priority_add(&task_list[pid]);
 }
