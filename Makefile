@@ -15,9 +15,9 @@ kernel.sys:$(kernel_bins) $(kernel_objs)
 kernel.bin:kernel.sys
 	objcopy -S -O binary kernel.sys kernel.bin
 
-%.bin:%.asm
+%.bin:%.S
 	@echo "AS  $@"
-	@$(AS) -f elf $*.asm -o $*.bin
+	@$(AS) $*.S --32 -o $*.bin
 %.o:%.c
 	@echo "CC  $@"
 	@$(CC) $(C_FLAGS) -c $*.c -o $*.o
