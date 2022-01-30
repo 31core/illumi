@@ -7,15 +7,15 @@ page_enable:
 	movl %cr0, %eax
 	orl $0x80000001, %eax
 	movl %eax, %cr0
-	ret
+	retl
 
 page_disable:
 	movl %cr0, %eax
 	andl $0x7fffffff, %eax
 	movl %eax, %cr0
-	ret
+	retl
 
 set_cr3:
 	movl 4(%esp), %eax
 	movl %eax, %cr3
-	ret
+	retl

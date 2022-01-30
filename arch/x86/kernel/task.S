@@ -22,4 +22,4 @@ asm_task_switch:
 	movl 20(%eax), %edx
 	movl 24(%eax), %esi
 	movl 28(%eax), %edi
-	ret
+	retl

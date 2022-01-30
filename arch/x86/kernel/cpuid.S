@@ -11,7 +11,7 @@ cpuid_get_vendorid:
 	movl %edx, 4(%eax)
 	movl %ecx, 8(%eax)
 	movb $0, 12(%eax)
-	ret
+	retl
 #获取cpu商标信息
 cpuid_get_brand:
 	movl $0x80000002, %eax
@@ -36,4 +36,4 @@ cpuid_get_brand:
 	movl %ecx, 40(%esi)
 	movl %edx, 44(%esi)
 	movb $0, 48(%esi)
-	ret
+	retl
