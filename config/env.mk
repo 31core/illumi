@@ -4,3 +4,7 @@ ifeq ($(ARCH), x86)
 	C_FLAGS += -m32
 	LD_FLAGS += -m elf_i386
 endif
+#是否启用KVM
+ifeq ($(KVM), y)
+	QEMU += -enable-kvm
+endif

@@ -15,7 +15,7 @@ static void refresh_free_size(void)
 }
 
 /* 获取内存大小 */
-unsigned int mem_get_size(void)
+void* mem_get_size(void)
 {
 	/* 已经检测过内存则返回该值 */
 	if(sysinfo.mem_size != 0)
@@ -33,7 +33,7 @@ unsigned int mem_get_size(void)
 		}
 		*p = old;
 	}
-	return (unsigned int)p;
+	return (void*)p;
 }
 
 /* 初始化内存碎片管理 */
@@ -43,7 +43,7 @@ void memfrag_init(void)
 	sysinfo.mem_free = sysinfo.mem_size;
 	mem_frag_list[0].addr = 0;
 	mem_frag_list[0].size = 0;
-	mem_frag_list[1].addr = (void*)sysinfo.mem_size;  //结尾的地址为内存大小
+	mem_frag_list[1].addr = sysinfo.mem_size;  //结尾的地址为内存大小
 	mem_frag_list[1].size = 0;
 }
 /* 分配内存碎片 */
@@ -148,7 +148,7 @@ void memfrag_free(void* addr)
 }
 
 /* 获取内存剩余空间 */
-unsigned int mem_get_free_size(void)
+void* mem_get_free_size(void)
 {
 	return sysinfo.mem_free;
 }

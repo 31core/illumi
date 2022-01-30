@@ -6,9 +6,9 @@ struct mem_fragment
 };
 
 void memfrag_init(void);
-unsigned int mem_get_size(void);
+void* mem_get_size(void);
 void* memfrag_alloc(unsigned int);
 void* memfrag_alloc_4k(unsigned int);
 void memfrag_alloc_with_addr(void*, unsigned int);
 void memfrag_free(void*);
-unsigned int mem_get_free_size(void);
+void* mem_get_free_size(void);

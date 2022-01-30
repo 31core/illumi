@@ -104,9 +104,9 @@ int main(void)
 		/* 打印内存使用情况 */
 		else if(!str_cmp(cmd, "mem"))
 		{
-			unsigned int size = mem_get_size() / 1024;
+			unsigned int size = (unsigned int)mem_get_size() / 1024;
 			print_format("Total: %d KB\n", size);
-			size = mem_get_free_size() / 1024;
+			size = (unsigned int)mem_get_free_size() / 1024;
 			print_format("Free: %d KB\n", size);
 		}
 		else if(str_cmp(cmd, ""))
