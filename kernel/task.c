@@ -23,7 +23,7 @@ void task_init(void)
 	task_list[0].ppid = 0;
 	task_list[0].nice = 0;
 	str_cpy(task_list[0].name, "idle");
-	task_priority_add(&task_list[0]);
+	scheduler_add(&task_list[0]);
 
 	/* 创建init进程 */
 	int init_pid = task_alloc(init_proc);
@@ -73,7 +73,7 @@ void task_run(int pid)
 	if(task_list[pid].flags == TASK_PENDING)
 	{
 		task_list[pid].flags = TASK_RUNNING;
-		task_priority_add(&task_list[pid]);
+		scheduler_add(&task_list[pid]);
 	}
 }
 
@@ -137,7 +137,7 @@ void task_kill(int pid)
 	{
 		task_list[pid].flags = TASK_AVAILABLE;
 		memfrag_free((void*)task_list[pid].init_info.stack_addr);
-		task_remove(&task_list[pid]);
+		scheduler_remove(&task_list[pid]);
 		int i = 0;
 		/* 为子进程重新分配父进程 */
 		for(; i < TASKS_MAX; i++)

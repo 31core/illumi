@@ -2,6 +2,8 @@
 
 #define TASKS_MAX 1024
 
+#define UNIT_TIME 100
+
 #define TASK_AVAILABLE 0
 #define TASK_PENDING 1
 #define TASK_RUNNING 2
@@ -52,6 +54,6 @@ int task_get_pid(void);
 int task_get_uid(int);
 int task_get_ppid(int);
 int task_get_list(int*);
-void task_set_priority(int, int);
-void task_priority_add(struct task_info*);
-void task_remove(struct task_info*);
+void task_set_nice(int, int);
+void scheduler_add(struct task_info*);
+void scheduler_remove(struct task_info*);

@@ -4,7 +4,7 @@ BINS = $(patsubst %.asm, %.bin, $(wildcard *.asm))
 all:$(BINS);
 
 %.bin:%.asm
-	@echo "AS  arch/x86/kernel/$@"
+	@echo "AS  arch/x86/boot/$@"
 	@nasm $*.asm -o $*.bin
 
 clean:
