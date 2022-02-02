@@ -46,7 +46,7 @@ int task_get_next_pid()
 	tasks_posit = 0;
 	return 0;
 }
-/* nice从低到高添加任务 */
+/* 添加任务到调度器 */
 void scheduler_add(struct task_info *task)
 {
 	tasks[tasks_count] = task;

@@ -7,7 +7,7 @@
 #define TASK_AVAILABLE 0
 #define TASK_PENDING 1
 #define TASK_RUNNING 2
-#define TASK_PAUSED 3
+#define TASK_SLEEPING 3
 
 #define TASK_DEFAULT_PRIORITY 0
 #define TASK_PRIO_MAX 19
@@ -48,6 +48,8 @@ int task_alloc(void*);
 void task_run(int);
 void task_kill(int);
 void task_wait(int);
+void task_sleep(int);
+void task_wakeup(int);
 void task_set_name(int, char*);
 int task_get_name(char*, int);
 int task_get_pid(void);

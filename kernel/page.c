@@ -59,24 +59,25 @@ void page_free(void *page)
 	}
 }
 /* 分配页表 */
-void page_set(unsigned int *page, int virt_addr)
+void page_set(unsigned int *page_dir, int virt_addr)
 {
 	void *addr = memfrag_alloc_4k(1);
 	int table = virt_addr / 1024;
-	int table_count = virt_addr % 1024;
-	if(page[table] == 0)
+	int page = virt_addr % 1024;
+	if(page_dir[table] == 0)
 	{
-		page[table] = (unsigned int)memfrag_alloc_4k(1);
+		page_dir[table] = (unsigned int)memfrag_alloc_4k(1);
 	}
-	page_set_table(page, table, table_count, addr);
+	page_set_table(page_dir, table, page, addr);
 }
 /* 释放页表 */
 void page_unset(unsigned int *page_dir, int virt_addr)
 {
 	int table = virt_addr / 1024;
-	int table_count = virt_addr % 1024;
+	int page = virt_addr % 1024;
 	unsigned int *page_table = (unsigned int*)page_dir[table];
-	memfrag_free((void*)page_table[table_count]);
+	memfrag_free((void*)page_table[page]);
+	page_table[page] = 0;
 }
 /* 重新加载页表 */
 void page_reload(void)
@@ -85,9 +86,9 @@ void page_reload(void)
 	page_enable();
 }
 /* 切换页表 */
-void page_switch(void *page)
+void page_switch(void *page_dir)
 {
 	page_disable();
-	set_cr3(page);
+	set_cr3(page_dir);
 	page_enable();
 }

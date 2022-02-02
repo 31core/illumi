@@ -168,3 +168,21 @@ int task_get_list(int *ret)
 	}
 	return j; //返回pid个数
 }
+/* 休眠任务 */
+void task_sleep(int pid)
+{
+	if(task_list[pid].flags == TASK_RUNNING)
+	{
+		task_list[pid].flags = TASK_SLEEPING;
+		scheduler_remove(&task_list[pid]);
+	}
+}
+/* 唤醒任务 */
+void task_wakeup(int pid)
+{
+	if(task_list[pid].flags == TASK_SLEEPING)
+	{
+		task_list[pid].flags = TASK_RUNNING;
+		scheduler_add(&task_list[pid]);
+	}
+}
