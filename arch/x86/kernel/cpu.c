@@ -1,6 +1,6 @@
 #include <arch/x86/cpu.h>
 #include <arch/x86/x86_asm.h>
-#include <device/interrupt/interrupt.h>
+#include "interrupts.h"
 
 /* 初始化cpu */
 void cpu_init(void)
@@ -17,6 +17,10 @@ void cpu_init(void)
 	{
 		IDT_set((char)i, 0, 0, 0);
 	}
+	IDT_set(0x04, (int)asm_interrupt04h, 8, 0x8e);
+	IDT_set(0x06, (int)asm_interrupt06h, 8, 0x8e);
+	IDT_set(0x0c, (int)asm_interrupt0ch, 8, 0x8e);
+	IDT_set(0x0d, (int)asm_interrupt0dh, 8, 0x8e);
 	IDT_set(0x20, (int)asm_interrupt20h, 8, 0x8e);
 	IDT_set(0x21, (int)asm_interrupt21h, 8, 0x8e);
 	IDTR_load(IDT_ADDR, 0x7ff); //加载IDTR寄存器
