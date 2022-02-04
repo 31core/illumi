@@ -2,6 +2,7 @@
 .global io_out8, io_in8
 .global io_out16, io_in16
 .global io_cli, io_sti
+.global cpu_halt
 
 .section .text
 #加载GDRT寄存器
@@ -49,4 +50,7 @@ io_cli:
 #启用中断
 io_sti:
 	sti
+	retl
+cpu_halt:
+	hlt
 	retl

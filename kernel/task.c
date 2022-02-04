@@ -1,7 +1,7 @@
 #include <kernel/task.h>
 #include <kernel/memory.h>
 #include <kernel/string.h>
-#include <arch/x86/x86_asm.h>
+#include <arch/x86/cpu.h>
 
 void init_proc(void);
 

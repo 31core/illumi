@@ -1,1 +1,1 @@
-kernel_objs += init/main.o
+kernel_objs += init/main.o init/shell.o

@@ -1,5 +1,4 @@
 #include <arch/x86/cpu.h>
-#include <arch/x86/x86_asm.h>
 #include "interrupts.h"
 
 /* 初始化cpu */

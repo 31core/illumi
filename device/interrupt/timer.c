@@ -1,4 +1,4 @@
-#include <arch/x86/x86_asm.h>
+#include <arch/x86/cpu.h>
 #include <kernel/task.h>
 
 unsigned int time_count = 0;/* 记录经过的时间,10ms */
