@@ -3,7 +3,7 @@
 #include <kernel/fs/inode.h>
 #include <kernel/fs/block.h>
 #include <kernel/fs/path.h>
-#include <kernel/string.h>
+#include <lib/string.h>
 #include <kernel/memory.h>
 
 /* 创建文件 */

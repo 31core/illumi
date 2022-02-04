@@ -3,8 +3,8 @@
 #include <kernel/task.h>
 #include <kernel/user.h>
 #include <kernel/memory.h>
-#include <kernel/string.h>
-#include <kernel/types.h>
+#include <lib/string.h>
+#include <lib/types.h>
 #include <kernel/string_format.h>
 #include <device/video/cli_print.h>
 #include <device/input/keyboard.h>

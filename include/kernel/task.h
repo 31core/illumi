@@ -10,8 +10,11 @@
 #define TASK_SLEEPING 3
 
 #define TASK_DEFAULT_PRIORITY 0
-#define TASK_PRIO_MAX 19
-#define TASK_PRIO_MIN -20
+#define TASK_NICE_MAX 19
+#define TASK_NICE_MIN -20
+
+#define TASK_IDLE_PID 0
+#define TASK_INIT_PID 1
 
 /* 任务初始化信息,释放任务时需要 */
 struct task_init_info

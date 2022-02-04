@@ -9,11 +9,11 @@ extern unsigned int time_count;
 /* 计算CPU时间 */
 static int get_cpu_time(int nice)
 {
-	int prio = (TASK_PRIO_MAX + 1) - nice;
+	int prio = (TASK_NICE_MAX + 1) - nice;
 	int max_prio = 0;
 	for(int i = 0; i < tasks_count; i++)
 	{
-		max_prio += (TASK_PRIO_MAX + 1) - tasks[i]->nice;
+		max_prio += (TASK_NICE_MAX + 1) - tasks[i]->nice;
 	}
 	float cpu_time = UNIT_TIME * ((float)prio / (float)max_prio);
 	return (int)cpu_time;

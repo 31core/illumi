@@ -1,0 +1,1 @@
+kernel_objs += lib/string.o lib/types.o

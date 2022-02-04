@@ -1,5 +1,5 @@
 #include <kernel/user.h>
-#include <kernel/string.h>
+#include <lib/string.h>
 
 struct user users[100];
 

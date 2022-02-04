@@ -1,6 +1,6 @@
 #include <kernel/fs/inode.h>
 #include <kernel/fs/path.h>
-#include <kernel/string.h>
+#include <lib/string.h>
 
 /* 获取路径基名称 */
 void path_get_basename(char *ret, char *path)

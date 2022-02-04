@@ -15,6 +15,8 @@ int main(void)
 	task_set_name(pid, "shell");
 	task_run(pid);
 
+	task_set_nice(TASK_IDLE_PID, TASK_NICE_MAX);
+
 	while(1)
 	{
 		cpu_halt();

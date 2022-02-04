@@ -1,5 +1,5 @@
-#include <kernel/types.h>
-#include <kernel/string.h>
+#include <lib/types.h>
+#include <lib/string.h>
 #include <device/video/cli_print.h>
 
 /* 格式化输出 */

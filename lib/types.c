@@ -1,4 +1,4 @@
-#include <kernel/string.h>
+#include <lib/string.h>
 
 /* 无符号整形数字转字符串 */
 void uint2str(char *str, unsigned int num)

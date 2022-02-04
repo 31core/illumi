@@ -1,6 +1,6 @@
 #include <kernel/time.h>
-#include <kernel/types.h>
-#include <kernel/string.h>
+#include <lib/types.h>
+#include <lib/string.h>
 
 unsigned int seed = 0;
 

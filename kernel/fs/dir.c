@@ -1,7 +1,7 @@
 #include <kernel/fs/fs.h>
 #include <kernel/fs/inode.h>
 #include <kernel/fs/path.h>
-#include <kernel/string.h>
+#include <lib/string.h>
 
 /* 创建文件夹 */
 int dir_create(char *path)
