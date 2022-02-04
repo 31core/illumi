@@ -35,6 +35,7 @@ KERNEL_SIZE equ 100 ;内核大小(扇区)
 start:
 	mov ax, 2 * 8
 	mov ds, ax
+	mov ss, ax
 	call load_kernel
 	jmp dword 8:KERNEL_ADDR
 ;加载内核

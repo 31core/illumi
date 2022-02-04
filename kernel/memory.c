@@ -41,7 +41,7 @@ void memfrag_init(void)
 {
 	sysinfo.mem_size = mem_get_size();
 	sysinfo.mem_free = sysinfo.mem_size;
-	mem_frag_list[0].addr = 0;
+	mem_frag_list[0].addr = (void*)0x100000;
 	mem_frag_list[0].size = 0;
 	mem_frag_list[1].addr = sysinfo.mem_size;  //结尾的地址为内存大小
 	mem_frag_list[1].size = 0;

@@ -19,7 +19,6 @@ void kernel_init(void)
 	sysinfo_init();
 	/* 初始化内存碎片管理 */
 	memfrag_init();
-	memfrag_alloc_with_addr((void*)VGA_ADDR, 2 * 80 * 25); //显存
 	memfrag_alloc_with_addr((void*)GDT_ADDR, 8 * 0x2000);
 	memfrag_alloc_with_addr((void*)IDT_ADDR, 8 * 0x100);
 	memfrag_alloc_with_addr((void*)0x100000, 4 * 0x100000); //为内核分配4MB空间
