@@ -3,7 +3,7 @@
 #include <device/video/cli_print.h>
 
 /* 格式化输出 */
-void print_format(char *str, ...)
+void printfmt(char *str, ...)
 {
 	int i = 0;
 	int arg = 1;
@@ -43,7 +43,7 @@ void print_format(char *str, ...)
 	}
 }
 /* 格式化字符串 */
-void string_format(char *ret, char *str, ...)
+void strfmt(char *ret, char *str, ...)
 {
 	int i = 0;
 	int j = i;

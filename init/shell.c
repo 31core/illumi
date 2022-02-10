@@ -5,7 +5,7 @@
 #include <kernel/memory.h>
 #include <lib/string.h>
 #include <lib/types.h>
-#include <kernel/string_format.h>
+#include <kernel/strfmt.h>
 #include <device/video/cli_print.h>
 #include <device/input/keyboard.h>
 
@@ -17,7 +17,7 @@ void shell(void)
 	while(1)
 	{
 		int i = 0;
-		print_format("[%s /] ", user);
+		printfmt("[%s /] ", user);
 		char inp[21],cmd[11];
 		char dirname[20];
 		input(inp);
@@ -25,7 +25,7 @@ void shell(void)
 		/* 显示内核版本 */
 		if(!str_cmp(cmd, "rever"))
 		{
-			print_format("%s %s\n", KERNEL_NAME, KERNEL_VERSION);
+			printfmt("%s %s\n", KERNEL_NAME, KERNEL_VERSION);
 		}
 		/* 打印任务 */
 		else if(!str_cmp(cmd, "ps"))
@@ -40,7 +40,7 @@ void shell(void)
 				int ppid = task_get_ppid(pids[j]);
 				int uid = task_get_uid(pids[j]);
 				task_get_name(name, j);
-				print_format("%d   %d   %d   %s\n", pids[j], ppid, uid, name);
+				printfmt("%d   %d   %d   %s\n", pids[j], ppid, uid, name);
 			}
 		}
 		/* 杀死任务 */
@@ -60,7 +60,7 @@ void shell(void)
 			for(i = 0; i < count; i++)
 			{
 				file_get_name_by_inode(dirname, inode_list[i]);
-				print_format("%s\n", dirname);
+				printfmt("%s\n", dirname);
 			}
 		}
 		/* 创建文件夹 */
@@ -79,7 +79,7 @@ void shell(void)
 			str_split(filename, inp, " ", 1);
 			if(file_open(&fp, filename) == -1)
 			{
-				print_format("%s: no such file.\n", filename);
+				printfmt("%s: no such file.\n", filename);
 				continue;
 			}
 			int size = file_read(&fp, data, 0);
@@ -99,13 +99,13 @@ void shell(void)
 		else if(!str_cmp(cmd, "mem"))
 		{
 			unsigned int size = (unsigned int)mem_get_size() / 1024;
-			print_format("Total: %d KB\n", size);
+			printfmt("Total: %d KB\n", size);
 			size = (unsigned int)mem_get_free_size() / 1024;
-			print_format("Free: %d KB\n", size);
+			printfmt("Free: %d KB\n", size);
 		}
 		else if(str_cmp(cmd, ""))
 		{
-			print_format("%s: unkown command.\n", cmd);
+			printfmt("%s: unkown command.\n", cmd);
 		}
 	}
 }

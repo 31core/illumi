@@ -14,13 +14,7 @@ void lba28_read(short *buf, unsigned int offset, unsigned char count)
 	for(; i < count * 512 / 2; i++)
 	{
 		/* 等待磁盘驱动器 */
-		while(1)
-		{
-			if((io_in8(0x1f7) & 0x88) == 0x08)
-			{
-				break;
-			}
-		}
+		while(!(io_in8(0x1f7) & 0x40));
 		buf[i] = io_in16(0x1f0);
 	}
 }
@@ -37,14 +31,7 @@ void lba28_write(short *data, unsigned int offset, unsigned char count)
 	for(; i < count * 512 / 2; i++)
 	{
 		/* 等待磁盘驱动器 */
-		while(1)
-		{
-			if((io_in8(0x1f7) & 0x08) == 0x08)
-			{
-				break;
-			}
-		}
+		while(!(io_in8(0x1f7) & 0x40));
 		io_out16(0x1f0, data[i]);
 	}
-	delay(1);
 }
