@@ -16,6 +16,8 @@
 #define TASK_IDLE_PID 0
 #define TASK_INIT_PID 1
 
+#define MAX_PID 0x400000
+
 /* 任务初始化信息,释放任务时需要 */
 struct task_init_info
 {
@@ -31,6 +33,7 @@ struct task_info
 	int nice;
 	int flags;
 	int cpu_time; //1s中需要运行的时间
+	unsigned int cpu_count;
 };
 
 struct task_priority
@@ -45,7 +48,7 @@ extern int current_pid;
 void task_init(void);
 void task_priority_init(void);
 void task_init_register(struct task_state*);
-int task_get_next_pid(void);
+int task_get_next_proc(void);
 void task_switch(void);
 int task_alloc(void*);
 void task_run(int);
@@ -54,7 +57,7 @@ void task_wait(int);
 void task_sleep(int);
 void task_wakeup(int);
 void task_set_name(int, char*);
-int task_get_name(char*, int);
+void task_get_name(char*, int);
 int task_get_pid(void);
 int task_get_uid(int);
 int task_get_ppid(int);

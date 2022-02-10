@@ -5,6 +5,7 @@ int tasks_count = 0;
 int tasks_posit = 1;
 extern struct task_info task_list[TASKS_MAX];
 extern unsigned int time_count;
+extern int get_proc_by_pid(int);
 
 /* 计算CPU时间 */
 static int get_cpu_time(int nice)
@@ -20,7 +21,7 @@ static int get_cpu_time(int nice)
 }
 
 /* 获取下一个任务pid */
-int task_get_next_pid()
+int task_get_next_proc()
 {
 	for(int i = tasks_posit; i < tasks_count; i++)
 	{
@@ -28,8 +29,9 @@ int task_get_next_pid()
 		if(tasks[tasks_posit]->cpu_time == -1)
 		{
 			tasks[tasks_posit]->cpu_time = get_cpu_time(tasks[tasks_posit]->nice);
+			tasks[tasks_posit]->cpu_count += tasks[tasks_posit]->cpu_time;
 			tasks[tasks_posit]->cpu_time -= 1;
-			return tasks[tasks_posit]->pid;
+			return tasks_posit;
 		}
 		/* CPU时间为0, 准备下一个任务 */
 		else if(tasks[tasks_posit]->cpu_time == 0)
@@ -40,7 +42,7 @@ int task_get_next_pid()
 		else
 		{
 			tasks[tasks_posit]->cpu_time -= 1;
-			return tasks[tasks_posit]->pid;
+			return tasks_posit;
 		}
 	}
 	tasks_posit = 0;
@@ -75,7 +77,8 @@ void scheduler_remove(struct task_info *task)
 /* 设置任务优先级 */
 void task_set_nice(int pid, int nice)
 {
-	scheduler_remove(&task_list[pid]);
-	task_list[pid].nice = nice;
-	scheduler_add(&task_list[pid]);
+	int proc = get_proc_by_pid(pid);
+	scheduler_remove(&task_list[proc]);
+	task_list[proc].nice = nice;
+	scheduler_add(&task_list[proc]);
 }
