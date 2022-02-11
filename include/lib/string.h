@@ -6,3 +6,4 @@ int str_count(char*, char*);
 void str_cat(char*, char*);
 void str_split(char*, char*, char*, int);
 void str_slice(char*, char*, int, int);
+void str_replace(char*, char*, char*);

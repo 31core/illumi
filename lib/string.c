@@ -84,9 +84,16 @@ int str_find(char *origin, char *str, int index)
 int str_count(char *origin, char *str)
 {
 	int count = 0;
-	while(str_find(origin, str, count) != -1)
+	int len = str_len(str);
+	while(1)
 	{
+		int i = str_find(origin, str, 0);
+		if(i == -1)
+		{
+			break;
+		}
 		count += 1;
+		origin += len + i;
 	}
 	return count;
 }
@@ -121,4 +128,23 @@ void str_slice(char *ret, char *src, int start, int end)
 	str_cpy(str, src);
 	str[end + 1] = '\0';
 	str_cpy(ret, str + start);
+}
+/* 替换字符串 */
+void str_replace(char *str, char *a, char *b)
+{
+	int len_a = str_len(a);
+	int len_b = str_len(b);
+	char bak[100];
+	while(1)
+	{
+		int i = str_find(str, a, 0);
+		if(i == -1)
+		{
+			break;
+		}
+		str_cpy(bak, str + len_a + i);
+		str_cpy(str + i, b);
+		str_cat(str, bak);
+		str += len_b + i;
+	}
 }

@@ -7,7 +7,6 @@ void init_proc(void);
 
 struct task_info task_list[1024];
 int current_proc = 0; //当前运行的任务pid
-int max_pid = 0;
 
 int get_proc_by_pid(int pid)
 {
@@ -23,6 +22,7 @@ int get_proc_by_pid(int pid)
 /* 生成未使用的PID */
 static int generate_pid(void)
 {
+	static int max_pid = 0;
 	if(max_pid > MAX_PID)
 	{
 		max_pid = 0;

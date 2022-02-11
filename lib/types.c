@@ -5,9 +5,8 @@ void uint2str(char *str, unsigned int num)
 {
 	char str0[11];
 	int check = 10; //用于检测最低位是否为0
-	int i, j;
-	i = 9; //用于从后到前写入str0字符
-	j = 0; //用于记录最低位的大小
+	int i = 9; //用于从后到前写入str0字符
+	int j = 0; //用于记录最低位的大小
 	while(1)
 	{
 		/* 最低位为0 */
