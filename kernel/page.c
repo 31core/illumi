@@ -1,6 +1,7 @@
+#include <config.h>
+#include <utils.h>
 #include <kernel/page.h>
 #include <kernel/memory.h>
-#include <const.h>
 
 unsigned int *kernel_page_dir; //内核页目录
 unsigned int *page_dirs[PAGE_DIRS_SIZE];
@@ -69,18 +70,22 @@ void page_set(unsigned int *page_dir, unsigned int phy_addr_4k, unsigned int vir
 	}
 	page_set_table(page_dir, table, page, phy_addr_4k);
 }
-/* 设置页表 */
-void* page_add(unsigned int *page_dir, unsigned int virt_addr_4k)
+/* 添加页表 */
+void* page_add(unsigned int *page_dir, unsigned int virt_addr_4k, unsigned int size_4k)
 {
-	unsigned int addr = _4KB_ALIGN((unsigned int)memfrag_alloc_4k(1));
-	int table = virt_addr_4k / 1024;
-	int page = virt_addr_4k % 1024;
-	if(page_dir[table] == 0)
+	unsigned int addr_4k = _4KB_ALIGN((unsigned int)memfrag_alloc_4k(size_4k));
+	for(int i = 0; i < size_4k; i++)
 	{
-		page_set_dir(page_dir, table, _4KB_ALIGN((unsigned int)memfrag_alloc_4k(1)));
+		virt_addr_4k += 1;
+		int table = virt_addr_4k / 1024;
+		int page = virt_addr_4k % 1024;
+		if(page_dir[table] == 0)
+		{
+			page_set_dir(page_dir, table, _4KB_ALIGN((unsigned int)memfrag_alloc_4k(1)));
+		}
+		page_set_table(page_dir, table, page, addr_4k);
 	}
-	page_set_table(page_dir, table, page, addr);
-	return (void*)(addr * 4096);
+	return (void*)(addr_4k * 4096);
 }
 /* 释放页表 */
 void page_unset(unsigned int *page_dir, unsigned int virt_addr_4k)

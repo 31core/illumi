@@ -18,13 +18,16 @@
 
 #define MAX_PID 0x400000
 
-#define TASK_CODE_ADDR (16 * 0x100000)
-#define TASK_STACK_ADDR (8 * 0x100000)
+#define TASK_CODE_ADDR (8 * 0x100000)
+#define TASK_STACK_ADDR 0x100000
+#define TASK_STACK_SIZE (6 * 0x100000)
 
 /* 任务初始化信息,释放任务时需要 */
 struct task_init_info
 {
+	void *code_addr;
 	void *stack_addr;
+	unsigned int code_size, stack_size;
 };
 
 struct task_info

@@ -1,0 +1,2 @@
+#define KERNEL_ADDR 0x700000
+#define KERNEL_SIZE 0x400000

@@ -1,4 +1,5 @@
-#include <const.h>
+#include <config.h>
+#include <utils.h>
 #include <kernel/task.h>
 #include <kernel/memory.h>
 #include <kernel/page.h>
@@ -84,7 +85,7 @@ int task_alloc(void *addr)
 		if(task_list[i].flags == TASK_AVAILABLE)
 		{
 			task_init_register(&task_list[i].state);
-			task_list[i].init_info.stack_addr = (void*)TASK_STACK_ADDR + _4KB - 1;
+			task_list[i].init_info.stack_addr = (void*)(TASK_STACK_ADDR + TASK_STACK_SIZE - 1);
 			task_list[i].flags = TASK_PENDING;
 			task_list[i].uid = task_list[current_proc].uid;
 			task_list[i].pid = generate_pid();
@@ -94,22 +95,22 @@ int task_alloc(void *addr)
 			task_list[i].cpu_count = 0;
 			task_list[i].page_dir = page_alloc();
 			/* 初始化进程栈页 */
-			void *stack_addr = page_add(task_list[i].page_dir, _4KB_ALIGN(TASK_STACK_ADDR));
+			void *stack_addr = page_add(task_list[i].page_dir, _4KB_ALIGN(TASK_STACK_ADDR), _4KB_ALIGN(TASK_STACK_SIZE));
 			/* 初始化内核代码页 */
 			for(int j = 0; j < _4KB_ALIGN(KERNEL_ADDR + KERNEL_SIZE); j++)
 			{
 				page_set(task_list[i].page_dir, j, j);
 			}
 			/* 初始化进程代码页 */
-			char *virt_addr = page_add(task_list[i].page_dir, _4KB_ALIGN(TASK_CODE_ADDR));
+			char *virt_addr = page_add(task_list[i].page_dir, _4KB_ALIGN(TASK_CODE_ADDR), 1);
 			char *code = addr;
 			for(int j = 0; j < _4KB; j++)
 			{
 				virt_addr[j] = code[j];
 			}
-			int *p = (int*)stack_addr;
-			*p = (int)TASK_CODE_ADDR; //[esp]为任务跳转地址
-			task_set_stack(&task_list[i].state, (void*)TASK_STACK_ADDR);
+			void **p = (void*)(stack_addr + TASK_STACK_SIZE - 1);
+			*p = (void*)TASK_CODE_ADDR; //[esp]为任务跳转地址
+			task_set_stack(&task_list[i].state, (void*)task_list[i].init_info.stack_addr);
 
 			task_list[i].cpu_time = 20 - task_list[i].nice;
 
