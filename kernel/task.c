@@ -1,5 +1,7 @@
+#include <const.h>
 #include <kernel/task.h>
 #include <kernel/memory.h>
+#include <kernel/page.h>
 #include <lib/string.h>
 #include <arch/x86/cpu.h>
 
@@ -52,6 +54,7 @@ void task_init(void)
 	task_list[0].pid = 0;
 	task_list[0].ppid = 0;
 	task_list[0].nice = 0;
+	task_list[0].page_dir = kernel_page_dir;
 	str_cpy(task_list[0].name, "idle");
 	scheduler_add(&task_list[0]);
 
@@ -69,6 +72,7 @@ void task_switch()
 		int old_proc = current_proc;
 		current_proc = proc;
 		io_sti(); //重新启用中断
+		page_switch(task_list[proc].page_dir);
 		asm_task_switch(&task_list[old_proc].state, &task_list[proc].state);
 	}
 }
@@ -79,9 +83,8 @@ int task_alloc(void *addr)
 	{
 		if(task_list[i].flags == TASK_AVAILABLE)
 		{
-			void *stack_addr = memfrag_alloc(1024) + 1024; //分配该任务的栈地址
 			task_init_register(&task_list[i].state);
-			task_list[i].init_info.stack_addr = stack_addr;
+			task_list[i].init_info.stack_addr = (void*)TASK_STACK_ADDR + _4KB - 1;
 			task_list[i].flags = TASK_PENDING;
 			task_list[i].uid = task_list[current_proc].uid;
 			task_list[i].pid = generate_pid();
@@ -89,9 +92,24 @@ int task_alloc(void *addr)
 			task_list[i].nice = TASK_DEFAULT_PRIORITY;
 			task_list[i].name[0] = '\0';
 			task_list[i].cpu_count = 0;
+			task_list[i].page_dir = page_alloc();
+			/* 初始化进程栈页 */
+			void *stack_addr = page_add(task_list[i].page_dir, _4KB_ALIGIN(TASK_STACK_ADDR));
+			/* 初始化内核代码页 */
+			for(int j = _4KB_ALIGIN(KERNEL_ADDR) - 128; j < _4KB_ALIGIN(0xffffffff); j++)
+			{
+				page_set(task_list[i].page_dir, j, j);
+			}
+			/* 初始化进程代码页 */
+			char *virt_addr = page_add(task_list[i].page_dir, _4KB_ALIGIN(TASK_CODE_ADDR));
+			char *code = addr;
+			for(int j = 0; j < _4KB; j++)
+			{
+				virt_addr[j] = code[j];
+			}
 			int *p = (int*)stack_addr;
-			*p = (int)addr; //[esp]为任务跳转地址
-			task_set_stack(&task_list[i].state, stack_addr);
+			*p = (int)TASK_CODE_ADDR; //[esp]为任务跳转地址
+			task_set_stack(&task_list[i].state, (void*)TASK_STACK_ADDR);
 
 			task_list[i].cpu_time = 20 - task_list[i].nice;
 

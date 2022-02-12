@@ -15,6 +15,7 @@
 /* 初始化内核 */
 void kernel_init(void)
 {
+	cpu_init(); //初始化cpu相关设定
 	sysinfo_init();
 	/* 初始化内存碎片管理 */
 	memfrag_init();
@@ -22,11 +23,10 @@ void kernel_init(void)
 	memfrag_alloc_with_addr((void*)IDT_ADDR, 8 * 0x100);
 	memfrag_alloc_with_addr((void*)0x100000, 4 * 0x100000); //为内核分配4MB空间
 	fifo_init(&key_fifo, memfrag_alloc_4k(1), 0x1000);
+	page_init();
 	task_init(); //初始化多任务
-	cpu_init(); //初始化cpu相关设定
 	PIC_init(); //初始化PIC
 	io_sti(); //启用中断
-	page_init();
 	random_init();
 	fs_init(); //初始化文件系统
 	user_init();

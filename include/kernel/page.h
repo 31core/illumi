@@ -1,3 +1,8 @@
+#define PAGE_DIRS_SIZE 1024
+
+extern unsigned int *kernel_page_dir; //内核页目录
+extern unsigned int *page_dirs[PAGE_DIRS_SIZE];
+
 void page_init(void);
 unsigned int* page_alloc(void);
 void page_free(void*);

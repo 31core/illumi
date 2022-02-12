@@ -18,6 +18,9 @@
 
 #define MAX_PID 0x400000
 
+#define TASK_CODE_ADDR (16 * 0x100000)
+#define TASK_STACK_ADDR (8 * 0x100000)
+
 /* 任务初始化信息,释放任务时需要 */
 struct task_init_info
 {
@@ -28,6 +31,7 @@ struct task_info
 {
 	struct task_init_info init_info;
 	struct task_state state; //任务状态
+	void *page_dir;
 	char name[30]; //任务名称
 	int pid, ppid, uid;
 	int nice;
