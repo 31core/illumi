@@ -13,14 +13,14 @@ void page_init(void)
 		page_dirs[i] = 0;
 	}
 	kernel_page_dir = page_alloc();
-	unsigned int kernel_page_table = _4KB_ALIGIN((unsigned int)memfrag_alloc_4k(1024));
+	unsigned int kernel_page_table = _4KB_ALIGN((unsigned int)memfrag_alloc_4k(1024));
 	/* 初始化内核页目录 */
 	for(short i = 0; i < PAGE_DIRS_SIZE; i++)
 	{
 		page_set_dir(kernel_page_dir ,i, kernel_page_table + i);
 	}
 	/* 初始化内核页表 */
-	for(short i = 0; i < _4KB_ALIGIN(0xffffffff); i++)
+	for(short i = 0; i < _4KB_ALIGN(0xffffffff); i++)
 	{
 		page_set(kernel_page_dir , i, i);
 	}
@@ -65,19 +65,19 @@ void page_set(unsigned int *page_dir, unsigned int phy_addr_4k, unsigned int vir
 	int page = virt_addr_4k % 1024;
 	if(page_dir[table] == 0)
 	{
-		page_set_dir(page_dir, table, _4KB_ALIGIN((unsigned int)memfrag_alloc_4k(1)));
+		page_set_dir(page_dir, table, _4KB_ALIGN((unsigned int)memfrag_alloc_4k(1)));
 	}
 	page_set_table(page_dir, table, page, phy_addr_4k);
 }
 /* 设置页表 */
 void* page_add(unsigned int *page_dir, unsigned int virt_addr_4k)
 {
-	unsigned int addr = _4KB_ALIGIN((unsigned int)memfrag_alloc_4k(1));
+	unsigned int addr = _4KB_ALIGN((unsigned int)memfrag_alloc_4k(1));
 	int table = virt_addr_4k / 1024;
 	int page = virt_addr_4k % 1024;
 	if(page_dir[table] == 0)
 	{
-		page_set_dir(page_dir, table, _4KB_ALIGIN((unsigned int)memfrag_alloc_4k(1)));
+		page_set_dir(page_dir, table, _4KB_ALIGN((unsigned int)memfrag_alloc_4k(1)));
 	}
 	page_set_table(page_dir, table, page, addr);
 	return (void*)(addr * 4096);

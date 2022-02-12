@@ -21,7 +21,7 @@ void kernel_init(void)
 	memfrag_init();
 	memfrag_alloc_with_addr((void*)GDT_ADDR, 8 * 0x2000);
 	memfrag_alloc_with_addr((void*)IDT_ADDR, 8 * 0x100);
-	memfrag_alloc_with_addr((void*)0x100000, 4 * 0x100000); //为内核分配4MB空间
+	memfrag_alloc_with_addr((void*)0x700000, 4 * 0x100000); //为内核分配4MB空间
 	fifo_init(&key_fifo, memfrag_alloc_4k(1), 0x1000);
 	page_init();
 	task_init(); //初始化多任务

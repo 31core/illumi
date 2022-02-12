@@ -94,14 +94,14 @@ int task_alloc(void *addr)
 			task_list[i].cpu_count = 0;
 			task_list[i].page_dir = page_alloc();
 			/* 初始化进程栈页 */
-			void *stack_addr = page_add(task_list[i].page_dir, _4KB_ALIGIN(TASK_STACK_ADDR));
+			void *stack_addr = page_add(task_list[i].page_dir, _4KB_ALIGN(TASK_STACK_ADDR));
 			/* 初始化内核代码页 */
-			for(int j = _4KB_ALIGIN(KERNEL_ADDR) - 128; j < _4KB_ALIGIN(0xffffffff); j++)
+			for(int j = 0; j < _4KB_ALIGN(KERNEL_ADDR + KERNEL_SIZE); j++)
 			{
 				page_set(task_list[i].page_dir, j, j);
 			}
 			/* 初始化进程代码页 */
-			char *virt_addr = page_add(task_list[i].page_dir, _4KB_ALIGIN(TASK_CODE_ADDR));
+			char *virt_addr = page_add(task_list[i].page_dir, _4KB_ALIGN(TASK_CODE_ADDR));
 			char *code = addr;
 			for(int j = 0; j < _4KB; j++)
 			{

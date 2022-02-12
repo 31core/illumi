@@ -18,11 +18,17 @@ void cpu_init(void)
 	}
 	IDT_set(0x00, (int)asm_interrupt00h, 8, 0x8e);
 	IDT_set(0x04, (int)asm_interrupt04h, 8, 0x8e);
+	IDT_set(0x05, (int)asm_interrupt05h, 8, 0x8e);
 	IDT_set(0x06, (int)asm_interrupt06h, 8, 0x8e);
 	IDT_set(0x08, (int)asm_interrupt08h, 8, 0x8e);
+	IDT_set(0x0a, (int)asm_interrupt0ah, 8, 0x8e);
+	IDT_set(0x0b, (int)asm_interrupt0bh, 8, 0x8e);
 	IDT_set(0x0c, (int)asm_interrupt0ch, 8, 0x8e);
 	IDT_set(0x0d, (int)asm_interrupt0dh, 8, 0x8e);
 	IDT_set(0x0e, (int)asm_interrupt0eh, 8, 0x8e);
+	IDT_set(0x11, (int)asm_interrupt11h, 8, 0x8e);
+	IDT_set(0x15, (int)asm_interrupt15h, 8, 0x8e);
+	IDT_set(0x1e, (int)asm_interrupt1eh, 8, 0x8e);
 	IDT_set(0x20, (int)asm_interrupt20h, 8, 0x8e);
 	IDT_set(0x21, (int)asm_interrupt21h, 8, 0x8e);
 	IDTR_load(IDT_ADDR, 0x7ff); //加载IDTR寄存器

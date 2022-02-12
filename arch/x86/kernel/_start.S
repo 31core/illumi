@@ -9,5 +9,5 @@ _start:
 	movw %ax, %es
 	movw %ax, %fs
 	movw %ax, %gs
-	movl $0x1000000, %esp
+	movl $0x700000, %esp
 	jmp main
