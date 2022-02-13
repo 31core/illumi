@@ -18,8 +18,8 @@
 
 #define MAX_PID 0x400000
 
-#define TASK_CODE_ADDR (8 * 0x100000)
-#define TASK_STACK_ADDR 0x100000
+#define TASK_CODE_ADDR (32 * 0x100000)
+#define TASK_STACK_ADDR (1024 * 0x100000)
 #define TASK_STACK_SIZE (6 * 0x100000)
 
 /* 任务初始化信息,释放任务时需要 */
@@ -50,14 +50,14 @@ struct task_priority
 };
 
 extern struct task_info task_list[TASKS_MAX];
-extern int current_pid;
+extern int current_proc;
 
 void task_init(void);
 void task_priority_init(void);
 void task_init_register(struct task_state*);
 int task_get_next_proc(void);
 void task_switch(void);
-int task_alloc(void*);
+int task_alloc(void*, unsigned int);
 void task_run(int);
 void task_kill(int);
 void task_wait(int);

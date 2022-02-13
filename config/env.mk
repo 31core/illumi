@@ -1,5 +1,5 @@
 C_FLAGS = -Wall -fno-stack-protector -Iinclude
-LD_FLAGS = -e _start -Ttext 0x700000
+LD_FLAGS = -e _start -Ttext 0x800000
 ifeq ($(ARCH), x86)
 	C_FLAGS += -m32
 	LD_FLAGS += -m elf_i386

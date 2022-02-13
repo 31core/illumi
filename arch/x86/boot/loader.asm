@@ -1,7 +1,7 @@
 ;loader.asm
 org 0x70000
 
-KERNEL_ADDR equ 0x700000 ;内核地址
+KERNEL_ADDR equ 0x800000 ;内核地址
 KERNEL_SIZE equ 100 ;内核大小(扇区)
 
 [bits 16]

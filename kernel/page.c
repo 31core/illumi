@@ -76,14 +76,14 @@ void* page_add(unsigned int *page_dir, unsigned int virt_addr_4k, unsigned int s
 	unsigned int addr_4k = _4KB_ALIGN((unsigned int)memfrag_alloc_4k(size_4k));
 	for(int i = 0; i < size_4k; i++)
 	{
-		virt_addr_4k += 1;
 		int table = virt_addr_4k / 1024;
 		int page = virt_addr_4k % 1024;
 		if(page_dir[table] == 0)
 		{
 			page_set_dir(page_dir, table, _4KB_ALIGN((unsigned int)memfrag_alloc_4k(1)));
 		}
-		page_set_table(page_dir, table, page, addr_4k);
+		page_set_table(page_dir, table, page, addr_4k + i);
+		virt_addr_4k += 1;
 	}
 	return (void*)(addr_4k * 4096);
 }

@@ -56,13 +56,14 @@ void task_init(void)
 	task_list[0].ppid = 0;
 	task_list[0].nice = 0;
 	task_list[0].page_dir = kernel_page_dir;
+	task_list[0].init_info.code_addr = (void*)KERNEL_ADDR;
+	task_list[0].init_info.code_size = _4KB_ALIGN(KERNEL_SIZE);
+	task_list[0].init_info.stack_addr = (void*)KERNEL_STACK_ADDR;
+	task_list[0].init_info.stack_size = _4KB_ALIGN(KERNEL_STACK_SIZE);
 	str_cpy(task_list[0].name, "idle");
 	scheduler_add(&task_list[0]);
 
 	/* 创建init进程 */
-	int init_pid = task_alloc(init_proc);
-	task_run(init_pid);
-	task_set_name(init_pid, "init");
 }
 /* 切换任务 */
 void task_switch()
@@ -74,18 +75,20 @@ void task_switch()
 		current_proc = proc;
 		io_sti(); //重新启用中断
 		page_switch(task_list[proc].page_dir);
-		asm_task_switch(&task_list[old_proc].state, &task_list[proc].state);
+		//asm_task_switch(&task_list[old_proc].state, &task_list[proc].state);
 	}
 }
 /* 创建任务 */
-int task_alloc(void *addr)
+int task_alloc(void *addr, unsigned int size_4k)
 {
 	for(int i = 0; i < TASKS_MAX; i++)
 	{
 		if(task_list[i].flags == TASK_AVAILABLE)
 		{
+			void *stack_addr = page_add(task_list[i].page_dir,
+				_4KB_ALIGN(TASK_STACK_ADDR), _4KB_ALIGN(TASK_STACK_SIZE));
 			task_init_register(&task_list[i].state);
-			task_list[i].init_info.stack_addr = (void*)(TASK_STACK_ADDR + TASK_STACK_SIZE - 1);
+			task_list[i].init_info.stack_addr = stack_addr;
 			task_list[i].flags = TASK_PENDING;
 			task_list[i].uid = task_list[current_proc].uid;
 			task_list[i].pid = generate_pid();
@@ -94,23 +97,39 @@ int task_alloc(void *addr)
 			task_list[i].name[0] = '\0';
 			task_list[i].cpu_count = 0;
 			task_list[i].page_dir = page_alloc();
-			/* 初始化进程栈页 */
-			void *stack_addr = page_add(task_list[i].page_dir, _4KB_ALIGN(TASK_STACK_ADDR), _4KB_ALIGN(TASK_STACK_SIZE));
+			for(int j = 0; j < _4KB_ALIGN(0x100000); j++)
+			{
+				page_set(task_list[i].page_dir, j, j);
+			}
 			/* 初始化内核代码页 */
-			for(int j = 0; j < _4KB_ALIGN(KERNEL_ADDR + KERNEL_SIZE); j++)
+			for(int j = _4KB_ALIGN(KERNEL_ADDR); j < _4KB_ALIGN(KERNEL_ADDR + KERNEL_SIZE); j++)
+			{
+				page_set(task_list[i].page_dir, j, j);
+			}
+			/* 初始化内核栈页 */
+			for(int j = _4KB_ALIGN(KERNEL_STACK_ADDR);
+				j < _4KB_ALIGN(KERNEL_STACK_ADDR + KERNEL_STACK_SIZE); j++)
+			{
+				page_set(task_list[i].page_dir, j, j);
+			}
+			/* 初始化IDT, GDT页 */
+			for(int j = _4KB_ALIGN(IDT_ADDR);
+				j < _4KB_ALIGN(GDT_ADDR + 8 * 0x2000); j++)
 			{
 				page_set(task_list[i].page_dir, j, j);
 			}
 			/* 初始化进程代码页 */
-			char *virt_addr = page_add(task_list[i].page_dir, _4KB_ALIGN(TASK_CODE_ADDR), 1);
+			char *task_code = page_add(task_list[i].page_dir,
+				_4KB_ALIGN(TASK_CODE_ADDR), size_4k);
 			char *code = addr;
-			for(int j = 0; j < _4KB; j++)
+			for(int j = 0; j < _4KB * size_4k; j++)
 			{
-				virt_addr[j] = code[j];
+				task_code[j] = code[j];
 			}
-			void **p = (void*)(stack_addr + TASK_STACK_SIZE - 1);
-			*p = (void*)TASK_CODE_ADDR; //[esp]为任务跳转地址
-			task_set_stack(&task_list[i].state, (void*)task_list[i].init_info.stack_addr);
+			/* 初始化进程栈页 */
+			//void **p = (void*)(stack_addr + TASK_STACK_SIZE - 1);
+			//*p = (void*)TASK_CODE_ADDR; //[esp]为任务跳转地址
+			//task_set_stack(&task_list[i].state, (void*)(TASK_STACK_ADDR + TASK_STACK_SIZE - 1));
 
 			task_list[i].cpu_time = 20 - task_list[i].nice;
 
