@@ -71,11 +71,8 @@ void task_switch()
 	int proc = task_get_next_proc();
 	if(proc != -1 && proc != current_proc)
 	{
-		int old_proc = current_proc;
-		current_proc = proc;
 		io_sti(); //重新启用中断
 		page_switch(task_list[proc].page_dir);
-		//asm_task_switch(&task_list[old_proc].state, &task_list[proc].state);
 	}
 }
 /* 创建任务 */
@@ -126,10 +123,7 @@ int task_alloc(void *addr, unsigned int size_4k)
 			{
 				task_code[j] = code[j];
 			}
-			/* 初始化进程栈页 */
-			//void **p = (void*)(stack_addr + TASK_STACK_SIZE - 1);
-			//*p = (void*)TASK_CODE_ADDR; //[esp]为任务跳转地址
-			//task_set_stack(&task_list[i].state, (void*)(TASK_STACK_ADDR + TASK_STACK_SIZE - 1));
+			task_list[i].state = task_list[current_proc].state;
 
 			task_list[i].cpu_time = 20 - task_list[i].nice;
 

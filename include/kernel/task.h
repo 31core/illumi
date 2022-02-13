@@ -70,5 +70,7 @@ int task_get_uid(int);
 int task_get_ppid(int);
 int task_get_list(int*);
 void task_set_nice(int, int);
+void task_save_state(struct task_state*);
+void task_load_state(struct task_state*);
 void scheduler_add(struct task_info*);
 void scheduler_remove(struct task_info*);
