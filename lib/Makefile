@@ -1,1 +1,1 @@
-kernel_objs += lib/string.o lib/types.o
+kernel_objs += lib/string.o lib/types.o lib/args.o

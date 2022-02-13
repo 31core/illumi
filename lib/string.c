@@ -53,13 +53,11 @@ void str_cat(char *a, char *b)
 /* 查找字符串 */
 int str_find(char *origin, char *str, int index)
 {
-	int i = 0;
-	int j;
 	int size = str_len(origin) - str_len(str);
-	for(; i <= size; i++)
+	for(int i = 0; i <= size; i++)
 	{
 		/* 测试origin[i]处是否匹配str */
-		j = 0;
+		int j = 0;
 		while(str[j] != '\0')
 		{
 			if(origin[i + j] != str[j])

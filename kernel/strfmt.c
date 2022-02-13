@@ -1,4 +1,5 @@
 #include <lib/types.h>
+#include <lib/args.h>
 #include <lib/string.h>
 #include <device/video/cli_print.h>
 
@@ -6,26 +7,30 @@
 void printfmt(char *str, ...)
 {
 	int i = 0;
-	int arg = 1;
+	struct arg arg;
+	arg_init(&arg, &str);
 	while(str[i] != '\0')
 	{
 		if(str[i] == '%')
 		{
 			if(str[i + 1] == 's')
 			{
-				char *str0 = *(&str + arg);
+				char *str0;
+				arg_get_next(&arg, &str0, sizeof(str0));
 				cli_print(str0);
 			}
 			else if(str[i + 1] == 'd')
 			{
-				int int0 = (int)*(&str + arg);
+				int int0;
+				arg_get_next(&arg, &int0, sizeof(int0));
 				char str1[50];
 				int2str(str1, int0);
 				cli_print(str1);
 			}
 			else if(str[i + 1] == 'u')
 			{
-				int int0 = (int)*(&str + arg);
+				int int0;
+				arg_get_next(&arg, &int0, sizeof(int0));
 				char str1[50];
 				uint2str(str1, int0);
 				cli_print(str1);
@@ -34,7 +39,6 @@ void printfmt(char *str, ...)
 			{
 				cli_print_char('%');
 			}
-			arg += 1;
 			i += 2;
 			continue;
 		}
@@ -47,20 +51,23 @@ void strfmt(char *ret, char *str, ...)
 {
 	int i = 0;
 	int j = i;
-	int arg = 1;
+	struct arg arg;
+	arg_init(&arg, &str);
 	while(str[i] != '\0')
 	{
 		if(str[i] == '%')
 		{
 			if(str[i + 1] == 's')
 			{
-				char *str0 = *(&str + arg);
+				char *str0;
+				arg_get_next(&arg, &str0, sizeof(str0));
 				str_cat(ret, str0);
 				j += str_len(str0);
 			}
 			else if(str[i + 1] == 'd')
 			{
-				int int0 = (int)*(&str + arg);
+				int int0;
+				arg_get_next(&arg, &int0, sizeof(int0));
 				char str1[50];
 				int2str(str1, int0);
 				str_cat(ret, str1);
@@ -68,7 +75,8 @@ void strfmt(char *ret, char *str, ...)
 			}
 			else if(str[i + 1] == 'u')
 			{
-				int int0 = (int)*(&str + arg);
+				int int0;
+				arg_get_next(&arg, &int0, sizeof(int0));
 				char str1[50];
 				uint2str(str1, int0);
 				str_cat(ret, str1);
@@ -79,7 +87,6 @@ void strfmt(char *ret, char *str, ...)
 				ret[j] = '%';
 				j += 1;
 			}
-			arg += 1;
 			i += 2;
 			continue;
 		}

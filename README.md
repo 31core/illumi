@@ -4,6 +4,7 @@
 * 内存管理
 * 多任务
 * 文件系统
+* 设备管理 (未实现)
 * API系统调用 (未实现)
 
 #### 0x1 目录说明
@@ -22,24 +23,25 @@
 ```
 USER MODE:
 +-------------------------+
-|		Applications	  |
+|       Applications      |
 +-------------------------+
-| 	syscall | libs		  |
+|   syscall | libs        |
 +-------------------------+
 KERNEL MODE:
  +-----------------------+
- |		interrupts		 |
+ |      interrupts       |
  +-----------------------+
- |		Kernel			 |
+ |      Kernel           |
  +-----------------------+
- |		Hardware		 |
+ |      Hardware         |
  +-----------------------+
 ```
 
 ### 二. 编译与调试
 #### 0x0 编译环境
 ```shell
-$ sudo apt install nasm build-essential qemu-system-x86
+$ sudo apt install nasm build-essential qemu-system-x86 #Debian based system
+$ sudo yum install nasm make gcc qemu #Redhat based system
 ```
 
 #### 0x1 命令行选项
