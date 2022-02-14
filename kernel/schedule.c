@@ -1,10 +1,10 @@
 #include <kernel/task.h>
+#include "task.h"
 
 struct task_info *tasks[TASKS_MAX];
 int tasks_count = 0;
 int tasks_posit = 1;
 extern unsigned int time_count;
-extern int get_proc_by_pid(int);
 
 /* 计算CPU时间 */
 static int get_cpu_time(int nice)

@@ -1,7 +1,7 @@
 #include <utils.h>
 #include <kernel/task.h>
-
-extern int get_proc_by_pid(int);
+#include <kernel/page.h>
+#include "task.h"
 
 int fork(void)
 {
@@ -20,6 +20,13 @@ int fork(void)
 			target_stack[i] = origin_stack[i];
 		}
 		task_run(pid);
+		if(task_get_pid() == 0)
+		{
+			current_proc = proc;
+			page_switch(task_list[proc].page_dir);
+			asm("addl $(1017 * 0x100000), %esp");
+			return 0;
+		}
 		return pid;
 	}
 }

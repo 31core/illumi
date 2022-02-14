@@ -22,6 +22,8 @@
 #define TASK_STACK_ADDR (1024 * 0x100000)
 #define TASK_STACK_SIZE (6 * 0x100000)
 
+#define IDLE_PROC 0
+
 /* 任务初始化信息,释放任务时需要 */
 struct task_init_info
 {

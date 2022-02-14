@@ -11,7 +11,10 @@ int main(void)
 	fs_create();
 	fs_init();
 
-	fork();
+	if(fork() == 0)
+	{
+		shell();
+	}
 
 	while(1)
 	{

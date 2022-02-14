@@ -50,18 +50,18 @@ void task_init(void)
 		task_list[i].flags = TASK_AVAILABLE;
 	}
 	/* 创建初始化任务 */
-	task_list[0].flags = TASK_RUNNING;
-	task_list[0].uid = 0;
-	task_list[0].pid = 0;
-	task_list[0].ppid = 0;
-	task_list[0].nice = 0;
-	task_list[0].page_dir = kernel_page_dir;
-	task_list[0].init_info.code_addr = (void*)KERNEL_ADDR;
-	task_list[0].init_info.code_size = _4KB_ALIGN(KERNEL_SIZE);
-	task_list[0].init_info.stack_addr = (void*)KERNEL_STACK_ADDR;
-	task_list[0].init_info.stack_size = _4KB_ALIGN(KERNEL_STACK_SIZE);
-	str_cpy(task_list[0].name, "idle");
-	scheduler_add(&task_list[0]);
+	task_list[IDLE_PROC].flags = TASK_RUNNING;
+	task_list[IDLE_PROC].uid = 0;
+	task_list[IDLE_PROC].pid = 0;
+	task_list[IDLE_PROC].ppid = 0;
+	task_list[IDLE_PROC].nice = 0;
+	task_list[IDLE_PROC].page_dir = kernel_page_dir;
+	task_list[IDLE_PROC].init_info.code_addr = (void*)KERNEL_ADDR;
+	task_list[IDLE_PROC].init_info.code_size = _4KB_ALIGN(KERNEL_SIZE);
+	task_list[IDLE_PROC].init_info.stack_addr = (void*)KERNEL_STACK_ADDR;
+	task_list[IDLE_PROC].init_info.stack_size = _4KB_ALIGN(KERNEL_STACK_SIZE);
+	str_cpy(task_list[IDLE_PROC].name, "idle");
+	scheduler_add(&task_list[IDLE_PROC]);
 
 	/* 创建init进程 */
 }
@@ -69,9 +69,10 @@ void task_init(void)
 void task_switch()
 {
 	int proc = task_get_next_proc();
+	io_sti(); //重新启用中断
 	if(proc != -1 && proc != current_proc)
 	{
-		io_sti(); //重新启用中断
+		current_proc = proc;
 		page_switch(task_list[proc].page_dir);
 	}
 }
