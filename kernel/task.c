@@ -65,6 +65,9 @@ void task_init(void)
 
 	/* 创建init进程 */
 }
+
+unsigned int task_switch_asm(void *, unsigned int);
+
 /* 切换任务 */
 void task_switch()
 {
@@ -72,8 +75,10 @@ void task_switch()
 	io_sti(); //重新启用中断
 	if(proc != -1 && proc != current_proc)
 	{
+		int old = current_proc;
 		current_proc = proc;
-		page_switch(task_list[proc].page_dir);
+		task_switch_asm(&task_list[old].stack, (unsigned int)task_list[proc].stack);
+		//page_switch(task_list[proc].page_dir);
 	}
 }
 /* 创建任务 */
@@ -85,7 +90,6 @@ int task_alloc(void *addr, unsigned int size_4k)
 		{
 			void *stack_addr = page_add(task_list[i].page_dir,
 				_4KB_ALIGN(TASK_STACK_ADDR), _4KB_ALIGN(TASK_STACK_SIZE));
-			task_init_register(&task_list[i].state);
 			task_list[i].init_info.stack_addr = stack_addr;
 			task_list[i].flags = TASK_PENDING;
 			task_list[i].uid = task_list[current_proc].uid;
@@ -124,7 +128,6 @@ int task_alloc(void *addr, unsigned int size_4k)
 			{
 				task_code[j] = code[j];
 			}
-			task_list[i].state = task_list[current_proc].state;
 
 			task_list[i].cpu_time = 20 - task_list[i].nice;
 

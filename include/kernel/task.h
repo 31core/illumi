@@ -1,5 +1,3 @@
-#include <arch/x86/task.h>
-
 #define TASKS_MAX 1024
 
 #define UNIT_TIME 100
@@ -35,7 +33,7 @@ struct task_init_info
 struct task_info
 {
 	struct task_init_info init_info;
-	struct task_state state; //任务状态
+	void *stack;
 	void *page_dir;
 	char name[30]; //任务名称
 	int pid, ppid, uid;
@@ -56,7 +54,6 @@ extern int current_proc;
 
 void task_init(void);
 void task_priority_init(void);
-void task_init_register(struct task_state*);
 int task_get_next_proc(void);
 void task_switch(void);
 int task_alloc(void*, unsigned int);
@@ -72,7 +69,5 @@ int task_get_uid(int);
 int task_get_ppid(int);
 int task_get_list(int*);
 void task_set_nice(int, int);
-void task_save_state(struct task_state*);
-void task_load_state(struct task_state*);
 void scheduler_add(struct task_info*);
 void scheduler_remove(struct task_info*);
