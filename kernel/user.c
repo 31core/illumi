@@ -14,12 +14,13 @@ void user_init(void)
 		users[i].uid = -1;
 	}
 }
-/* 注册用户 */
+
+/* register a user */
 int user_register(char *name, int uid)
 {
 	for(int i = 0; i < 100; i++)
 	{
-		/* 用户已经存在 */
+		/* user exists */
 		if(!str_cmp(users[uid].name, name))
 		{
 			return -1;
@@ -33,7 +34,8 @@ int user_register(char *name, int uid)
 	users[uid].uid = uid;
 	return 0;
 }
-/* 获取用户名 */
+
+/* get username by uid */
 int user_get_name(char *ret, int uid)
 {
 	if(users[uid].uid == -1)
@@ -43,7 +45,8 @@ int user_get_name(char *ret, int uid)
 	str_cpy(ret, users[uid].name);
 	return 0;
 }
-/* 获取用户UID */
+
+/* get UID */
 int user_get_uid(char *name)
 {
 	for(int uid = 0; uid < 100; uid++)

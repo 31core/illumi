@@ -2,9 +2,9 @@
 #include <kernel/sysinfo.h>
 
 struct mem_fragment mem_frag_list[4096];
-int mem_frag_num = 0; //内存碎片总数
+int mem_frag_num = 0; //lenth og fragments
 
-/* 刷新内存剩余空间 */
+/* refresh remaining size */
 static void refresh_free_size(void)
 {
 	sysinfo.mem_free = sysinfo.mem_size;
@@ -14,7 +14,7 @@ static void refresh_free_size(void)
 	}
 }
 
-/* 获取内存大小 */
+/* get memory full size */
 void* mem_get_size(void)
 {
 	/* 已经检测过内存则返回该值 */
@@ -36,7 +36,7 @@ void* mem_get_size(void)
 	return (void*)p;
 }
 
-/* 初始化内存碎片管理 */
+/* initialize memory management */
 void memfrag_init(void)
 {
 	sysinfo.mem_size = mem_get_size();
@@ -46,7 +46,8 @@ void memfrag_init(void)
 	mem_frag_list[1].addr = sysinfo.mem_size;  //结尾的地址为内存大小
 	mem_frag_list[1].size = 0;
 }
-/* 分配内存碎片 */
+
+/* allocate memory area */
 void* memfrag_alloc(unsigned int size)
 {
 	int i = 1;
@@ -60,8 +61,8 @@ void* memfrag_alloc(unsigned int size)
 		}
 	}
 	void *addr = mem_frag_list[i - 1].addr + mem_frag_list[i - 1].size;
-	int j = mem_frag_num + 1;
-	for(; j >= i; j--)
+
+	for(int j = mem_frag_num + 1; j >= i; j--)
 	{
 		mem_frag_list[j + 1] = mem_frag_list[j];
 	}
@@ -71,6 +72,7 @@ void* memfrag_alloc(unsigned int size)
 	refresh_free_size();
 	return addr;
 }
+
 /* 以4kb为单位分配内存 */
 void* memfrag_alloc_4k(unsigned int size)
 {
@@ -87,8 +89,7 @@ void* memfrag_alloc_4k(unsigned int size)
 		}
 	}
 
-	int j = mem_frag_num + 1;
-	for(; j >= i; j--)
+	for(int j = mem_frag_num + 1; j >= i; j--)
 	{
 		mem_frag_list[j + 1] = mem_frag_list[j];
 	}
@@ -98,7 +99,8 @@ void* memfrag_alloc_4k(unsigned int size)
 	refresh_free_size();
 	return addr;
 }
-/* 分配内存时指定地址 */
+
+/* allocate memory with address */
 void memfrag_alloc_with_addr(void *addr, unsigned int size)
 {
 	int i = 1;
@@ -127,11 +129,11 @@ void memfrag_alloc_with_addr(void *addr, unsigned int size)
 	mem_frag_num += 1;
 	refresh_free_size();
 }
-/* 释放内存碎片 */
+
+/* release memory area */
 void memfrag_free(void* addr)
 {
-	int i = 1;
-	for(; i <= mem_frag_num; i++)
+	for(int i = 1; i <= mem_frag_num; i++)
 	{
 		if(mem_frag_list[i].addr == addr)
 		{
@@ -147,7 +149,7 @@ void memfrag_free(void* addr)
 	refresh_free_size();
 }
 
-/* 获取内存剩余空间 */
+/* get remaining space */
 void* mem_get_free_size(void)
 {
 	return sysinfo.mem_free;

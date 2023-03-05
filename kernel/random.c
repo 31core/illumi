@@ -4,7 +4,7 @@
 
 unsigned int seed = 0;
 
-/* 调整随机数种子 */
+/* adjust random seed */
 static int adjust_seed(int origin_seed)
 {
 	if(origin_seed < 1000)
@@ -19,7 +19,7 @@ static int adjust_seed(int origin_seed)
 	return origin_seed;
 }
 
-/* 初始化随机数种子 */
+/* initialize random seed */
 void random_init(void)
 {
 	LOCAL_TIME tm;
@@ -35,7 +35,8 @@ void random_init(void)
 	}
 	seed = adjust_seed(seed);
 }
-/* 生成随机数 */
+
+/* generate a random */
 unsigned int random(void)
 {
 	seed = seed * seed;

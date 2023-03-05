@@ -1,5 +1,7 @@
-#define GDT_ADDR (8 * 0x100000 + 0x800) //GDT地址
-#define IDT_ADDR (8 * 0x100000) //IDT地址
+#define GDT_ADDR (8 * 0x100000 + 0x800)
+#define GDT_SIZE (8 * 0x2000)
+#define IDT_ADDR (8 * 0x100000)
+#define IDT_SIZE (8 * 0x100)
 
 #define ACC_CODE 0b10011000
 #define ACC_DATA 0b10010000

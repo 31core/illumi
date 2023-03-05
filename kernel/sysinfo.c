@@ -2,7 +2,6 @@
 
 struct sysinfo sysinfo;
 
-/* 初始化系统信息 */
 void sysinfo_init(void)
 {
 	sysinfo.mem_size = 0;

@@ -5,7 +5,7 @@
 int pipe_count = 0; //pipe数量
 struct pipe *pipe_list[1024];
 
-/* 分配一个pipe */
+/* allocate a pipe */
 void pipe_create(struct pipe *pipe, int target_pid)
 {
 	fifo_init(&pipe->fifo, memfrag_alloc(1024), 1024);
@@ -13,7 +13,8 @@ void pipe_create(struct pipe *pipe, int target_pid)
 	pipe_list[pipe_count] = pipe;
 	pipe_count += 1;
 }
-/* 获取pipe */
+
+/* get pipe */
 int pipe_get(struct pipe **pipe)
 {
 	for(int i = 0; i < pipe_count; i++)
@@ -26,7 +27,8 @@ int pipe_get(struct pipe **pipe)
 	}
 	return -1;
 }
-/* 写入管道数据 */
+
+/* write to pipe */
 int pipe_write(struct pipe *pipe, char *data, int size)
 {
 	for(int i = 0; i < size; i++)
@@ -35,7 +37,8 @@ int pipe_write(struct pipe *pipe, char *data, int size)
 	}
 	return size;
 }
-/* 读取管道数据 */
+
+/* read from pipe */
 int pipe_read(struct pipe *pipe, char* data, int size)
 {
 	for(int i = 0; i < size; i++)
@@ -48,7 +51,8 @@ int pipe_read(struct pipe *pipe, char* data, int size)
 	}
 	return size;
 }
-/* 关闭管道 */
+
+/* close pipe */
 void pipe_close(struct pipe *pipe)
 {
 	for(int i = 0; i < pipe_count; i++)

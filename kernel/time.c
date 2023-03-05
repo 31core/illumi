@@ -1,7 +1,7 @@
 #include <kernel/time.h>
 #include <kernel/timer.h>
 
-/* 延时函数,单位:ms */
+/* delay, unit: ms */
 void delay(unsigned int time)
 {
 	int i = timer_alloc(); //分配一个计时器
@@ -15,14 +15,16 @@ void delay(unsigned int time)
 	}
 	timer_free(i);
 }
-/* 等待,单位:s */
+
+/* delay, unit: s */
 void sleep(unsigned int time)
 {
 	delay(100 * time);
 }
 #define Y_SEC (365 * 24 * 60 * 60)
 #define D_SEC (24 * 60 * 60)
-/* 获取时间戳 */
+
+/* get current timestamp */
 void time_get_stamp(struct time_stamp *ts, struct local_time lt)
 {
 	ts->ts_low += Y_SEC * (lt.Y - 1970);

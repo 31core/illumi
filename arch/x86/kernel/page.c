@@ -1,6 +1,6 @@
 #include <kernel/memory.h>
 
-/* 设置页表 */
+/* set page table */
 void page_set_table(unsigned int *page_dir, short table, short page, unsigned addr_4k)
 {
 	addr_4k <<= 12;
@@ -9,7 +9,7 @@ void page_set_table(unsigned int *page_dir, short table, short page, unsigned ad
 	page_table[page] = addr_4k;
 }
 
-/* 设置页目录 */
+/* set page directory */
 void page_set_dir(unsigned int *page_dir, short page, unsigned addr_4k)
 {
 	addr_4k <<= 12;

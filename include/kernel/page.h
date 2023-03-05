@@ -1,3 +1,6 @@
+extern unsigned int *kernel_page_dir;
+extern unsigned int *page_dirs[];
+
 void page_init(void);
 unsigned int* page_alloc(void);
 void page_free(void*);

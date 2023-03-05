@@ -1,10 +1,9 @@
-/* 记录时间的结构体 */
 struct local_time
 {
-	int Y, m, d; //年,月,日
-	int H, M, S; //时,分,秒
+	int Y, m, d; //year, month, day
+	int H, M, S; //hour, minute, second
 };
-/* 64位时间戳 */
+/* 64-bit time stamp */
 struct time_stamp
 {
 	int ts_low, ts_hight;

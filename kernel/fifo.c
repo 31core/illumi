@@ -1,5 +1,6 @@
 #include <kernel/fifo.h>
-/* 初始化缓冲区 */
+
+/* initialize FIFO */
 void fifo_init(struct fifo8 *fifo, void* addr, int size)
 {
 	fifo->addr = addr;
@@ -8,12 +9,14 @@ void fifo_init(struct fifo8 *fifo, void* addr, int size)
 	fifo->write = 0;
 	fifo->read = 0;
 }
-/* 获取缓冲区未读取的数据大小 */
+
+/* get unread size */
 int fifo_get_info(struct fifo8 fifo)
 {
 	return fifo.size - fifo.free;
 }
-/* 写入缓冲区数据 */
+
+/* write to FIFO */
 void fifo_write_data(struct fifo8 *fifo, char data)
 {
 	/* 缓冲区空间已满 */
@@ -31,7 +34,8 @@ void fifo_write_data(struct fifo8 *fifo, char data)
 	fifo->write += 1;
 	fifo->free -= 1;
 }
-/* 读取缓冲区数据 */
+
+/* read from FIFO */
 char fifo_read_data(struct fifo8 *fifo)
 {
 	/* 缓冲区数据大小为0 */

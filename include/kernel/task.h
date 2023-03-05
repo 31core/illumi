@@ -16,18 +16,24 @@
 #define TASK_IDLE_PID 0
 #define TASK_INIT_PID 1
 
+#define TASK_CODE_ADDR (1 * 1024 * 1024 * 1024)
+#define KERNEL_CODE_ADDR 0x100000
+#define KERNEL_CODE_SIZE (1 * 1024 * 1024) //1MB
+
 #define MAX_PID 0x400000
 
 /* 任务初始化信息,释放任务时需要 */
 struct task_init_info
 {
 	void *stack_addr;
+	void *code_addr;
 };
 
 struct task_info
 {
 	struct task_init_info init_info;
 	struct task_state state; //任务状态
+	unsigned int *page;
 	char name[30]; //任务名称
 	int pid, ppid, uid;
 	int nice;

@@ -1,5 +1,6 @@
 #include <kernel/task.h>
 #include <kernel/memory.h>
+#include <kernel/page.h>
 #include <lib/string.h>
 #include <arch/x86/cpu.h>
 
@@ -52,13 +53,14 @@ void task_init(void)
 	task_list[0].pid = 0;
 	task_list[0].ppid = 0;
 	task_list[0].nice = 0;
+	task_list[0].page = kernel_page_dir;
 	str_cpy(task_list[0].name, "idle");
 	scheduler_add(&task_list[0]);
 
 	/* 创建init进程 */
-	int init_pid = task_alloc(init_proc);
-	task_run(init_pid);
-	task_set_name(init_pid, "init");
+	//int init_pid = task_alloc(init_proc);
+	//task_run(init_pid);
+	//task_set_name(init_pid, "init");
 }
 /* 切换任务 */
 void task_switch()
@@ -68,10 +70,13 @@ void task_switch()
 	{
 		int old_proc = current_proc;
 		current_proc = proc;
+		printfmt("%d\n", proc);
 		io_sti(); //重新启用中断
-		asm_task_switch(&task_list[old_proc].state, &task_list[proc].state);
+		page_switch(task_list[proc].page);
+		//asm_task_switch(&task_list[old_proc].state, &task_list[proc].state);
 	}
 }
+#define PAGE_DIRS_SIZE 1024
 /* 创建任务 */
 int task_alloc(void *addr)
 {
@@ -81,6 +86,14 @@ int task_alloc(void *addr)
 		{
 			void *stack_addr = memfrag_alloc(1024) + 1024; //分配该任务的栈地址
 			task_init_register(&task_list[i].state);
+			/* copy process code */
+			task_list[i].init_info.code_addr = memfrag_alloc(1);
+			unsigned char *code = task_list[i].init_info.code_addr;
+			unsigned char *source = addr;
+			for(int off = 0; off < 4096; off++)
+			{
+				code[off] = source[off];
+			}
 			task_list[i].init_info.stack_addr = stack_addr;
 			task_list[i].flags = TASK_PENDING;
 			task_list[i].uid = task_list[current_proc].uid;
@@ -88,9 +101,31 @@ int task_alloc(void *addr)
 			task_list[i].ppid = task_list[current_proc].pid;
 			task_list[i].nice = TASK_DEFAULT_PRIORITY;
 			task_list[i].name[0] = '\0';
+			task_list[i].page = page_alloc();
+			page_set(task_list[i].page, (unsigned int)task_list[i].init_info.code_addr / 4096, TASK_CODE_ADDR / 4096);
+			/* map low 1 MB */
+			for(int j = 0; j < 1024 * 1024 / 4096; j++)
+			{
+				page_set(task_list[i].page, j, j);
+			}
+			/* map kernel code */
+			for(int j = 0; j < KERNEL_CODE_SIZE / 4096; j++)
+			{
+				page_set(task_list[i].page, KERNEL_CODE_ADDR / 4096 + j, KERNEL_CODE_ADDR / 4096 + j);
+			}
+			/* map GDT table */
+			for(int j = 0; j < GDT_SIZE / 4096; j++)
+			{
+				page_set(task_list[i].page, GDT_ADDR / 4096 + j, GDT_ADDR / 4096 + j);
+			}
+			/* map IDT table */
+			for(int j = 0; j < IDT_SIZE; j++)
+			{
+				page_set(task_list[i].page, IDT_ADDR / 4096 + j, IDT_ADDR / 4096 + j);
+			}
 			task_list[i].cpu_count = 0;
 			int *p = (int*)stack_addr;
-			*p = (int)addr; //[esp]为任务跳转地址
+			*p = (int)TASK_CODE_ADDR; //[esp]为任务跳转地址
 			task_set_stack(&task_list[i].state, stack_addr);
 
 			task_list[i].cpu_time = 20 - task_list[i].nice;

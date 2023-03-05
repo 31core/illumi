@@ -13,8 +13,8 @@ void shell(void)
 {
 	char user[20];
 	user_get_name(user, task_get_uid(task_get_pid()));
-	/* 操作系统主循环 */
-	while(1)
+
+	for(;;)
 	{
 		int i = 0;
 		printfmt("[%s /] ", user);
